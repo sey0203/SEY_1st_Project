@@ -66,8 +66,10 @@ class LoginPage:
             username_field = WebDriverWait(self.driver, 3).until(
                 EC.presence_of_element_located((By.ID, "email")) 
             )
+            username_field.clear()
             username_field.send_keys(username)
             password_field = self.driver.find_element(By.ID, "password")
+            password_field.clear()
             password_field.send_keys(password)
 
             length_element = self.driver.find_elements(By.CSS_SELECTOR, "span.cac336714")
@@ -79,24 +81,24 @@ class LoginPage:
             
             password_field.send_keys(Keys.ENTER)
             try :
-                WebDriverWait(self.driver, 1).until(
+                print(WebDriverWait(self.driver, 2).until(
                     EC.presence_of_element_located((By.ID, "prompt-alert")) 
-                )
+                ).text)
                 return False
             except TimeoutException:
                 print("회원가입 성공")
                 return True
         
         except Exception as e:
-            print(f"로그인 중 오류 발생: {e}")
+            print(f"회원가입 실패: {e}")
             return False
         
         except NoSuchElementException:
-            print("입력 필드를 찾을 수 없습니다.")
+            print("회원가입 입력 필드를 찾을 수 없습니다.")
             return False  
         
         except TimeoutException:
-            print("입력 필드 로딩 시간 초과.")
+            print("회원가입 입력 필드 로딩 시간 초과.")
             return False
         
         #로그인 텍스트 인풋의 ID는 username 회원가입 텍스트 인풋의 아이디는 emaill이라 이방법을 사용 By.ID "username" By.ID "email"

@@ -5,47 +5,92 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from urllib import parse
+
 from pages.login_page import LoginPage
-from selenium.webdriver.support.ui import Select
-import random
 
 @pytest.mark.usefixtures("driver")
-class TestMainPage:
-
-    def test_TC001(self, driver: WebDriver):
+class TestLoginPage:
+    
+    def test_login_TC001(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-
+            
             login_page.open()
-            time.sleep(1)        
+            #페이지 로딩
             wait = ws(driver, 10) 
             wait.until(EC.url_contains("signin"))
             assert "signin" in driver.current_url
-            
+            #로그인 버튼 클릭
             button=driver.find_element(By.XPATH, '//*[@id="root"]//button[contains(text(),"로그인")]')
             button.click()
             wait.until(EC.url_contains("login"))
             assert "login" in driver.current_url
-
-
-            print(login_page.login("qwer1@qwer.qwer","qwerQWER1!"))
-            time.sleep(3)
+            login_page.login("qwer1@qwer.qwer","qwerQWER1!")
             
-            driver.back()
-            wait.until(EC.url_contains("signin"))
+            time.sleep(2)
+        except NoSuchElementException as e:
+            assert False
 
+    def test_login_TC002_err(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            #페이지 로딩
+            wait = ws(driver, 10) 
+            wait.until(EC.url_contains("signin"))
+            assert "signin" in driver.current_url
+            #로그인 버튼 클릭
+            button=driver.find_element(By.XPATH, '//*[@id="root"]//button[contains(text(),"로그인")]')
+            button.click()
+            wait.until(EC.url_contains("login"))
+            assert "login" in driver.current_url
+            #비밀번호 틀림
+            login_page.login("qwer1@qwer.qwer","1234")
+            
+            time.sleep(2)
+        except NoSuchElementException as e:
+            assert False
+    
+    def test_login_TC003_err(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            #페이지 로딩
+            wait = ws(driver, 10) 
+            wait.until(EC.url_contains("signin"))
+            assert "signin" in driver.current_url
+            #로그인 버튼 클릭
+            button=driver.find_element(By.XPATH, '//*[@id="root"]//button[contains(text(),"로그인")]')
+            button.click()
+            wait.until(EC.url_contains("login"))
+            assert "login" in driver.current_url
+            #아이디 틑림
+            login_page.login("qwer.qwer","qwerQWER1!")
+            
+            time.sleep(2)
+        except NoSuchElementException as e:
+            assert False
+
+    @pytest.mark.skip
+    def test_signup_TC001(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            login_page.open()
+            #페이지 로딩
+            wait = ws(driver, 10) 
+            wait.until(EC.url_contains("signin"))
+            assert "signin" in driver.current_url
+            #로그인 버튼 클릭
             button=driver.find_element(By.XPATH, '//*[@id="root"]//button[contains(text(),"회원가입")]')
             button.click()
             wait.until(EC.url_contains("u/signup"))
             assert "u/signup" in driver.current_url
-            
-            time.sleep(2)
-            login_page.signup("qwer2@qwer.qwer","qwerQWER1!")
-            time.sleep(2)
+
+            login_page.signup("qwer3@qwer.qwer","qwerQWER1!")
             
             time.sleep(5)
         except NoSuchElementException as e:
             assert False
-
             
