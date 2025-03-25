@@ -29,8 +29,8 @@ class LoginPage:
             )
             username_field.send_keys(username)
             password_field = self.driver.find_element(By.ID, "password")
-            password_field.send_keys(password)
-            #password_field.send_keys(password + Keys.ENTER) 
+        
+            password_field.send_keys(password + Keys.ENTER) 
 
             try:
                 error_element = WebDriverWait(self.driver, 1).until(
