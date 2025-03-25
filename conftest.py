@@ -11,7 +11,8 @@ def driver():
     
     # 크롬 옵션 설정
     chrome_options = Options()
-
+    
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
     #도커 젠킨스 실행용 코드
     # chrome_options .add_argument("--headless")
     # chrome_options .add_argument("--no-sandbox")
@@ -21,6 +22,7 @@ def driver():
     # chrome_options.add_argument('--disable-gpu')  # 가상환경에서 GPU 기능 비활성화
    
     # 드라이버 객체 생성
+    
     driver = webdriver.Chrome(service=Service(), options=chrome_options)
         # instantiate a Chrome browser and add the options
 
