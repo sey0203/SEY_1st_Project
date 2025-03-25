@@ -94,3 +94,7 @@ def driver():
     driver.quit()
 
 
+@pytest.fixture
+def login():
+    print("임시 기능입니다..")
+    #로그인 픽스쳐를 만드는 공간
