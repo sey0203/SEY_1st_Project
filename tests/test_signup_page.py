@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
 
 from pages.login_page import LoginPage
-from pages.signup_page import SinupPage
+from pages.signup_page import SignupPage
 
 @pytest.mark.usefixtures("driver")
 class TestSignupPage:
@@ -18,6 +18,7 @@ class TestSignupPage:
     def test_signup_TC001(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
+            signup_page= SignupPage(driver)
             
             login_page.open()
             #페이지 로딩
@@ -40,8 +41,12 @@ class TestSignupPage:
             # 옵션 개수 확인 및 품절 여부 확인 후 선택
             target_option = select_element.options[random.randint(1, len(select_element.options) - 1)]
             select_element.select_by_visible_text(target_option.text)
+
+            signup_page.set_slider_value_action_chains("단", 3)
+            signup_page.set_slider_value_action_chains("짠", 0.99)
+            signup_page.set_slider_value_action_chains("매운", 3)
             
-            time.sleep(5)
+            time.sleep(15)
         except NoSuchElementException as e:
-            print("")
+            
             assert False#
