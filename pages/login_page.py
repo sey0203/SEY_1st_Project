@@ -20,35 +20,18 @@ class LoginPage:
     def open_page(self, url : str):
         self.driver.get(url)
     
-    def input_userinfo(self, username, password):
-        """사용자 이름과 비밀번호를 입력하는 함수"""
+    def login(self, username, password):
         try:
-            #로그인 텍스트 인풋의 ID는 username 회원가입 텍스트 인풋의 아이디는 emaill이라 이방법을 사용 By.ID "username" By.ID "email"
+            url = self.driver.current_url
+            
             username_field = WebDriverWait(self.driver, 3).until(
-                EC.presence_of_element_located((By.XPATH, "//input[contains(@class, 'input c59b33b40')]")) 
+                EC.presence_of_element_located((By.ID, "username")) 
             )
             username_field.send_keys(username)
             password_field = self.driver.find_element(By.ID, "password")
             password_field.send_keys(password)
             #password_field.send_keys(password + Keys.ENTER) 
-            return True  
-        except NoSuchElementException:
-            print("입력 필드를 찾을 수 없습니다.")
-            return False  
-        except TimeoutException:
-            print("입력 필드 로딩 시간 초과.")
-            return False
-        except Exception as e:
-            print(f"입력 중 오류 발생: {e}")
-            return False  
-    
-    def login(self, username, password):
-        try:
-            url = self.driver.current_url
-            if not self.input_userinfo(username, password):  # 입력 실패 시 False 반환
-                return False
 
-           
             try:
                 error_element = WebDriverWait(self.driver, 1).until(
                     EC.presence_of_element_located((By.ID, "error-element-password"))  
@@ -64,19 +47,59 @@ class LoginPage:
                     return True
                 except TimeoutException:
                     print("로그인 실패: 페이지 변경 없음")
-                    return False
-                
+                    return False    
         except Exception as e:
             print(f"로그인 중 오류 발생: {e}")
             return False
         
-    def check_password_length_color(driver):
+        except NoSuchElementException:
+            print("입력 필드를 찾을 수 없습니다.")
+            return False  
+        
+        except TimeoutException:
+            print("입력 필드 로딩 시간 초과.")
+            return False
+                
+    
+    def signup(self, username, password) :
         try:
-            length_element = WebDriverWait(driver, 3).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "span.cac336714"))
+            username_field = WebDriverWait(self.driver, 3).until(
+                EC.presence_of_element_located((By.ID, "email")) 
             )
-            color = length_element.value_of_css_property("color")
-            return color
+            username_field.send_keys(username)
+            password_field = self.driver.find_element(By.ID, "password")
+            password_field.send_keys(password)
+
+            length_element = self.driver.find_elements(By.CSS_SELECTOR, "span.cac336714")
+            #비밀번호 규칙 지키는지 확인
+            for i in range(1, 5):
+                if length_element[0].value_of_css_property("color") == length_element[i].value_of_css_property("color"):
+                    print("비밀번호 규칙 실패")
+                    return False
+            
+            password_field.send_keys(Keys.ENTER)
+            try :
+                WebDriverWait(self.driver, 1).until(
+                    EC.presence_of_element_located((By.ID, "prompt-alert")) 
+                )
+                return False
+            except TimeoutException:
+                print("회원가입 성공")
+                return True
+        
         except Exception as e:
-            print(f"오류 발생: {e}")
-            return None
+            print(f"로그인 중 오류 발생: {e}")
+            return False
+        
+        except NoSuchElementException:
+            print("입력 필드를 찾을 수 없습니다.")
+            return False  
+        
+        except TimeoutException:
+            print("입력 필드 로딩 시간 초과.")
+            return False
+        
+        #로그인 텍스트 인풋의 ID는 username 회원가입 텍스트 인풋의 아이디는 emaill이라 이방법을 사용 By.ID "username" By.ID "email"
+        # username_field = WebDriverWait(self.driver, 3).until(
+        #         EC.presence_of_element_located((By.XPATH, "//input[contains(@class, 'input c59b33b40')]")) 
+        #     )
