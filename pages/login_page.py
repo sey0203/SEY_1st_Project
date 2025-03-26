@@ -20,6 +20,10 @@ class LoginPage:
     def open_page(self, url : str):
         self.driver.get(url)
     
+    def click_button(self, text):
+        button=self.driver.find_element(By.XPATH, f'//*[@id="root"]//button[contains(text(),"{text}")]')
+        button.click()
+    
     def login(self, username, password):
         try:
             url = self.driver.current_url

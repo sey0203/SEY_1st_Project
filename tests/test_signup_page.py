@@ -32,8 +32,10 @@ class TestSignupPage:
             wait.until(EC.url_contains("login"))
             assert "login" in driver.current_url
             login_page.login("qwer1@qwer.qwer","qwerQWER1!")
+            signup_page.set_name("ppap")
+            signup_page.set_random_option()
+
             
-            driver.find_element(By.NAME, "name").send_keys("1234")
             
 
             option = driver.find_element(By.XPATH, '//*[@id="root"]//select')
@@ -42,9 +44,16 @@ class TestSignupPage:
             target_option = select_element.options[random.randint(1, len(select_element.options) - 1)]
             select_element.select_by_visible_text(target_option.text)
 
-            signup_page.set_slider_value_action_chains("단", 3)
-            signup_page.set_slider_value_action_chains("짠", 0.99)
-            signup_page.set_slider_value_action_chains("매운", 3)
+            signup_page.set_slider_value("단", 3)
+            signup_page.set_slider_value("짠", 0.99)
+            signup_page.set_slider_value("매운", 3)
+            testarea=driver.find_element(By.NAME, 'pros')
+            print(testarea)
+            testarea.send_keys("123")
+            testarea=driver.find_element(By.NAME, 'cons')
+            print(testarea)
+            testarea.send_keys("456")
+            
             
             time.sleep(15)
         except NoSuchElementException as e:
