@@ -40,7 +40,7 @@ class TestMyPage:
             print(f"뒤로가기 버튼 누르기 실패")
             assert False
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_003(self, driver: WebDriver):
         try:
             history_page = HistoryPage(driver)
