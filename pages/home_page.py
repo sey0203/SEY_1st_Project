@@ -104,18 +104,6 @@ class SoloKoreanFood:
         if not self.is_dropdown_opened():
             raise Exception("드롭다운 메뉴 열림 확인 실패")
         
-        # 카테고리 선택
-        category_xpath = f'//span[text()="{category}"]/parent::button'
-        category_option = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, category_xpath))
-        )
-        category_option.click()
-        print(f"카테고리 '{category}' 선택: PASS")
-
-    except Exception as e:
-        print(f"카테고리 선택 실패: FAIL - {e}")
-        raise
-
     # 드롭다운 메뉴 노출 상태 유지 여부 확인
     def is_menu_opened(self):
         """드롭다운 메뉴가 오픈되어 있는지 확인"""
@@ -135,12 +123,28 @@ class SoloKoreanFood:
         except Exception as e:
             print(f"드롭다운 메뉴 열림 확인 실패: FAIL - {e}")
             return False
+        
+####### 드롭다운 메뉴에서 한식, 중식, 양식 선택 하는 방법을 모르겠음. 계속 해도 안돼서 일단 넘김#######
+
+        # 카테고리 선택 (이 부분에서 막혀버림.. 일단 여기 재끼고 다음 부분부터 작성하자.)
+        category_xpath = f'//span[text()="{category}"]/parent::button'
+        category_option = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, category_xpath))
+        )
+        category_option.click()
+        print(f"카테고리 '{category}' 선택: PASS")
+
+    except Exception as e:
+        print(f"카테고리 선택 실패: FAIL - {e}")
+        raise
 
     def click_complete_button(self):
         """선택 완료 버튼 클릭"""
         complete_button_xpath = '//*[@id="root"]/div[1]/main/section/div/button'
         complete_button = self.driver.find_element(By.XPATH, complete_button_xpath)
         complete_button.click()
+
+####### 드롭다운 메뉴에서 한식, 중식, 양식 선택 하는 방법을 모르겠음. 계속 해도 안돼서 일단 넘김#######
 
 # RecommendationPage 클래스 정의
 class RecommendationPage:
@@ -171,18 +175,106 @@ class RecommendationPage:
             print(f"추천 수락 버튼 클릭 실패: FAIL - {e}")
             raise
 
-# HistoryPage 클래스 정의
-class HistoryPage:
+# # HistoryPage 클래스 정의 (근데 이건 필요 없을 것 같기도 함)
+# class HistoryPage:
+#     def __init__(self, driver: webdriver):
+#         self.driver = driver
+
+#     def go_back(self):
+#         """뒤로 가기 버튼 클릭"""
+#         try:
+#             back_button_xpath = '//*[@id="root"]/div[1]/header/div/svg'
+#             back_button = self.driver.find_element(By.XPATH, back_button_xpath)
+#             back_button.click()
+#             print("뒤로 가기 버튼 클릭: PASS")
+#         except Exception as e:
+#             print(f"뒤로 가기 버튼 클릭 실패: FAIL - {e}")
+#             raise
+
+# 추천 히스토리 확인 후 홈으로 이동 (썼던 클래스를 또 써도 되는지 모르겠다.)
+
+class HomePage:
+    def __init__(self, driver: webdriver):
+        self.driver = driver
+        self.base_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/"
+
+    def load_home(self):
+        """홈 페이지를 로드"""
+        self.driver.get(self.base_url)
+
+    def is_home_loaded(self):
+        """홈 페이지가 로드되었는지 확인"""
+        try:
+            WebDriverWait(self.driver, 10).until(
+                lambda driver: driver.current_url == self.base_url
+            )
+            print(f"홈 페이지 로드 확인: PASS - URL: {self.driver.current_url}")
+            return True
+        except Exception as e:
+            print(f"홈 페이지 로드 확인 실패: Fail - {e}")
+            return False
+        
+# 같이 먹기 (한식) 시도
+class TogetherKoreanFood:
     def __init__(self, driver: webdriver):
         self.driver = driver
 
-    def go_back(self):
-        """뒤로 가기 버튼 클릭"""
+    def eat_together(self):
+        """'같이 먹기' 버튼 클릭"""
         try:
-            back_button_xpath = '//*[@id="root"]/div[1]/header/div/svg'
-            back_button = self.driver.find_element(By.XPATH, back_button_xpath)
-            back_button.click()
-            print("뒤로 가기 버튼 클릭: PASS")
+            eat_together_css = "div.grid > button:nth-child(2)"
+            together_button = self.driver.find_element(By.CSS_SELECTOR, eat_together_css)
+            together_button.click()
+            print("'같이 먹기' 버튼 클릭 : PASS")
         except Exception as e:
-            print(f"뒤로 가기 버튼 클릭 실패: FAIL - {e}")
+            print(f"'같이 먹기' 버튼 클릭 실패: FAIL - {e}")
             raise
+
+    def is_load_together_page(self):
+        ""같이 먹기 페이지가 로드되었는지 확인""
+        try:
+            expected_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/selectoptions/together"
+            WebDriverWait(self.driver, 10).until(
+                lambda driver: driver.current_url == expected_url
+            )
+            print("같이 먹기 페이지 로드 확인: PASS")
+            return True
+        except Exception as e:
+            print(f"같이 먹기 페이지 로드 실패 : FAIL - {e}")
+            return False
+        
+    # 드롭다운 메뉴 노출 > 한식 선택하기  
+    def select_category(self, category):
+        """음식 카테고리를 선택"""
+        try:
+            # 드롭다운 버튼 클릭
+            dropdown_xpath = '//button[@role="combobox"]'
+            dropdown = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, dropdown_xpath))
+            )
+            dropdown.click()
+            print("드롭다운 메뉴 열기: PASS")
+
+        # 드롭다운 열림 상태 확인
+        if not self.is_dropdown_opened():
+            raise Exception("드롭다운 메뉴 열림 확인 실패")
+        
+    # 드롭다운 메뉴 노출 상태 유지 여부 확인
+    def is_menu_opened(self):
+        """드롭다운 메뉴가 오픈되어 있는지 확인"""
+        try:
+            drop_menu_xpath = '//div[@data-radix-popper-content-wrapper]'
+            drop_menu = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, drop_menu_xpath))
+            )
+            #요소의 스타일 속성 확인
+            style_attribute = drop_menu.get_attribute("style")
+            if "transform" in style_attribute and "z-index: 50" in style_attribute:
+                print("드롭다운 메뉴 열림 확인: PASS")
+                return True
+            else:
+                print("드롭다운 열림 확인 실패: 스타일 속성 불일치")
+                return False
+        except Exception as e:
+            print(f"드롭다운 메뉴 열림 확인 실패: FAIL - {e}")
+            return False
