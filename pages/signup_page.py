@@ -13,31 +13,53 @@ class SignupPage:
     def __init__(self, driver: WebDriver):
         self.driver = driver
 
+    def click_button(self, text):
+        button=self.driver.find_element(By.XPATH, f'//*[@id="root"]//button[contains(text(),"{text}")]')
+        button.click()
+
     def set_select_option(self, option_text : str):
         try:
             option = self.driver.find_element(By.XPATH, '//*[@id="root"]//select')
             select_element = Select(option)
+        
+            #바로 기획 1팀을 선택하면 기능을 작동안해서 추가함
+            select_element.select_by_index(1)
             select_element.select_by_visible_text(option_text)
         except NoSuchElementException:
-            print("리스트를 찾을 수 없습니다.")
-            
+            print("옵션을 찾을 수 없습니다.")
 
     def set_random_option(self):
         try :
             option = self.driver.find_element(By.XPATH, '//*[@id="root"]//select')
             select_element = Select(option)
             target_option = select_element.options[random.randint(1, len(select_element.options) - 1)]
+            select_element.select_by_index(1)
             select_element.select_by_visible_text(target_option.text)
         except NoSuchElementException:
-            print("리스트를 찾을 수 없습니다.")
+            print("옵션을 찾을 수 없습니다.")
+
+    def get_team_option(self):
+        try :
+            option = self.driver.find_element(By.XPATH, '//*[@id="root"]//select')
+            return option.get_property("value")
+        except NoSuchElementException:
+            print("옵션을 찾을 수 없습니다." )
+            return None
 
     def set_name(self, name :str):
         try :
             username = self.driver.find_element(By.NAME, "name")
             username.send_keys(name)
         except NoSuchElementException:
-            print("이름을 찾을 수 없습니다.")
-            
+            print("이름 필드를 찾을 수 없습니다.")
+
+    def get_name(self) :
+        try :
+            username = self.driver.find_element(By.NAME, "name")       
+            return username.get_attribute("value")
+        except NoSuchElementException:
+            print("이름 필드를 찾을 수 없습니다.")
+            return None
 
     def set_slider_value(self, flavor : str, value : float):
         try:
@@ -65,7 +87,7 @@ class SignupPage:
             # 드래그 앤 드롭 동작 수행
             action = ActionChains(self.driver)
             action.click_and_hold(thumb_element).move_by_offset(target_x -track_start_x, 0).release().perform()
-
+            
             return True
         except Exception as e:
             print(f"슬리이더 조작 중 오류 발생: {e}")
@@ -76,5 +98,63 @@ class SignupPage:
             return False  
         
         except TimeoutException:
-            print("입력 필드 로딩 시간 초과.")
+            print("슬라이드 로딩 시간 초과.")
+            return False
+    def get_slider_value(self, flavor : str) :
+        try:
+            # 맛에 해당하는 슬라이더 섹션 찾기
+            flavor_section_xpath = f"//section[.//span[text()='{flavor} 맛']]"
+            flavor_section = self.driver.find_element(By.XPATH, flavor_section_xpath)
+            check_value=flavor_section.find_element(By.CLASS_NAME , "w-8").text
+            return check_value
+        except NoSuchElementException:
+            print("필드를 찾을 수 없습니다.")
+            return None 
+        
+    def set_like_textarea(self, text : str):
+        try:
+            textarea=self.driver.find_element(By.NAME, 'pros')
+            textarea.send_keys(text)
+            return True
+        except NoSuchElementException:
+            print("좋아요를 찾을 수 없습니다.")
+            return False
+        
+    def set_hate_textarea(self, text : str):
+        try:
+            textarea=self.driver.find_element(By.NAME, 'cons')
+            textarea.send_keys(text)
+            return True
+        except NoSuchElementException:
+            print("싫어요를 찾을 수 없습니다.")
+            return False
+    
+    def get_like_textarea(self):
+        try:
+            textarea=self.driver.find_element(By.NAME, 'pros')
+
+            return textarea.text
+        except NoSuchElementException:
+            print("싫어요를 찾을 수 없습니다.")
+            return None
+        
+    def get_hate_textarea(self):
+        try:
+            textarea=self.driver.find_element(By.NAME, 'cons')
+            
+            return textarea.text
+        except NoSuchElementException:
+            print("싫어요를 찾을 수 없습니다.")
+            return None
+
+        
+    def error_messages_check(self):
+        error_messages= self.driver.find_elements(By.XPATH, "//p[contains(@class, 'text-red-500')]")
+        if len(error_messages)==0:
+            print("제출하기 성공")
+            return True
+        else :
+            print("제출하기 실패")
+            for i in error_messages :
+                print(i.text)
             return False

@@ -13,9 +13,17 @@ class LoginPage:
     
     def __init__(self, driver: WebDriver):
         self.driver = driver
+    def check_url(self, url : str) :
+        try:
+            wait = WebDriverWait(self.driver, 5) 
+            wait.until(EC.url_contains(url))
+            assert url in self.driver.current_url
+        except TimeoutException:
+            print(f"{url} 페이지가 일치하지 않음")
 
     def open(self):
-        self.driver.get(self.URL)
+            self.driver.get(self.URL)
+            
 
     def open_page(self, url : str):
         self.driver.get(url)

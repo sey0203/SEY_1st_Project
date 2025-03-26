@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 
 from pages.login_page import LoginPage
 
+
 @pytest.mark.usefixtures("driver")
 class TestLoginPage:
     @pytest.mark.skip

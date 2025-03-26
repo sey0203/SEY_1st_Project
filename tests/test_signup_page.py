@@ -12,50 +12,70 @@ from selenium.webdriver.common.action_chains import ActionChains
 from pages.login_page import LoginPage
 from pages.signup_page import SignupPage
 
+FakeData = {"name" : "육조임", "team" : "개발 1팀","value" : 1, "Ltext" : "한식에서 매콤한 음식을 좋아합니다." ,"Htext" : "중식에서 느끼한 음식을 싫어합니다."}
+InvalidData = {"name" : "김", "team" : "개발 4팀","value" : 0.99, "Ltext" : "         " ,"Htext" : "         "}
+LongData = {"name" : "@"*100,
+                "team" : "#"*100,
+                "value" : 10, "Ltext" : "백자가넘는텍스트"*20 ,"Htext" : "백자가넘는텍스트"*20}
+
 @pytest.mark.usefixtures("driver")
-class TestSignupPage:
-    
-    def test_signup_TC001(self, driver: WebDriver):
+class TestSignupPage:    
+    print("123")
+    def test_signup_TC002(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
             signup_page= SignupPage(driver)
             
-            login_page.open()
             #페이지 로딩
-            wait = ws(driver, 10) 
-            wait.until(EC.url_contains("signin"))
-            assert "signin" in driver.current_url
+            login_page.open()
+            login_page.check_url("signin")
             #로그인 버튼 클릭
-            button=driver.find_element(By.XPATH, '//*[@id="root"]//button[contains(text(),"로그인")]')
-            button.click()
-            
-            wait.until(EC.url_contains("login"))
-            assert "login" in driver.current_url
+            login_page.click_button("로그인")
+            login_page.check_url("login")
+
+            #TC98
             login_page.login("qwer1@qwer.qwer","qwerQWER1!")
-            signup_page.set_name("ppap")
-            signup_page.set_random_option()
+            login_page.check_url("welcome")
+
+            #TC99
+            signup_page.set_name(FakeData["name"])
+            signup_page.get_name()
+
+            #TC100
+            signup_page.set_select_option(FakeData["team"])
+            signup_page.get_team_option()
 
             
+            #TC101, TC102
+            signup_page.set_slider_value("단", FakeData["value"])
+            print(signup_page.get_slider_value("단"))
+            signup_page.set_slider_value("단", FakeData["value"]*-1)
+            print(signup_page.get_slider_value("단"))
+
+            #TC103, TC104
+            signup_page.set_slider_value("짠", FakeData["value"])
+            print(signup_page.get_slider_value("짠"))
+            signup_page.set_slider_value("짠", FakeData["value"]*-1)
+            print(signup_page.get_slider_value("짠"))
             
 
-            option = driver.find_element(By.XPATH, '//*[@id="root"]//select')
-            select_element = Select(option)
-            # 옵션 개수 확인 및 품절 여부 확인 후 선택
-            target_option = select_element.options[random.randint(1, len(select_element.options) - 1)]
-            select_element.select_by_visible_text(target_option.text)
+            #TC105, TC106
+            signup_page.set_slider_value("매운", FakeData["value"])
+            print(signup_page.get_slider_value("매운"))
+            signup_page.set_slider_value("매운", FakeData["value"]*-1)
+            print(signup_page.get_slider_value("매운"))
 
-            signup_page.set_slider_value("단", 3)
-            signup_page.set_slider_value("짠", 0.99)
-            signup_page.set_slider_value("매운", 3)
-            testarea=driver.find_element(By.NAME, 'pros')
-            print(testarea)
-            testarea.send_keys("123")
-            testarea=driver.find_element(By.NAME, 'cons')
-            print(testarea)
-            testarea.send_keys("456")
+            #TC107, TC108
+            signup_page.set_like_textarea(FakeData["Ltext"])
+            signup_page.set_hate_textarea(FakeData["Htext"])
+
+            print(signup_page.get_hate_textarea())
+            print(signup_page.get_like_textarea())
             
-            
-            time.sleep(15)
+            #TC107 ~ TC117
+            signup_page.click_button("제출하기")
+            signup_page.error_messages_check()
+
         except NoSuchElementException as e:
             
-            assert False#
+            assert False
