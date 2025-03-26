@@ -10,6 +10,7 @@ import time
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from user_info import LOGIN_INFO
 
 @pytest.fixture(scope="function")
 def driver():
@@ -26,16 +27,13 @@ def driver():
 
 @pytest.fixture
 def login_driver(driver):
-    #이메일과 비밀번호 입력
-    email = "gogo@gmail.com"
-    password = "!Q2w3e4r"
 
     url = "http://kdt-pt-1-pj-2-team03.elicecoding.com/"
     driver.get(url)
     driver.implicitly_wait(5)
     driver.find_element(By.XPATH, "//button[text()='로그인하기']").click()
     driver.implicitly_wait(5)
-    driver.find_element(By.ID, "username").send_keys(email)
-    driver.find_element(By.ID, "password").send_keys(password + Keys.ENTER)
+    driver.find_element(By.ID, "username").send_keys(LOGIN_INFO["user_id"])
+    driver.find_element(By.ID, "password").send_keys(LOGIN_INFO["user_password"] + Keys.ENTER)
     WebDriverWait(driver,3).until_not(EC.url_contains("signin")) #signin이 url에 없어질때까지 명시적 대기
     yield driver
