@@ -24,7 +24,7 @@ class LoginPage:
         try:
             url = self.driver.current_url
             
-            username_field = WebDriverWait(self.driver, 3).until(
+            username_field = WebDriverWait(self.driver, 2).until(
                 EC.presence_of_element_located((By.ID, "username")) 
             )
             username_field.send_keys(username)
@@ -63,7 +63,7 @@ class LoginPage:
     
     def signup(self, username, password) :
         try:
-            username_field = WebDriverWait(self.driver, 3).until(
+            username_field = WebDriverWait(self.driver, 2).until(
                 EC.presence_of_element_located((By.ID, "email")) 
             )
             username_field.clear()
