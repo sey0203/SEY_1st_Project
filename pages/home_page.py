@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import pytest
 
+####### 로그인 된 상태에서 진행이 가능하므로 임의의 로그인 케이스 추가함#######
 # 로그인 설정을 위한 Fixture 정의
 @pytest.fixture(scope="module")
 def login_driver():
@@ -32,52 +33,108 @@ def login_driver():
     )
     yield driver
     driver.quit()
+    
+####### 로그인 된 상태에서 진행이 가능하므로 임의의 로그인 케이스 추가함#######
 
-# HomePage 클래스 정의
+
+# Home Page 진입 확인
 class HomePage:
     def __init__(self, driver: webdriver):
         self.driver = driver
         self.base_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/"
-        self.alone_page_url = self.base_url + "selectoptions/alone"
 
     def load_home(self):
         """홈 페이지를 로드"""
         self.driver.get(self.base_url)
 
-    def load_alone_page(self):
-        """혼자 먹기 페이지 로드"""
-        self.driver.get(self.alone_page_url)
-
     def is_home_loaded(self):
         """홈 페이지가 로드되었는지 확인"""
         try:
             WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div[1]/main/section/div/div[1]/button[1]'))
+                lambda driver: driver.current_url == self.base_url
             )
+            print(f"홈 페이지 로드 확인: PASS - URL: {self.driver.current_url}")
             return True
-        except Exception:
+        except Exception as e:
+            print(f"홈 페이지 로드 확인 실패: Fail - {e}")
             return False
 
-    def click_solo_button(self):
-        """'혼자 먹기' 버튼 클릭"""
-        solo_button_xpath = '//button[.//p[contains(text(), "혼자 먹기")]]'
-        solo_button = self.driver.find_element(By.XPATH, solo_button_xpath)
-        solo_button.click()
+# 혼자 먹기 (한식) 시도
+class SoloKoreanFood:
+    def __init__(self, driver: webdriver):
+        self.driver = driver
 
+    def eat_solo(self):
+        """'혼자 먹기' 버튼 클릭"""
+        try:
+            eat_solo_css = "button.cursor-pointer"
+            solo_button = self.driver.find_element(By.CSS_SELECTOR, eat_solo_css)
+            solo_button.click()
+            print("'혼자 먹기' 버튼 클릭 : PASS")
+        except Exception as e:
+            print(f"'혼자 먹기' 버튼 클릭 실패: FAIL - {e}")
+            raise
+
+    def is_load_alone_page(self):
+        """혼자 먹기 페이지가 로드되었는지 확인"""
+        try:
+            expected_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/selectoptions/alone"
+            WebDriverWait(self.driver, 10).until(
+                lambda driver: driver.current_url == expected_url
+            )
+            print("혼자 먹기 페이지 로드 확인: PASS")
+            return True
+        except Exception as e:
+            print(f"혼자 먹기 페이지 로드 실패 : FAIL - {e}")
+            return False
+        
+    # 드롭다운 메뉴 노출 > 한식 선택하기  
     def select_category(self, category):
         """음식 카테고리를 선택"""
-        dropdown_xpath = '//button[@role="combobox"]'
-        dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, dropdown_xpath))
-        )
-        dropdown.click()
+        try:
+            # 드롭다운 버튼 클릭
+            dropdown_xpath = '//button[@role="combobox"]'
+            dropdown = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, dropdown_xpath))
+            )
+            dropdown.click()
+            print("드롭다운 메뉴 열기: PASS")
 
-        # 카테고리 선택 (한식 선택을 안했기 때문에 문제 발생. 한식, 중식, 양식을 번갈아가며 선택할 수 있게 해야할 것 같음)
-        category_xpath = f'//button[contains(text(), "{category}")]'
+        # 드롭다운 열림 상태 확인
+        if not self.is_dropdown_opened():
+            raise Exception("드롭다운 메뉴 열림 확인 실패")
+        
+        # 카테고리 선택
+        category_xpath = f'//span[text()="{category}"]/parent::button'
         category_option = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, category_xpath))
         )
         category_option.click()
+        print(f"카테고리 '{category}' 선택: PASS")
+
+    except Exception as e:
+        print(f"카테고리 선택 실패: FAIL - {e}")
+        raise
+
+    # 드롭다운 메뉴 노출 상태 유지 여부 확인
+    def is_menu_opened(self):
+        """드롭다운 메뉴가 오픈되어 있는지 확인"""
+        try:
+            drop_menu_xpath = '//div[@data-radix-popper-content-wrapper]'
+            drop_menu = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, drop_menu_xpath))
+            )
+            #요소의 스타일 속성 확인
+            style_attribute = drop_menu.get_attribute("style")
+            if "transform" in style_attribute and "z-index: 50" in style_attribute:
+                print("드롭다운 메뉴 열림 확인: PASS")
+                return True
+            else:
+                print("드롭다운 열림 확인 실패: 스타일 속성 불일치")
+                return False
+        except Exception as e:
+            print(f"드롭다운 메뉴 열림 확인 실패: FAIL - {e}")
+            return False
 
     def click_complete_button(self):
         """선택 완료 버튼 클릭"""
@@ -129,72 +186,3 @@ class HistoryPage:
         except Exception as e:
             print(f"뒤로 가기 버튼 클릭 실패: FAIL - {e}")
             raise
-
-# 테스트 케이스
-@pytest.mark.parametrize("category", ["한식"]) # 중식, 양식은 아직 작성하지 않았으므로 넘기기
-def test_food_category(login_driver, category):
-    """로그인 후 음식 카테고리 선택 및 추천 과정 검증"""
-    home_page = HomePage(login_driver)
-
-    try:
-        # 1. 혼자 먹기 페이지 로드
-        home_page.load_alone_page()
-        print("혼자 먹기 페이지 로드: PASS")
-    except Exception as e:
-        print(f"혼자 먹기 페이지 로드 실패: FAIL - {e}")
-        raise
-
-    try:
-        # 2. 음식 카테고리 선택
-        home_page.select_category(category)
-        print(f"음식 카테고리 '{category}' 선택: PASS")
-    except Exception as e:
-        print(f"음식 카테고리 '{category}' 선택 실패: FAIL - {e}")
-        raise
-
-    try:
-        # 3. 선택 완료 버튼 클릭
-        home_page.click_complete_button()
-        print("선택 완료 버튼 클릭: PASS")
-    except Exception as e:
-        print(f"선택 완료 버튼 클릭 실패: FAIL - {e}")
-        raise
-
-    try:
-        # 4. 추천 페이지 확인
-        recommendation_page = RecommendationPage(login_driver)
-        if recommendation_page.is_menu_displayed():
-            print("추천 페이지 확인: PASS")
-        else:
-            print("추천 페이지 확인 실패: FAIL")
-            raise AssertionError("추천 메뉴 표시 확인 실패")
-    except Exception as e:
-        print(f"추천 페이지 확인 중 오류 발생: FAIL - {e}")
-        raise
-
-    try:
-        # 5. 추천 수락
-        recommendation_page.accept_recommendation()
-        print("추천 수락 버튼 클릭: PASS")
-    except Exception as e:
-        print(f"추천 수락 버튼 클릭 실패: FAIL - {e}")
-        raise
-
-    try:
-        # 6. 추천 히스토리 페이지 확인
-        history_page = HistoryPage(login_driver)
-        history_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/history"
-        assert login_driver.current_url == history_url, "추천 히스토리 페이지로 이동 실패"
-        print("추천 히스토리 페이지 확인: PASS")
-    except AssertionError as e:
-        print(f"추천 히스토리 페이지 확인 실패: FAIL - {e}")
-        raise
-
-    try:
-        # 7. 뒤로 가기 버튼 클릭하여 다시 혼자 먹기 페이지로 이동
-        history_page.go_back()
-        assert login_driver.current_url == home_page.alone_page_url, "혼자 먹기 페이지로 복귀 실패"
-        print("혼자 먹기 페이지 복귀 확인: PASS")
-    except AssertionError as e:
-        print(f"혼자 먹기 페이지 복귀 실패: FAIL - {e}")
-        raise
