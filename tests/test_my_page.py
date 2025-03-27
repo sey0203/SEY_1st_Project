@@ -14,8 +14,9 @@ from pages.my_page import MyPage
 
 
 @pytest.mark.usefixtures("login_driver")
+@pytest.mark.skip(reason="아직 미구현")
 class TestMyPage:
-    @pytest.mark.skip()
+
     def test_001(self, driver:WebDriver):
         try:
             driver.find_element(By.XPATH,'//*[@id="root"]/div[1]/div/ul/li[4]/a').click() # 개인피드 클릭 임시
@@ -23,7 +24,7 @@ class TestMyPage:
         except TimeoutException:
             print("URL에 'my'가 포함되지 않았습니다. ")
             assert False
-    @pytest.mark.skip()
+
     def test_002(self,driver:WebDriver):
         try:            
             driver.find_element(By.XPATH,'//*[@id="root"]/div[1]/div/ul/li[3]/a').click() #히스토리 클릭 임시

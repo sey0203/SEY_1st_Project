@@ -15,6 +15,5 @@ class MyPage:
     def __init__(self, driver: WebDriver):
         self.driver = driver
 
-    def open(self):
-        self.driver.get(self.URL)
-        print("hello")
+    def history_tab(self,driver):
+        print("아직 미완성")
