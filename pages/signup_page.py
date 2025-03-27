@@ -151,10 +151,7 @@ class SignupPage:
     def error_messages_check(self):
         error_messages= self.driver.find_elements(By.XPATH, "//p[contains(@class, 'text-red-500')]")
         if len(error_messages)==0:
-            print("제출하기 성공")
-            return True
+            return None
         else :
             print("제출하기 실패")
-            for i in error_messages :
-                print(i.text)
-            return False
+            return error_messages

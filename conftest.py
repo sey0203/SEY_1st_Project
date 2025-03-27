@@ -19,7 +19,7 @@ def driver():
     driver = webdriver.Chrome(service=Service(), options=chrome_options)
     driver.delete_all_cookies()
     #  대기시간 설정
-    driver.implicitly_wait(5)
+    driver.implicitly_wait(1)
     yield driver
     # 테스트가 끝나면 드라이버 종료
     driver.quit()
