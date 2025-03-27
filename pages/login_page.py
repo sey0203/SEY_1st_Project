@@ -15,7 +15,7 @@ class LoginPage:
         self.driver = driver
     def check_url(self, url : str) :
         try:
-            wait = WebDriverWait(self.driver, 5) 
+            wait = WebDriverWait(self.driver, 3) 
             wait.until(EC.url_contains(url))
             assert url in self.driver.current_url
         except TimeoutException:
