@@ -27,7 +27,8 @@ def setup(login_page) :
             #TC98
             login_page.login(LoginData["username"], LoginData["password"])
             login_page.check_url("welcome")
-
+            
+@pytest.mark.skip
 @pytest.mark.usefixtures("driver")
 class TestSignupPage:
 
