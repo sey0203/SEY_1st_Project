@@ -1,26 +1,26 @@
-# 필요한 라이브러리 import
+# 1. selenium 구동 시 필요한 driver import하기
+# import os (쓸 수도 있으니 일단 놔두고 주석 처리)
+# import time (얘도 마찬가지)
+import pytest
 from selenium import webdriver
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-import pytest
+from selenium.webdriver.support.ui import WebDriverWait
 
-####### 로그인 된 상태에서 진행이 가능하므로 임의의 로그인 케이스 추가함#######
-# 로그인 설정을 위한 Fixture 정의
+# 2. 테스트를 위한 로그인 단 만들기 (사실 여기는 스킾될거임)
 @pytest.fixture(scope="module")
 def login_driver():
     """로그인 설정"""
     service = Service()  # ChromeDriver 설정
     driver = webdriver.Chrome(service=service)
     driver.maximize_window()
-
     # 로그인 정보
     email = "qa1234@1234.com"
     password = "QA1234@1234.com"
     url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/"
-
     # 로그인 절차
     driver.get(url)
     driver.implicitly_wait(5)
@@ -33,248 +33,400 @@ def login_driver():
     )
     yield driver
     driver.quit()
-    
-####### 로그인 된 상태에서 진행이 가능하므로 임의의 로그인 케이스 추가함#######
 
-
-# Home Page 진입 확인
+# 3. 홈 탭으로 이동하기 (이전 과정이 로그인이라 아마 기본적으로 홈 탭으로 이동될 것으로 예상)
 class HomePage:
-    def __init__(self, driver: webdriver):
+    def __init__ (self, driver):
         self.driver = driver
-        self.base_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/"
-
-    def load_home(self):
-        """홈 페이지를 로드"""
-        self.driver.get(self.base_url)
-
-    def is_home_loaded(self):
-        """홈 페이지가 로드되었는지 확인"""
-        try:
-            WebDriverWait(self.driver, 10).until(
-                lambda driver: driver.current_url == self.base_url
-            )
-            print(f"홈 페이지 로드 확인: PASS - URL: {self.driver.current_url}")
-            return True
-        except Exception as e:
-            print(f"홈 페이지 로드 확인 실패: Fail - {e}")
-            return False
-
-# 혼자 먹기 (한식) 시도
-class SoloKoreanFood:
-    def __init__(self, driver: webdriver):
-        self.driver = driver
-
-    def eat_solo(self):
-        """'혼자 먹기' 버튼 클릭"""
-        try:
-            eat_solo_css = "button.cursor-pointer"
-            solo_button = self.driver.find_element(By.CSS_SELECTOR, eat_solo_css)
-            solo_button.click()
-            print("'혼자 먹기' 버튼 클릭 : PASS")
-        except Exception as e:
-            print(f"'혼자 먹기' 버튼 클릭 실패: FAIL - {e}")
-            raise
-
-    def is_load_alone_page(self):
-        """혼자 먹기 페이지가 로드되었는지 확인"""
-        try:
-            expected_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/selectoptions/alone"
-            WebDriverWait(self.driver, 10).until(
-                lambda driver: driver.current_url == expected_url
-            )
-            print("혼자 먹기 페이지 로드 확인: PASS")
-            return True
-        except Exception as e:
-            print(f"혼자 먹기 페이지 로드 실패 : FAIL - {e}")
-            return False
+        # 홈 탭 관련 속성
+        self.home_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/" 
+        # 혼자 먹기 관련 속성
+        self.alone_button_xpath = "/html/body/div[1]/div[1]/main/section/div/div[1]/button[1]"
+        self.alone_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/selectoptions/alone"
+        # 같이 먹기 관련 속성
+        self.together_button_xpath = "같이 먹기 Xpath 붙여넣기"
+        self.together_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/selectoptions/together"
+        # 팀 회식 관련 속성
+        self.team_button_xpath = "팀 회식 Xpath 붙여넣기"
+        self.team_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/selectoptions/team"
+        # 추천 메뉴 페이지 관련 속성
+        self.recommendation_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/recommendation"
+        # 음식 메뉴 Xpath
+        self.menu_xpath = {"한식" : '/html/body/div[3]/div/div/div/div[2]',
+                           "중식" : '/html/body/div[3]/div/div/div/div[3]', 
+                           "양식" : '/html/body/div[3]/div/div/div/div[4]',
+                           "일식" : '/html/body/div[3]/div/div/div/div[5]',
+                           "분식" : '/html/body/div[3]/div/div/div/div[6]',
+                           "아시안" : '/html/body/div[3]/div/div/div/div[7]',
+                           "패스트푸드" : '/html/body/div[3]/div/div/div/div[8]',
+                           "기타" : '/html/body/div[3]/div/div/div/div[9]'}
         
-    # 드롭다운 메뉴 노출 > 한식 선택하기  
-    def select_category(self, category):
-        """음식 카테고리를 선택"""
+####### 이 부분이 에러가 나면 통째로 날리거나 수정 필요함 #######
+    def click_menu_category(self, category_xpath):
+        """드롭다운 리스트에서 메뉴 선택하는 과정이 반복되어 만듦"""
         try:
-            # 드롭다운 버튼 클릭
-            dropdown_xpath = '//button[@role="combobox"]'
-            dropdown = WebDriverWait(self.driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, dropdown_xpath))
+            category = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, category_xpath))
             )
-            dropdown.click()
+            category.click()
+            print(f"'{category_xpath}' 카테고리 선택 : PASS")
+        except NoSuchElementException as e:
+            print(f"해당 카테고리를 찾을 수 없습니다 : {e}")
+        except ElementNotInteractableException as e:
+            print(f"선택한 카테고리 클릭 실패 : {e}")
+            
+####### 이 부분이 에러가 나면 통째로 날리거나 수정 필요함 #######
+
+    def go_to_home(self):
+        """홈 탭을 눌러 이동"""
+        self.driver.get(self.home_url)
+
+    def verify_home_page(self):
+        """이동한 페이지의 url이 위의 주소와 동일한지 확인"""
+        current_url = self.driver.current_url
+        try:
+            assert current_url == self.home_url
+            print("홈 탭에 정상적으로 이동했습니다.")
+        except AssertionError:
+            print(f"홈 탭 이동 실패! 현재 URL: {current_url}")
+
+####### 혼자 먹기 테스트 시작 #######
+
+# 4. 혼자 먹기 클릭 하기
+    def click_eat_alone_button(self):
+        """혼자 먹기 버튼 클릭"""
+        try:
+            alone_button = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, self.alone_button_xpath))
+            )
+            alone_button.click()
+            print("혼자 먹기 버튼 클릭 : PASS")
+        except NoSuchElementException as e:
+            print(f"혼자 먹기 버튼을 찾을 수 없음: {e}")
+        except ElementNotInteractableException as e:
+            print(f"혼자 먹기 버튼 클릭 실패: {e}")
+
+    def verify_eat_alone_page(self):
+        """혼자 먹기 페이지 URL 확인"""
+        current_url = self.driver.current_url
+        try:
+            assert current_url == self.alone_url
+            print("혼자 먹기 페이지에 정상적으로 이동했습니다.")
+        except AssertionError:
+            print(f"혼자 먹기 페이지 이동 실패! 현재 URL: {current_url}")
+
+# 5. 펼침 메뉴 > 한식 / 중식 / 양식 선택하기 (3 ~ 8 과정 반복 수행)
+    def click_category(self):
+        """메뉴 드롭다운 리스트 펼치기"""
+        try:
+            menu_category = self.driver.find_element(By.XPATH, '//*[@id="root"]/div[1]/main/section/div/div[1]/button')
+            menu_category.click()
             print("드롭다운 메뉴 열기: PASS")
+        except NoSuchElementException as e:
+            print(f"드롭다운 메뉴를 찾을 수 없음: {e}")
+        except ElementNotInteractableException as e:
+            print(f"메뉴 선택 드롭다운 리스트 펼치기 실패: {e}")
 
-        # 드롭다운 열림 상태 확인
-        if not self.is_dropdown_opened():
-            raise Exception("드롭다운 메뉴 열림 확인 실패")
-        
-    # 드롭다운 메뉴 노출 상태 유지 여부 확인
-    def is_menu_opened(self):
-        """드롭다운 메뉴가 오픈되어 있는지 확인"""
+    def select_category(self, category_name):
+        """카테고리 선택하기"""
         try:
-            drop_menu_xpath = '//div[@data-radix-popper-content-wrapper]'
-            drop_menu = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, drop_menu_xpath))
+            category_xpath = self.menu_xpath[category_name]
+            category = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, category_xpath))
             )
-            #요소의 스타일 속성 확인
-            style_attribute = drop_menu.get_attribute("style")
-            if "transform" in style_attribute and "z-index: 50" in style_attribute:
-                print("드롭다운 메뉴 열림 확인: PASS")
-                return True
-            else:
-                print("드롭다운 열림 확인 실패: 스타일 속성 불일치")
-                return False
-        except Exception as e:
-            print(f"드롭다운 메뉴 열림 확인 실패: FAIL - {e}")
-            return False
-        
-####### 드롭다운 메뉴에서 한식, 중식, 양식 선택 하는 방법을 모르겠음. 계속 해도 안돼서 일단 넘김#######
+            category.click()
+            print(f"{category_name} 선택 : PASS")
+        except ElementNotInteractableException as e:
+            print(f"드롭다운 리스트에서 {category_name} 선택 실패!: {e}")
 
-        # 카테고리 선택 (이 부분에서 막혀버림.. 일단 여기 재끼고 다음 부분부터 작성하자.)
-        category_xpath = f'//span[text()="{category}"]/parent::button'
-        category_option = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, category_xpath))
-        )
-        category_option.click()
-        print(f"카테고리 '{category}' 선택: PASS")
-
-    except Exception as e:
-        print(f"카테고리 선택 실패: FAIL - {e}")
-        raise
-
-    def click_complete_button(self):
-        """선택 완료 버튼 클릭"""
-        complete_button_xpath = '//*[@id="root"]/div[1]/main/section/div/button'
-        complete_button = self.driver.find_element(By.XPATH, complete_button_xpath)
-        complete_button.click()
-
-####### 드롭다운 메뉴에서 한식, 중식, 양식 선택 하는 방법을 모르겠음. 계속 해도 안돼서 일단 넘김#######
-
-# RecommendationPage 클래스 정의
-class RecommendationPage:
-    def __init__(self, driver: webdriver):
-        self.driver = driver
-
-    def is_menu_displayed(self):
-        """추천 메뉴 태그 확인"""
+# 6. 선택 완료 버튼을 눌러 메뉴 추천 받기
+    def click_complete_btn(self):
+        """선택 완료 버튼을 눌러 한식 메뉴 추천 받기"""
         try:
-            menu_tag_xpath = '//span[contains(text(), "오늘 메뉴는")]'
-            WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, menu_tag_xpath))
+            complete_btn_xpath = '/html/body/div[1]/div[1]/main/section/div/button'
+            complete_btn = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, complete_btn_xpath))
             )
-            print("추천 메뉴 확인: PASS")
-            return True
-        except Exception as e:
-            print(f"추천 메뉴 확인 실패: FAIL - {e}")
-            return False
+            complete_btn.click()
+            print("선택 완료 버튼 클릭 : PASS")
+        except NoSuchElementException as e:
+            print(f"선택 완료 버튼을 찾을 수 없음: {e}")
+        except ElementNotInteractableException as e:
+            print(f"선택 완료 버튼 클릭 실패 : {e}")
 
-    def accept_recommendation(self):
-        """추천 수락 버튼 클릭"""
+# 7. 메뉴 추천 받은 후, 추천 수락하기
+    def show_recommend(self):
+        """추천 메뉴 확인"""
+        current_url = self.driver.current_url
         try:
-            accept_button_xpath = '//*[@id="root"]/div[1]/main/section/section/button[2]'
-            accept_button = self.driver.find_element(By.XPATH, accept_button_xpath)
-            accept_button.click()
-            print("추천 수락 버튼 클릭: PASS")
-        except Exception as e:
-            print(f"추천 수락 버튼 클릭 실패: FAIL - {e}")
-            raise
+            assert current_url == self.recommendation_url
+            print("추천 메뉴 확인 페이지에 정상적으로 이동했습니다.")
+        except AssertionError:
+            print(f"추천 메뉴 확인 페이지 이동 실패! 현재 URL: {current_url}")
 
-# # HistoryPage 클래스 정의 (근데 이건 필요 없을 것 같기도 함)
-# class HistoryPage:
-#     def __init__(self, driver: webdriver):
-#         self.driver = driver
-
-#     def go_back(self):
-#         """뒤로 가기 버튼 클릭"""
-#         try:
-#             back_button_xpath = '//*[@id="root"]/div[1]/header/div/svg'
-#             back_button = self.driver.find_element(By.XPATH, back_button_xpath)
-#             back_button.click()
-#             print("뒤로 가기 버튼 클릭: PASS")
-#         except Exception as e:
-#             print(f"뒤로 가기 버튼 클릭 실패: FAIL - {e}")
-#             raise
-
-# 추천 히스토리 확인 후 홈으로 이동 (썼던 클래스를 또 써도 되는지 모르겠다.)
-
-class HomePage:
-    def __init__(self, driver: webdriver):
-        self.driver = driver
-        self.base_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/"
-
-    def load_home(self):
-        """홈 페이지를 로드"""
-        self.driver.get(self.base_url)
-
-    def is_home_loaded(self):
-        """홈 페이지가 로드되었는지 확인"""
+    def accept_recommend(self):
+        """추천 수락 버튼 클릭하기"""
         try:
-            WebDriverWait(self.driver, 10).until(
-                lambda driver: driver.current_url == self.base_url
+            accept_btn_xpath = '/html/body/div[1]/div[1]/main/section/section/button[2]'
+            accept_btn = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, accept_btn_xpath))
             )
-            print(f"홈 페이지 로드 확인: PASS - URL: {self.driver.current_url}")
-            return True
-        except Exception as e:
-            print(f"홈 페이지 로드 확인 실패: Fail - {e}")
-            return False
-        
-# 같이 먹기 (한식) 시도
-class TogetherKoreanFood:
-    def __init__(self, driver: webdriver):
-        self.driver = driver
+            accept_btn.click()
+            print("추천 수락 버튼 클릭 : PASS")
+        except NoSuchElementException as e:
+            print(f"추천 수락 버튼을 찾을 수 없음 : {e}")
+        except ElementNotInteractableException as e:
+            print(f"추천 수락 버튼 클릭 실패 : {e}")
 
-    def eat_together(self):
-        """'같이 먹기' 버튼 클릭"""
+# 8. 다시 홈 탭으로 돌아가기 
+    def return_home(self):
+        """추천 수락 후, 다음 테스트를 위해 홈 탭으로 이동"""
+        self.go_to_home()
+        self.verify_home_page()
+        
+# 위의 과정을 사용하여 한식 테스트 수행
+    def test_korean_food(self):
+        self.go_to_home()
+        self.verify_home_page()
+        self.click_eat_alone_button()
+        self.verify_eat_alone_page()
+        self.click_category()
+        self.select_category("한식")
+        self.click_complete_btn()
+        self.show_recommend()
+        self.accept_recommend()
+        self.return_home()
+
+# 위의 과정을 사용하여 중식 테스트 수행
+    def test_chinese_food(self):
+        self.go_to_home()
+        self.verify_home_page()
+        self.click_eat_alone_button()
+        self.verify_eat_alone_page()
+        self.click_category()
+        self.select_category("중식")
+        self.click_complete_btn()
+        self.show_recommend()
+        self.accept_recommend()
+        self.return_home()
+
+ # 위의 과정을 사용하여 양식 테스트 수행
+    def test_western_food(self):
+        self.go_to_home()
+        self.verify_home_page()
+        self.click_eat_alone_button()
+        self.verify_eat_alone_page()
+        self.click_category()
+        self.select_category("양식")
+        self.click_complete_btn()
+        self.show_recommend()
+        self.accept_recommend()
+        self.return_home()
+
+####### 혼자 먹기 테스트 완료 #######
+
+####### 같이 먹기 테스트 시작 #######
+
+# 9. 같이 먹기 클릭하기
+    def click_eat_together_button(self):
+        """같이 먹기 버튼 클릭"""
         try:
-            eat_together_css = "div.grid > button:nth-child(2)"
-            together_button = self.driver.find_element(By.CSS_SELECTOR, eat_together_css)
+            together_button = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, self.together_button_xpath))
+            )
             together_button.click()
-            print("'같이 먹기' 버튼 클릭 : PASS")
-        except Exception as e:
-            print(f"'같이 먹기' 버튼 클릭 실패: FAIL - {e}")
-            raise
+            print("같이 먹기 버튼 클릭 : PASS")
+        except NoSuchElementException as e:
+            print(f"같이 먹기 버튼을 찾을 수 없음: {e}")
+        except ElementNotInteractableException as e:
+            print(f"같이 먹기 버튼 클릭 실패: {e}")
 
-    def is_load_together_page(self):
-        ""같이 먹기 페이지가 로드되었는지 확인""
+    def verify_eat_together_page(self):
+        """같이 먹기 페이지 URL 확인"""
+        current_url = self.driver.current_url
         try:
-            expected_url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/selectoptions/together"
-            WebDriverWait(self.driver, 10).until(
-                lambda driver: driver.current_url == expected_url
-            )
-            print("같이 먹기 페이지 로드 확인: PASS")
-            return True
-        except Exception as e:
-            print(f"같이 먹기 페이지 로드 실패 : FAIL - {e}")
-            return False
-        
-    # 드롭다운 메뉴 노출 > 한식 선택하기  
-    def select_category(self, category):
-        """음식 카테고리를 선택"""
-        try:
-            # 드롭다운 버튼 클릭
-            dropdown_xpath = '//button[@role="combobox"]'
-            dropdown = WebDriverWait(self.driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, dropdown_xpath))
-            )
-            dropdown.click()
-            print("드롭다운 메뉴 열기: PASS")
+            assert current_url == self.together_url
+            print("같이 먹기 페이지에 정상적으로 이동했습니다.")
+        except AssertionError:
+            print(f"같이 먹기 페이지 이동 실패! 현재 URL: {current_url}")
 
-        # 드롭다운 열림 상태 확인
-        if not self.is_dropdown_opened():
-            raise Exception("드롭다운 메뉴 열림 확인 실패")
-        
-    # 드롭다운 메뉴 노출 상태 유지 여부 확인
-    def is_menu_opened(self):
-        """드롭다운 메뉴가 오픈되어 있는지 확인"""
+# 10. 펼침 메뉴 > 일식 / 분식 / 아시안 선택하기 (9 ~ 14 과정 반복 수행)
+    def click_category_together(self):
+        self.click_category()
+    def select_category_together(self, category_name):
+        self.select_category(category_name)
+
+# 11. 먹는 인원 선택하기 (첫번째 멤버 선택, 강호동은 검색해야할 듯...)
+    def choice_member_one(self):
+        """첫번째 멤버 선택하기"""
         try:
-            drop_menu_xpath = '//div[@data-radix-popper-content-wrapper]'
-            drop_menu = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, drop_menu_xpath))
+            member_one = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div[1]/main/section/div/div[2]/div[4]/div[1]/input'))
             )
-            #요소의 스타일 속성 확인
-            style_attribute = drop_menu.get_attribute("style")
-            if "transform" in style_attribute and "z-index: 50" in style_attribute:
-                print("드롭다운 메뉴 열림 확인: PASS")
-                return True
-            else:
-                print("드롭다운 열림 확인 실패: 스타일 속성 불일치")
-                return False
-        except Exception as e:
-            print(f"드롭다운 메뉴 열림 확인 실패: FAIL - {e}")
-            return False
+            member_one.click()
+            print("첫번째 멤버가 선택되었습니다.")
+        except NoSuchElementException as e:
+            print(f"해당 멤버를 찾지 못했습니다. : {e}")
+        except ElementNotInteractableException as e:
+            print(f"해당 멤버를 선택하지 못했습니다. : {e}")
+
+    def choice_member_two(self):
+        """강호동 검색해서 선택하기"""
+        try:
+            member_two = self.driver.find_element(By.CLASS_NAME, "placeholder") 
+            member_two.send_keys("강호동")
+            member_two.send_keys(Keys.RETURN)
+            click_member_two = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div[1]/main/section/div/div[2]/div[3]/ul/li/div'))
+            )
+            click_member_two.click()
+            print("멤버가 선택되었습니다.")
+        except NoSuchElementException as e:
+            print(f"해당 멤버를 찾지 못했습니다. : {e}")
+        except ElementNotInteractableException as e:
+            print(f"해당 멤버를 선택하지 못했습니다. : {e}")
+
+# 12. 선택 완료 버튼을 눌러 메뉴 추천 받기
+    def click_complete_btn_together(self):
+        self.click_complete_btn()
+
+# 13. 메뉴 추천 받은 후, 추천 수락하기
+    def show_recommend_together(self):
+        self.show_recommend()
+    def accept_recommend_together(self):
+        self.accept_recommend()
+
+# 14. 다시 홈 탭으로 돌아가기
+        self.return_home()
+
+# 위의 과정을 사용하여 일식 테스트 수행
+    def test_japanese_food(self):
+        self.verify_home_page()
+        self.click_eat_together_button()
+        self.verify_eat_together_page()
+        self.click_category_together()
+        self.select_category_together("일식")
+        self.choice_member_one()
+        self.choice_member_two()
+        self.click_complete_btn_together()
+        self.show_recommend_together()
+        self.accept_recommend_together()
+        self.return_home()
+
+# 위의 과정을 사용하여 분식 테스트 수행
+    def test_street_food(self):
+        self.verify_home_page()
+        self.click_eat_together_button()
+        self.verify_eat_together_page()
+        self.click_category_together()
+        self.select_category_together("분식")
+        self.choice_member_one()
+        self.choice_member_two()
+        self.click_complete_btn_together()
+        self.show_recommend_together()
+        self.accept_recommend_together()
+        self.return_home()
+ # 위의 과정을 사용하여 아시안 테스트 수행
+    def test_asian_food(self):
+        self.verify_home_page()
+        self.click_eat_together_button()
+        self.verify_eat_together_page()
+        self.click_category_together()
+        self.select_category_together("아시안")
+        self.choice_member_one()
+        self.choice_member_two()
+        self.click_complete_btn_together()
+        self.show_recommend_together()
+        self.accept_recommend_together()
+        self.return_home()
+
+####### 같이 먹기 테스트 완료 #######
+
+####### 회식하기 테스트 시작 #######
+
+# 15. 회식하기 클릭하기
+    def click_eat_team_button(self):
+        """회식하기 버튼 클릭"""
+        try:
+            team_button = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, self.team_button_xpath))
+            )
+            team_button.click()
+            print("회식하기 버튼 클릭 : PASS")
+        except NoSuchElementException as e:
+            print(f"회식하기 버튼을 찾을 수 없음: {e}")
+        except ElementNotInteractableException as e:
+            print(f"회식하기 버튼 클릭 실패: {e}")
+
+    def verify_eat_team_page(self):
+        """회식하기 페이지 URL 확인"""
+        current_url = self.driver.current_url
+        try:
+            assert current_url == self.team_url
+            print("회식하기 페이지에 정상적으로 이동했습니다.")
+        except AssertionError:
+            print(f"회식하기 페이지 이동 실패! 현재 URL: {current_url}")
+
+# 16. 펼침 메뉴 > 패스트 푸드 / 기타 선택하기 (15 ~ 20 과정 반복 수행)
+    def click_category_team(self):
+        self.click_category()
+    def select_category_team(self, category_name):
+        self.select_category(category_name)
+
+# 17. 먹는 인원 확인하기 (개발 1팀 여부 확인)
+    def join_team(self):
+        try:
+            team_name = self.driver.find_element(By.XPATH, "//span[@class='text-white']")
+            assert "개발 1팀" in team_name.text
+            print("'개발 1팀'이 정상적으로 선택되어 있습니다.")
+        except NoSuchElementException as e: 
+            print(f"'개발 1팀'을 찾을 수 없습니다. : {e}") 
+
+# 18. 선택 완료 버튼을 눌러 메뉴 추천 받기
+    def click_complete_btn_team(self):
+        self.click_complete_btn()
+
+# 19. 메뉴 추천 받은 후, 추천 수락하기
+    def show_recommend_team(self):
+        self.show_recommend()
+    def accept_recommend_team(self):
+        self.accept_recommend()
+
+# 20. 다시 홈 탭으로 돌아가기 
+        self.return_home()
+
+# 위의 과정을 사용하여 패스트 푸드 테스트 수행
+    def test_fast_food(self):
+        self.go_to_home()
+        self.verify_home_page()
+        self.click_eat_team_button()
+        self.verify_eat_team_page()
+        self.click_category()
+        self.select_category("패스트푸드")
+        self.click_complete_btn()
+        self.show_recommend()
+        self.accept_recommend()
+        self.return_home()
+
+# 위의 과정을 사용하여 기타 테스트 수행
+    def test_other_food(self):
+        self.go_to_home()
+        self.verify_home_page()
+        self.click_eat_team_button()
+        self.verify_eat_team_page()
+        self.click_category()
+        self.select_category("기타")
+        self.click_complete_btn()
+        self.show_recommend()
+        self.accept_recommend()
+        self.return_home()
+
+####### 회식하기 테스트 완료 #######
+
+# 21. 직원들이 선호하는 음식 종류 확인하기 (마우스 온 시 내용 노출 확인)
+
+
+
+# 22. 메뉴 추천 확인하기 
+
+
