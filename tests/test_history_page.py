@@ -10,6 +10,7 @@ import time
 import random
 import pytest
 from pages.history_page import HistoryPage
+import os
 
 '''
 참고
@@ -27,7 +28,7 @@ menu_list의 출력 예시
 
 
 @pytest.mark.usefixtures("login_driver")
-@pytest.mark.skip()
+#@pytest.mark.skip()
 class TestMyPage:
 
     category_list = [
@@ -39,6 +40,8 @@ class TestMyPage:
     (5, "혼밥", "양식"),
     (6, "혼밥", "중식"),
     (7, "혼밥", "한식")]
+
+    meal_type = ["혼밥", "그룹", "회식"]
 
     def navigate_to_history(self, driver):
         history_page = HistoryPage(driver)
@@ -120,18 +123,75 @@ class TestMyPage:
             history_page = self.navigate_to_history(driver)
             
             btn = history_page.text(HistoryPage.review_register_btn)
-            assert "추천 후기 등록" in btn, "추천 후기 등록 버튼이 없음"
+            assert "추천 후기 등록" in btn, "추천 후기 등록 버튼 미노출"
         except Exception as e:
-            print("추천 후기 등록하기 버튼 미노출")
+            print("추천 후기 등록하기 버튼 탐색 실패")
             assert False
 
     @pytest.mark.skip()
     def test_history_023(self,driver:WebDriver):
         try:
             history_page = self.navigate_to_history(driver)
-            button = history_page.review_register_btn()
-            button.click()            
-            #assert len(GNB) > 0 , "후기 등록하기 페이지가 열리지 않음"
+            history_page.click(HistoryPage.review_register_btn)
+            result = history_page.is_displayed(HistoryPage.review_tab)
+            assert result == True, "후기 등록 탭 미노출"
         except Exception as e:
-            print("후기 등록 탭 미노출")
+            print("후기 등록 탭 탐색 실패")
+            assert False
+
+    @pytest.mark.skip()
+    def test_history_024(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+            review_title = history_page.text(HistoryPage.GNB_review)
+            assert "후기 등록하기" in review_title, "후기 등록 GNB 미노출"
+        except Exception as e:
+            print("후기 등록하기 GNB 탐색 실패")
+            assert False
+
+    @pytest.mark.skip()
+    def test_history_025(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+            radio_alone = history_page.text(HistoryPage.eat_alone)
+            radio_group = history_page.text(HistoryPage.eat_group)
+            radio_together = history_page.text(HistoryPage.eat_together)
+            print(radio_alone, radio_group, radio_together)
+            assert radio_alone == "혼밥", "혼밥 라디오 버튼 미노출"
+            assert radio_group == "그룹", "그룹 라디오 버튼 미노출"
+            assert radio_together == "회식", "회식 라디오 버튼 미노출"
+        except Exception as e:
+            print("라디오 버튼 탐색 실패")
+            assert False
+
+    @pytest.mark.skip() ##이미지 등록 기능 구현이 어려워서 일단 패스
+    def test_history_026(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)   
+            time.sleep(1)
+            #history_page.click(HistoryPage.review_img_btn)
+            time.sleep(1)
+            history_page.send_keys(HistoryPage.review_comment, "테스트")
+            history_page.send_keys(HistoryPage.review_img_input, "sample.png")
+            time.sleep(5)
+
+        except Exception as e:
+            print("이미지 영역 탐색 실패")
+            assert False
+
+    #@pytest.mark.skip()  ## 시스템 대화창이 떴는지 검증은 불가능한듯
+    def test_history_027(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)   
+            #history_page.click(HistoryPage.review_img_btn)
+            time.sleep(1)
+            history_page.send_keys(HistoryPage.review_img_input, HistoryPage.image_path)
+            time.sleep(5)
+            assert True
+        except Exception as e:
+            print("에러발생 확인완료")
             assert False
