@@ -68,7 +68,13 @@ class TestMyPage:
             assert False
 
     @pytest.mark.skip()
+<<<<<<< HEAD
     def test_history_003(self, driver: WebDriver):
+=======
+
+    def test_history_003(self, driver: WebDriver):
+
+>>>>>>> cb38479bd9d35beb6223a2fc0657add0ea30311c
         try:
             history_page = self.navigate_to_history(driver)
             GNB_name = history_page.text(HistoryPage.GNB_history)
@@ -97,8 +103,17 @@ class TestMyPage:
         except Exception as e:
             print(f"메뉴들을 찾아내지 못함")
             assert False
+<<<<<<< HEAD
             
     @pytest.mark.skip()
+=======
+
+    
+
+
+
+    #@pytest.mark.skip()
+>>>>>>> cb38479bd9d35beb6223a2fc0657add0ea30311c
     @pytest.mark.parametrize("index, expected_main, expected_sub", category_list)
     def test_menu_categories(self,driver: WebDriver, index, expected_main, expected_sub):  #6,8,10,12,14,16,18,20번 TC
         try:
@@ -136,4 +151,8 @@ class TestMyPage:
             #assert "추천 후기 등록" in  "추천 후기 등록 버튼이 없음"
         except Exception as e:
             print("후기 등록 탭 미노출")
+<<<<<<< HEAD
             assert False
+=======
+            assert False
+>>>>>>> cb38479bd9d35beb6223a2fc0657add0ea30311c
