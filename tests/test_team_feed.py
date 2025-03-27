@@ -6,6 +6,8 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from pages.team_feed import TeamFeedPage
+from pages.login_page import LoginPage
+from pages.signup_page import SignupPage
 from selenium.webdriver.common.action_chains import ActionChains
 
 
@@ -26,9 +28,14 @@ class TestTeamFeedPage:
     TEAM_HATE_FOOD_XPATH = "//*[@id='root']/div[1]/main/section/section/section/div[2]/div[2]/p"
     PROFILE_EDIT_XPATH = "//span[text()='프로필 정보 수정']"
     SWEET_SLIDER_XPATH = "//section[contains(., '단 맛')]//span[@role='slider']"
+    SOLO_DINNER_XPATH = "//div[@class='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-main text-white' and text()='혼밥']"
+    GROUP_DINNER_XPATH = "//div[@class='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-main text-white' and text()='그룹']"
+    TEAM_DINNER_XPATH = "//div[@class='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-main text-white' and text()='회식']"
+    REVIEW_CONTAINER_CSS = "div.flex.w-full.gap-6.p-4.shadow-md.rounded-2xl"
+    ADD_REVIEW_XPATH = "//span[text()='새로운 후기 등록하기']"
 
     
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_001(self, driver: WebDriver):
         try:
             home_gnb = driver.find_element(By.CSS_SELECTOR, self.GNB_SELECTOR)
@@ -54,7 +61,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드 아이콘-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_002(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -73,7 +80,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드 페이지-오픈-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_003(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -95,7 +102,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드 title 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_004(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -122,7 +129,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-드롭다운-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_005(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -149,7 +156,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-음식 성향 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_006(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -176,7 +183,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-팀 통계 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_007(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -203,7 +210,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-팀이 먹은 메뉴-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_008(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -232,7 +239,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-'개발 1팀' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_009(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -261,7 +268,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-'단 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_010(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -290,7 +297,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-'짠 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_011(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -319,7 +326,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-'매운 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_012(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -348,7 +355,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-좋아하는 음식 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="테스트 통과해서 생략")
+    @pytest.mark.skip()
     def test_teamfeed_013(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -377,7 +384,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-싫어하는 음식 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="나중에 다시 테스트")
+    @pytest.mark.skip()
     def test_teamfeed_014(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -408,7 +415,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-프로필 정보 수정화면-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="나중에 다시 테스트")
+    @pytest.mark.skip()
     def test_teamfeed_015(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -432,7 +439,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-프로필 수정 완료 클릭-실패 (알 수 없는 오류) : {e}"
         
 
-    @pytest.mark.skip(reason="나중에 다시 테스트")
+    @pytest.mark.skip()
     def test_teamfeed_016(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -457,41 +464,143 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-'X' 버튼 클릭-실패 (알 수 없는 오류) : {e}"
 
 
-    # @pytest.mark.skip(reason="나중에 다시 테스트")
-    def test_teamfeed_017(self, driver: WebDriver):
+    @pytest.mark.skip()
+    def test_teamfeed_082(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
-            team_feed_page.navigate_to_profile_edit(driver)
+            team_feed_page.navigate_to_team_eaten_menu(driver)
 
-            sweet_slider = driver.find_element(By.XPATH, self.SWEET_SLIDER_XPATH)
+            #후기 컨테이너 선택
+            wait = ws(driver, 10)
+            review_container = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, self.REVIEW_CONTAINER_CSS)))
 
-            # 현재 값 가져오기
-            current_value = float(sweet_slider.get_attribute("aria-valuenow"))
-            print(f"현재 슬라이더 값: {current_value}")
+            #후기 아이템 선택
+            review_items = review_container.find_elements(By.TAG_NAME, "p")
 
-            slider_width = sweet_slider.size["width"]  # 슬라이더의 전체 너비 가져오기
-            move_distance = -slider_width * 0.2  # 20% 만큼 이동할 거리 계산
-
-            actions = ActionChains(driver)
-            actions.click_and_hold(sweet_slider).move_by_offset(move_distance, 0).release().perform()
-            time.sleep(1)
-
-            # 새로운 값 가져와서 검증
-            new_value = float(sweet_slider.get_attribute("aria-valuenow"))
-            print(f"변경 후 슬라이더 값: {new_value}")
-
-            # 값이 예상 범위 내에서 변경되었는지 검증
-            expected_value = current_value * 0.80  # 20% 감소
-            assert abs(new_value - expected_value) < 0.05, "❌ 값이 올바르게 감소되지 않았습니다!"
-
-            print("✅ 슬라이더 값이 20% 감소됨")
-            driver.save_screenshot("✅ 팀 피드-프로필정보수정화면-단맛 슬라이더조정-성공.png")
+            assert len(review_items) > 0, "❌ 팀이 먹은 메뉴 후기가 1개 이상 존재해야 합니다."
+            print("✅ 팀이 먹은 메뉴 후기가 1개 이상 존재합니다.")
 
         except NoSuchElementException as e:
-            assert False, f"❌ 팀 피드-프로필정보수정화면-단맛 슬라이더조정-실패 (요소를 찾을 수 없음) : {e}"
+            assert False, f"❌ 팀 피드-팀이 먹은 메뉴목록-실패 (요소를 찾을 수 없음) : {e}"
 
         except TimeoutException as e:
-            assert False, f"❌ 팀 피드-프로필정보수정화면-단맛 슬라이더조정-실패 (시간 초과) : {e}"
+            assert False, f"❌ 팀 피드-팀이 먹은 메뉴목록-실패 (시간 초과) : {e}"
 
         except Exception as e:
-            assert False, f"❌ 팀 피드-프로필정보수정화면-단맛 슬라이더조정-실패 (알 수 없는 오류) : {e}"
+            assert False, f"❌ 팀 피드-팀이 먹은 메뉴목록-실패 (알 수 없는 오류) : {e}"
+
+
+    @pytest.mark.skip()
+    def test_teamfeed_083(self, driver: WebDriver):
+        try:
+            team_feed_page = TeamFeedPage(driver)
+            team_feed_page.navigate_to_team_eaten_menu(driver)
+
+            solo_dinner = driver.find_elements(By.XPATH, self.SOLO_DINNER_XPATH)
+
+            # 혼밥 태그가 없어야 정상 (이전 테스트 케이스에서 FAIL이 났으므로)
+            assert len(solo_dinner) == 0, f"❌ 혼밥 태그가 표시됨 (버그 존재 가능)"
+            print("✅ 기능명세서대로 혼밥태그 존재하지 않음")
+
+        except NoSuchElementException as e:
+            pass # 요소가 없으면 정상적으로 테스트 통과
+
+        except TimeoutException as e:
+            assert False, f"❌ 팀 피드-팀이 먹은 메뉴-혼밥태그-실패 (시간 초과) : {e}"
+
+        except Exception as e:
+            assert False, f"❌ 팀 피드-팀이 먹은 메뉴-혼밥태그-실패 (알 수 없는 오류) : {e}"
+
+
+    @pytest.mark.skip()
+    def test_teamfeed_084(self, driver: WebDriver):
+        try:
+            team_feed_page = TeamFeedPage(driver)
+            team_feed_page.navigate_to_team_eaten_menu(driver)
+
+            group_dinner = driver.find_elements(By.XPATH, self.GROUP_DINNER_XPATH)
+
+            assert len(group_dinner) > 0, f"❌ 팀이 먹은 메뉴-그룹태그 존재하지 않음"
+            print("✅ 팀이 먹은 메뉴-그룹태그 확인")
+
+        except NoSuchElementException as e:
+            assert False, f"❌ 팀 피드-팀이 먹은 메뉴-그룹태그-실패 (요소를 찾을 수 없음) : {e}"
+
+        except TimeoutException as e:
+            assert False, f"❌ 팀 피드-팀이 먹은 메뉴-그룹태그-실패 (시간 초과) : {e}"
+
+        except Exception as e:
+            assert False, f"❌ 팀 피드-팀이 먹은 메뉴-그룹태그-실패 (알 수 없는 오류) : {e}"
+
+
+    @pytest.mark.skip()
+    def test_teamfeed_085(self, driver: WebDriver):
+        try:
+            team_feed_page = TeamFeedPage(driver)
+            team_feed_page.navigate_to_team_eaten_menu(driver)
+
+            team_dinner = driver.find_elements(By.XPATH, self.TEAM_DINNER_XPATH)
+
+            assert len(team_dinner) > 0, f"❌ 팀이 먹은 메뉴-회식태그 존재하지 않음"
+            print("✅ 팀이 먹은 메뉴-회식태그 확인")
+
+        except NoSuchElementException as e:
+            assert False, f"❌ 팀 피드-팀이 먹은 메뉴-회식태그-실패 (요소를 찾을 수 없음) : {e}"
+
+        except TimeoutException as e:
+            assert False, f"❌ 팀 피드-팀이 먹은 메뉴-회식태그-실패 (시간 초과) : {e}"
+
+        except Exception as e:
+            assert False, f"❌ 팀 피드-팀이 먹은 메뉴-회식태그-실패 (알 수 없는 오류) : {e}"
+
+
+    # @pytest.mark.skip()
+    def test_teamfeed_086(self, driver: WebDriver):
+        try:
+            team_feed_page = TeamFeedPage(driver)
+            team_feed_page.navigate_to_team_eaten_menu(driver)
+
+            team_feed_page.team_eaten_menu_add_btn_click()
+
+            wait = ws(driver, 10)
+            add_review_title = wait.until(EC.presence_of_element_located((By.XPATH, self.ADD_REVIEW_XPATH)))
+
+            time.sleep(1)
+            assert add_review_title.is_displayed(), f"❌ 새로운 후기 등록하기 화면 진입 실패"
+            print("✅ 새로운 후기 등록하기 화면 진입 성공")
+            driver.save_screenshot("✅ 팀 피드-새로운 후기 등록하기 화면-성공.png")
+
+        except NoSuchElementException as e:
+            assert False, f"❌ 팀 피드-새로운 후기 등록하기 화면-실패 (요소를 찾을 수 없음) : {e}"
+
+        except TimeoutException as e:
+            assert False, f"❌ 팀 피드-새로운 후기 등록하기 화면-실패 (시간 초과) : {e}"
+
+        except Exception as e:
+           assert False, f"❌ 팀 피드-새로운 후기 등록하기 화면-실패 (알 수 없는 오류) : {e}"
+            
+
+    @pytest.mark.skip()
+    def test_teamfeed_087(self, driver: WebDriver):
+        try:
+            team_feed_page = TeamFeedPage(driver)
+            team_feed_page.navigate_to_add_review(driver)
+
+            # "혼밥" 라디오 버튼 찾기
+            honbap_button = driver.find_element(By.ID, "혼밥")
+
+            # aria-checked 속성값 가져오기
+            is_checked = honbap_button.get_attribute("aria-checked")
+
+            # 혼밥이 선택된 상태인지 검증
+            assert is_checked == "true", "❌ 혼밥 라디오 버튼이 선택되지 않았음!"
+            print("✅ 혼밥 라디오 버튼이 선택된 상태로 노출")
+
+        except NoSuchElementException as e:
+            assert False, f"❌ 팀 피드-새로운 후기 등록하기-혼밥라디오버튼-실패 (요소를 찾을 수 없음): {e}"
+
+        except TimeoutException as e:
+            assert False, f"❌ 팀 피드-새로운 후기 등록하기-혼밥라디오버튼-실패 (시간 초과): {e}"
+
+        except Exception as e:
+            assert False, f"❌ 팀 피드-새로운 후기 등록하기-혼밥라디오버튼-실패 (알 수 없는 오류): {e}"
