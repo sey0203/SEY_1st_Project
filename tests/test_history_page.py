@@ -5,12 +5,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementNotInteractableException
 import time
 import random
 import pytest
 from pages.history_page import HistoryPage
 import os
+from utils.image_is_similar import is_similar
+
 
 '''
 참고
@@ -101,10 +103,6 @@ class TestMyPage:
             print(f"메뉴들을 찾아내지 못함")
             assert False
 
-    
-
-
-
     @pytest.mark.skip()
     @pytest.mark.parametrize("index, expected_main, expected_sub", category_list)
     def test_history_006_008_010_012_014_016_018_020(self,driver: WebDriver, index, expected_main, expected_sub):  #6,8,10,12,14,16,18,20번 TC
@@ -166,32 +164,129 @@ class TestMyPage:
             print("라디오 버튼 탐색 실패")
             assert False
 
-    @pytest.mark.skip() ##이미지 등록 기능 구현이 어려워서 일단 패스
+    @pytest.mark.skip()
     def test_history_026(self,driver:WebDriver):
         try:
             history_page = self.navigate_to_history(driver)
-            history_page.click(HistoryPage.review_register_btn)   
-            time.sleep(1)
-            #history_page.click(HistoryPage.review_img_btn)
-            time.sleep(1)
-            history_page.send_keys(HistoryPage.review_comment, "테스트")
-            history_page.send_keys(HistoryPage.review_img_input, "sample.png")
-            time.sleep(5)
-
+            history_page.click(HistoryPage.review_register_btn)
+            result = history_page.is_displayed(HistoryPage.review_img_is_null)
+            assert result == True, "이미지 영역에 무언가 들어있음"
         except Exception as e:
-            print("이미지 영역 탐색 실패")
+            print("이미지 영역 미노출")
             assert False
 
-    #@pytest.mark.skip()  ## 시스템 대화창이 떴는지 검증은 불가능한듯
+    @pytest.mark.skip()
     def test_history_027(self,driver:WebDriver):
         try:
             history_page = self.navigate_to_history(driver)
-            history_page.click(HistoryPage.review_register_btn)   
-            #history_page.click(HistoryPage.review_img_btn)
-            time.sleep(1)
+            history_page.click(HistoryPage.review_register_btn)
             history_page.send_keys(HistoryPage.review_img_input, HistoryPage.image_path)
-            time.sleep(5)
-            assert True
+            src = history_page.get_attribute(HistoryPage.review_img, "src")
+            result = is_similar(src, HistoryPage.image_path)
+            assert result > 0.9, "이미지가 다름"
         except Exception as e:
-            print("에러발생 확인완료")
+            print("이미지 비교 실패")
+            assert False
+        
+    @pytest.mark.skip()
+    def test_history_028(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            menu_list = history_page.menu_list()
+            history_menu_name = menu_list[0][2]
+            history_page.click(HistoryPage.review_register_btn)
+            value = history_page.get_attribute(HistoryPage.review_menu, "value")
+            assert history_menu_name == value, "히스토리 메뉴명과 후기 메뉴명이 다름"
+
+        except Exception as e:
+            print("히스토리 메뉴명 또는 후기 메뉴명 탐색 실패")
+            assert False
+
+    @pytest.mark.skip()
+    def test_history_029(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+            result = history_page.is_displayed(HistoryPage.review_category)
+            assert result == True, "카테고리 미노출"
+
+        except Exception as e:
+            print("카테고리 탐색 실패")
+            assert False
+    
+    @pytest.mark.skip()
+    def test_history_030(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+            result = history_page.is_displayed(HistoryPage.review_comment)
+            assert result == True, "후기 입력란 감지 실패"
+
+        except Exception as e:
+            print("후기 입력란 탐색 실패")
+            assert False
+    
+    @pytest.mark.skip()
+    def test_history_031(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+            result = history_page.get_attribute(HistoryPage.review_comment, "placeholder")
+            assert "후기를 입력해주세요." in result, "후기 입력 placeholder이 다르게 노출됨"
+        except Exception as e:
+            print("후기 입력란 탐색 실패")
+            assert False        
+
+    @pytest.mark.skip()
+    def test_history_032(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+
+            lenth = len(history_page.texts(HistoryPage.review_star_gray))
+            assert lenth == 5, "칠해지지 않은 별점 수가 5개가 아님"
+        except Exception as e:
+            print("별점 탐색 실패")
+            assert False
+
+    @pytest.mark.skip()
+    def test_history_033(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+            history_page.click(HistoryPage.eat_alone_radio)
+            result = history_page.get_attribute(HistoryPage.eat_alone_radio, "data-state")
+            assert result == "unchecked", "혼밥 라디오 버튼이 선택됨"
+            
+        except Exception as e:
+            print("라디오 버튼 탐색 실패")
+            assert False
+
+
+    #34번부터 41번까지는 테스트데이터 준비가 필요
+
+
+
+    @pytest.mark.skip()
+    def test_history_042(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+            with pytest.raises(ElementNotInteractableException):
+                history_page.send_keys(HistoryPage.review_menu, "123")
+            
+        except Exception as e:
+            print("라디오 버튼 탐색 실패")
+            assert False
+    
+    #@pytest.mark.skip()
+    def test_history_043(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+
+            history_page.send_keys(HistoryPage.review_comment, "123")
+            result = history_page.get_attribute(HistoryPage.review_comment, "value")
+            assert result == "124", print("val")
+        except Exception as e:
             assert False

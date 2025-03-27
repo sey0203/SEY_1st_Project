@@ -31,6 +31,9 @@ class HistoryPage:
     def texts(self, by_locator):
         elements = WebDriverWait(self.driver, 10).until(EC.presence_of_all_elements_located(by_locator))
         return [el.text for el in elements]
+    
+    def get_attribute(self, by_locator, attribute):
+        return WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(by_locator)).get_attribute(attribute)
 
     def menu_list(self):
         result = []
@@ -67,16 +70,25 @@ class HistoryPage:
     eat_alone = (By.XPATH, "//label[@for='혼밥']")
     eat_group = (By.XPATH, "//label[@for='그룹']")
     eat_together = (By.XPATH, "//label[@for='회식']")
+    eat_alone_radio = (By.ID, "혼밥")
+    eat_group_radio = (By.ID, "그룹")
+    eat_together_radio = (By.ID, "회식")
     #리뷰탭 - 후기 사진
-    review_img = (By.XPATH, ".//div[contains(@class, 'w-24 h-24')]")
+    review_img_is_null = (By.XPATH, ".//div[contains(@class, 'object-cover w-24 h-24 rounded-md border-[1px] border-light-gray')]")
     review_img_btn = (By.XPATH, '//*[@id="modal-root"]/div/div[2]/section/form/div[2]/div/button')
     review_img_input = (By.NAME, 'reviewImg')
     image_path = os.path.abspath('utils/망글곰.png')
-
+    review_img = (By.XPATH,"//img[@alt='후기 사진']")
     #리뷰탭 - 메뉴 명
-
+    review_menu = (By.NAME, 'menu')
     #리뷰탭 - 카테고리
+    review_category = (By.XPATH, "//button[@role= 'combobox']")
+    #리뷰탭 - 후기
     review_comment = (By.NAME, 'comment')
+
+    #리뷰탭 - 별점
+    review_star_gray = (By.XPATH,".//div[contains(@class, 'text-gray-300')]" )
+    review_star_yellow = (By.XPATH,".//div[contains(@class, 'text-yellow-400')]" )
 
 
 
