@@ -28,14 +28,16 @@ class TeamFeedPage(BasePage):
     TEAM_FEED_SELECTOR = "a[href='/teams/1']"
     COMBOBOX_SELECTOR = "button[role='combobox']"
     TEAM_STATS_IMAGE_SELECTOR = "span.font-bold.text-sub-2.text-title"
-    FOOD_PREFERENCE_IMAGE_XPATH = "//span[text()='음식 성향']"
-    COMBOBOX_TEAM_XPATH = "//span[text()='개발 1팀']"
+    COMBOBOX_TEAM_XPATH = "//span[contains(text(), '개발 1팀')]"
     PROFILE_EDIT_ICON_SELECTOR = "div.flex.items-center.justify-between.text-subbody > svg.cursor-pointer"
-    PROFILE_EDIT_XPATH = "//span[text()='프로필 정보 수정']"
+    PROFILE_EDIT_XPATH = "//span[contains(text(), '프로필 정보 수정')]"
     TEAM_STATS_XPATH = "//span[contains(text(), '팀 통계')]"
     TEAM_EATEN_MENU_XPATH = "//span[contains(text(), '팀이 먹은 메뉴')]"
     PROFILE_EDIT_FINISH_BTN_SELECTOR = "button.cursor-pointer[type='submit']"
     PROFILE_EDIT_X_BTN_SELECTOR = "button.text-2xl.cursor-pointer"
+    TEAM_EATEN_MENU_ADD_BTN_SELECTOR = "div.flex.items-center.gap-4 > button"
+    ADD_REVIEW_XPATH = "//span[text()='새로운 후기 등록하기']"
+    NEW_REVIEW_FINISH_BTN_SELECTOR = "button:contains('후기 작성 완료')"
 
 
 
@@ -72,6 +74,14 @@ class TeamFeedPage(BasePage):
         x_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, self.PROFILE_EDIT_X_BTN_SELECTOR)))
         self.driver.execute_script("arguments[0].click();", x_button)
 
+    def team_eaten_menu_add_btn_click(self):       
+        wait = ws(self.driver, 10)
+        add_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, self.TEAM_EATEN_MENU_ADD_BTN_SELECTOR)))
+        self.driver.execute_script("arguments[0].click();", add_button)
+
+    def new_review_finish_btn_click(self):
+        self.element_click(By.CSS_SELECTOR, self.NEW_REVIEW_FINISH_BTN_SELECTOR)
+
     def element_scroll(self, locator_type, locator):
         wait = ws(self.driver, 10)
         element = wait.until(EC.presence_of_element_located((locator_type, locator)))
@@ -92,3 +102,21 @@ class TeamFeedPage(BasePage):
         team_feed_page.profile_edit_icon_click()
         wait = ws(driver, 10)
         wait.until(EC.visibility_of_element_located((By.XPATH, self.PROFILE_EDIT_XPATH)))
+
+    def navigate_to_team_eaten_menu(self, driver):
+        #팀 피드에서 팀이 먹은 메뉴로 이동하는 공통 함수, 대기까지
+        team_feed_page = TeamFeedPage(driver)
+        team_feed_page.team_feed_click()          
+        team_feed_page.combobox_btn_click()
+        team_feed_page.combobox_team_select()
+        team_feed_page.team_eaten_menu_scroll()
+        wait = ws(driver, 10)
+        wait.until(EC.visibility_of_element_located((By.XPATH, self.TEAM_EATEN_MENU_XPATH)))
+
+    def navigate_to_add_review(self, driver):
+        #팀 피드에서 새로운 후기 등록하기로 이동하는 공통 함수, 대기까지
+        team_feed_page = TeamFeedPage(driver)
+        team_feed_page.navigate_to_team_eaten_menu(driver)
+        team_feed_page.team_eaten_menu_add_btn_click()
+        wait = ws(driver, 10)
+        wait.until(EC.presence_of_element_located((By.XPATH, self.ADD_REVIEW_XPATH)))
