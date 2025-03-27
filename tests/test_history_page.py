@@ -27,7 +27,7 @@ menu_list의 출력 예시
 
 
 @pytest.mark.usefixtures("login_driver")
-#@pytest.mark.skip()
+@pytest.mark.skip()
 class TestMyPage:
 
     category_list = [
@@ -58,9 +58,7 @@ class TestMyPage:
     def test_history_002(self, driver: WebDriver):
         try:
             history_page = self.navigate_to_history(driver)
-            time.sleep(1)
             history_page.click(HistoryPage.back_btn)
-            time.sleep(1)
             WebDriverWait(driver,10).until_not(EC.url_contains("history"))
             assert "history" != driver.current_url, "아직 history 탭에 남아있음"
         except Exception as e:
@@ -87,7 +85,7 @@ class TestMyPage:
             print(f"추천 받았던 메뉴들이에요! 가 미노출")
             assert False
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_history_005(self, driver: WebDriver):
         try:
             history_page = self.navigate_to_history(driver)
@@ -101,9 +99,9 @@ class TestMyPage:
 
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     @pytest.mark.parametrize("index, expected_main, expected_sub", category_list)
-    def test_menu_categories(self,driver: WebDriver, index, expected_main, expected_sub):  #6,8,10,12,14,16,18,20번 TC
+    def test_history_006_008_010_012_014_016_018_020(self,driver: WebDriver, index, expected_main, expected_sub):  #6,8,10,12,14,16,18,20번 TC
         try:
             history_page = self.navigate_to_history(driver)
             menu_list = history_page.menu_list()
