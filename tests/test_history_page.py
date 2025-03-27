@@ -66,7 +66,9 @@ class TestMyPage:
             assert False
 
     @pytest.mark.skip()
+
     def test_history_003(self, driver: WebDriver):
+
         try:
             history_page = self.navigate_to_history(driver)
             GNB_name = history_page.text(HistoryPage.GNB_history)
@@ -95,6 +97,7 @@ class TestMyPage:
         except Exception as e:
             print(f"메뉴들을 찾아내지 못함")
             assert False
+
     
 
 
