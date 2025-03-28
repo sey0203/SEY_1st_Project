@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
 import time
 import random
 import os 
@@ -16,8 +16,10 @@ class HistoryPage:
     def __init__(self, driver: WebDriver):
         self.driver = driver
 
+
+
     def click(self, by_locator):
-        WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(by_locator)).click()
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(by_locator)).click()
 
     def clear(self, by_locator):
         WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(by_locator)).clear()
@@ -60,7 +62,7 @@ class HistoryPage:
     GNB_history = (By.XPATH,'//*[@id="root"]/div[1]/header/div/span')
     #히스토리탭 영역
     history_title = (By.XPATH,'//*[@id="root"]/div[1]/main/section/section/span')
-    review_register_btn = (By.XPATH, '//button[normalize-space()="추천 후기 등록하기"]') 
+    review_register_btn = (By.XPATH, "//button[contains(text(), '후기 등록')]") 
     #히스토리탭 - 메뉴 박스 영역
     menu_box_locator = (By.XPATH, "//div[@class='flex w-full gap-6 p-4 shadow-md rounded-2xl']")
     main_category_locator = (By.XPATH, ".//div[contains(@class, 'bg-main')]")
@@ -106,4 +108,10 @@ class HistoryPage:
     review_text_warning = (By.XPATH, "//p[contains(text(), '후기는 필수입니다')]")
     review_star_warning = (By.XPATH, "//p[contains(text(), '별점은 최소 1점 이상이어야 합니다')]")
 
-    
+    #홈 탭 - 혼자 먹기
+
+    eat_alone_home_btn = (By.XPATH, "//button[.//p[text()='혼자 먹기']]")
+    eat_alone_home_combobox = (By.XPATH, "//button[@role='combobox']")
+    eat_alone_home_category_Korean = (By.XPATH, "//span[text()='한식']")
+    eat_alone_home_choose_btn = (By.XPATH, "//button[text()='선택 완료']")
+    eat_alone_home_accept_recommend = (By.XPATH, "//button[text()='추천 수락하기']")
