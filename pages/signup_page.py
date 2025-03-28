@@ -100,6 +100,7 @@ class SignupPage:
         except TimeoutException:
             print("슬라이드 로딩 시간 초과.")
             return False
+        
     def get_slider_value(self, flavor : str) :
         try:
             # 맛에 해당하는 슬라이더 섹션 찾기

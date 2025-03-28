@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 
 from pages.login_page import LoginPage
 
-@pytest.mark.skip
+
 @pytest.mark.usefixtures("driver")
 class TestLoginPage:
     @pytest.mark.skip
@@ -136,3 +136,5 @@ class TestLoginPage:
             time.sleep(5)
         except NoSuchElementException as e:
             assert False
+
+            

@@ -13,13 +13,15 @@ class LoginPage:
     
     def __init__(self, driver: WebDriver):
         self.driver = driver
+
     def check_url(self, url : str) :
         try:
-            wait = WebDriverWait(self.driver, 5) 
+            wait = WebDriverWait(self.driver, 3) 
             wait.until(EC.url_contains(url))
             assert url in self.driver.current_url
         except TimeoutException:
             print(f"{url} 페이지가 일치하지 않음")
+            assert False
 
     def open(self):
             self.driver.get(self.URL)
@@ -29,8 +31,12 @@ class LoginPage:
         self.driver.get(url)
     
     def click_button(self, text):
-        button=self.driver.find_element(By.XPATH, f'//*[@id="root"]//button[contains(text(),"{text}")]')
-        button.click()
+        try :
+            button=self.driver.find_element(By.XPATH, f'//*[@id="root"]//button[contains(text(),"{text}")]')
+            button.click()
+        except NoSuchElementException :
+            print("버튼을 찾을 수 없음")
+            assert False
     
     def login(self, username, password):
         try:
@@ -86,10 +92,13 @@ class LoginPage:
 
             length_element = self.driver.find_elements(By.CSS_SELECTOR, "span.cac336714")
             #비밀번호 규칙 지키는지 확인
-            for i in range(1, 5):
+            count = 0
+            for i in range(1, 6):
                 if length_element[0].value_of_css_property("color") == length_element[i].value_of_css_property("color"):
-                    print("비밀번호 규칙 실패")
-                    return False
+                    count += 1
+                    if count >= 2:
+                        print("비밀번호 규칙 실패")
+                        return False
             
             password_field.send_keys(Keys.ENTER)
             try :
