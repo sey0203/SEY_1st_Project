@@ -457,7 +457,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-'X' 버튼 클릭-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip(reason="나중에 다시 테스트")
+    # @pytest.mark.skip(reason="나중에 다시 테스트")
     def test_teamfeed_017(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
