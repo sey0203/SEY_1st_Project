@@ -1,59 +1,58 @@
 import pytest
+
 from selenium.webdriver.support.ui import WebDriverWait as ws
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException,TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.action_chains import ActionChains
 
 from pages.login_page import LoginPage
-from pages.signup_page import SignupPage
 
-FakeData = {"name" : "육조임", "team" : "개발 1팀","value" : 0.99, "Ltext" : "한식에서 매콤한 음식을 좋아합니다." ,"Htext" : "중식에서 느끼한 음식을 싫어합니다."}
-InvalidData = {"name" : "", "team" : "","value" : "", "Ltext" : "" ,"Htext" : ""}
-LongData = {"name" : "@"*100,
-                "team" : "#"*100,
-                "value" : 10, "Ltext" : "백자가넘는텍스트"*20 ,"Htext" : "백자가넘는텍스트"*20}
-LoginData = {"username" : "qwer2@qwer.qwer", "password" : "qwerQWER1!"}
+LoginData = {"username" : "qwer3@qwer.qwer", "password" : "qwerQWER1!","password1" : "!Q2w3e4r"}
+FalseLogin = {"username1" : "hi@com", "password1" : "qwerqwer", "password2" : "12341234" }
+NewLoginData = {"username" : "qwer11@qwer.qwer", "password" : "qwerQWER1!"}
 
-def setup(login_page) :
+@pytest.mark.skip
+@pytest.mark.usefixtures("driver")
+class TestSignPage:
+    @pytest.mark.skip
+    def test_signup_TC032(self, driver: WebDriver):
+        
+        try:
+            login_page = LoginPage(driver)
             login_page.open()
             login_page.check_url("signin")
-            #로그인 버튼 클릭
-            login_page.click_button("로그인")
-            login_page.check_url("login")
-            
-            #TC98
-            login_page.login(LoginData["username"], LoginData["password"])
-            login_page.check_url("welcome")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
 
-@pytest.mark.skip(reason="1차 작업 끝")
-@pytest.mark.usefixtures("driver")
-class TestSignupPage:
-
-    
-    def test_signup_TC069(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-
-            setup(login_page)
-            class_value="p-4,bg-white"   
-            driver.find_element(By.CLASS_NAME, class_value)
+            background_color = driver.execute_script(
+            "return window.getComputedStyle(document.documentElement).getPropertyValue('--widget-background-color');"
+            )
+            if background_color == "#ffffff" :
+                print(background_color)
+                assert True
+                return
+            assert False
         except Exception as e:
             print(f"오류 발생: {e}")
             assert False
 
-    
-    def test_signup_TC070(self, driver: WebDriver):
+    @pytest.mark.skip
+    def test_signup_TC033(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            src_path="https://elice-assign-bucket.s3.ap-northeast-2.amazonaws.com/assign_logo.png"
-            setup(login_page)
-            img_path=ws(driver, 3).until(
-            EC.presence_of_element_located((By.XPATH, '//img[contains(@alt,"오늘 뭐 먹지?")]'))
-            ).get_attribute("src")
-            if img_path==src_path :
+
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+
+            class_value="환영합니다"
+            get_text = driver.find_element(By.XPATH, f"//h1[contains(text(),'{class_value}')]").text
+
+            if class_value in get_text :
+                print(get_text)
                 assert True
                 return
             assert False
@@ -62,694 +61,554 @@ class TestSignupPage:
             print(f"오류 발생: {e}")
             assert False
 
-    
-    def test_signup_TC071(self, driver: WebDriver):
+    @pytest.mark.skip
+    def test_signup_TC034(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
             
-            setup(login_page)
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
 
-            class_value="서비스 이용을 위해"
-            get_text = driver.find_element(By.XPATH, f"//span[contains(text(),'{class_value}')]").text
-            print(get_text)
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC072(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-
-            class_value="이름을 입력해주세요"
+            class_value="오늘 뭐 먹지? 를 사용하시려면 회원가입을 진행해주세요."
             get_text = driver.find_element(By.XPATH, f"//p[contains(text(),'{class_value}')]").text
-            print(get_text)
+
+            if class_value in get_text :
+                print(get_text)
+                assert True
+                return
+            assert False
+
         except Exception as e:
             print(f"오류 발생: {e}")
             assert False
-
     
-    def test_signup_TC073(self, driver: WebDriver):
+    @pytest.mark.skip
+    def test_signup_TC035(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
             
-            setup(login_page)
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
 
-            driver.find_element(By.NAME, "name")
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC074(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-            class_value="본인이 속한 팀을"
-            get_text = driver.find_element(By.XPATH, f"//p[contains(text(),'{class_value}')]").text
-            print(get_text)
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-            
-    
-    def test_signup_TC075(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-            driver.find_element(By.XPATH, '//*[@id="root"]//select')
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC076(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-            text="팀 선택"
-            get_text=driver.find_element(By.XPATH, f'//*[@id="root"]//span[contains(text(),"{text}")]').text
-            print(get_text)
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    @pytest.mark.parametrize("TEAM", [0,1,2,3])
-    def test_signup_TC077_TC80(self, driver: WebDriver, TEAM):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-            option = driver.find_element(By.XPATH, '//*[@id="root"]//select')
-            select_element = Select(option)
-            get_text=select_element.options[TEAM].text
-            print(get_text)
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC081(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-            class_value="음식 성향에 대해"
-            get_text = driver.find_element(By.XPATH, f"//p[contains(text(),'{class_value}')]").text
-            print(get_text)
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    @pytest.mark.parametrize("TASTE", ["단","짠","매운"])
-    def test_signup_TC082_TC087(self, driver: WebDriver,TASTE):
-        try:
-            login_page = LoginPage(driver)
-            setup(login_page)
-            signup_page= SignupPage(driver)
-            signup_page.set_slider_value(TASTE, 0)
-            get_text=signup_page.get_slider_value(TASTE)
-            print(get_text)
-
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC088(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-            text="음식 성향을 이야기 해주세요!"
-            get_text=driver.find_element(By.XPATH, f'//*[@id="root"]//p[contains(text(),"{text}")]').text
-            print(get_text)
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC089(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-            text="점은 좋아요"
-            get_text=driver.find_element(By.XPATH, f'//*[@id="root"]//p[contains(text(),"{text}")]').text
-            print(get_text)
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC090(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-            driver.find_element(By.NAME, 'pros')
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC091(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-
-            driver.find_element(By.NAME, 'pros')
-            parent=driver.find_element(By.NAME, 'pros')
-            child=parent.find_element(By.XPATH, "parent::*")
-            num_text=child.find_element(By.CLASS_NAME, "text-subbody, text-dark-gray").text
-            print(num_text)
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC093(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-            text="점은 싫어요"
-            get_text=driver.find_element(By.XPATH, f'//*[@id="root"]//p[contains(text(),"{text}")]').text
-            print(get_text)
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC094(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-            driver.find_element(By.NAME, 'cons')
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC095(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-            
-            driver.find_element(By.NAME, 'cons')
-            parent=driver.find_element(By.NAME, 'cons')
-            child=parent.find_element(By.XPATH, "parent::*")
-            num_text=child.find_element(By.CLASS_NAME, "text-subbody, text-dark-gray").text
-            print(num_text)
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC096(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            setup(login_page)
-            
-            driver.find_element(By.XPATH, '//*[@id="root"]//button[contains(text(),"제출하기")]')
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC097(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-
-            setup(login_page)
-
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC098(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            
-            signup_page.set_name(FakeData["name"])
-            if signup_page.get_name()!=FakeData["name"] :
-                assert False
-
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-            
-    def test_signup_TC099(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            
-            #TC100
-            signup_page.set_select_option(FakeData["team"])
-            
-            if signup_page.get_team_option()!=FakeData["team"] :
-                assert False
-
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-       
-    def test_signup_TC100(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            
-            signup_page.set_slider_value("단", FakeData["value"])
-
-            if float(signup_page.get_slider_value("단"))!=round(FakeData["value"],1) :
-                assert False
-
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-       
-    def test_signup_TC101(self, driver: WebDriver):
-            try:
-                login_page = LoginPage(driver)
-                signup_page= SignupPage(driver)
-
-                setup(login_page)
-                signup_page.set_slider_value("단", FakeData["value"])
-                signup_page.set_slider_value("단", FakeData["value"]*-1)
-                if float(signup_page.get_slider_value("단"))!=0.0 :
+            driver.find_element(By.NAME, "email")
+        except NoSuchElementException as e:
+                    print("이메일 인풋을 찾지 못함")
                     assert False
 
-            except Exception as e:
-                print(f"오류 발생: {e}")
-                assert False
-
-    
-    def test_signup_TC102(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            
-            signup_page.set_slider_value("짠", FakeData["value"])
-
-            if float(signup_page.get_slider_value("짠"))!=round(FakeData["value"],1) :
-                assert False
 
         except Exception as e:
             print(f"오류 발생: {e}")
             assert False
-
-    
-    def test_signup_TC103(self, driver: WebDriver):
-            try:
-                login_page = LoginPage(driver)
-                signup_page= SignupPage(driver)
-
-                setup(login_page)
-                signup_page.set_slider_value("짠", FakeData["value"])
-                signup_page.set_slider_value("짠", FakeData["value"]*-1)
-                if float(signup_page.get_slider_value("짠"))!=0.0 :
-                    assert False
-
-            except Exception as e:
-                print(f"오류 발생: {e}")
-                assert False
-
-    
-    def test_signup_TC104(self, driver: WebDriver):
+        
+    @pytest.mark.skip
+    def test_signup_TC036(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
             
-            signup_page.set_slider_value("매운", FakeData["value"])
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
 
-            if float(signup_page.get_slider_value("매운"))!=round(FakeData["value"],1) :
-                assert False
-
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC105(self, driver: WebDriver):
-            try:
-                login_page = LoginPage(driver)
-                signup_page= SignupPage(driver)
-
-                setup(login_page)
-                signup_page.set_slider_value("매운", FakeData["value"])
-                signup_page.set_slider_value("매운", FakeData["value"]*-1)
-                if float(signup_page.get_slider_value("매운"))!=0.0 :
-                    assert False
-
-            except Exception as e:
-                print(f"오류 발생: {e}")
-                assert False
-
-    
-    def test_signup_TC106(self, driver: WebDriver):
-            try:
-                login_page = LoginPage(driver)
-                signup_page= SignupPage(driver)
-
-                setup(login_page)
-                signup_page.set_like_textarea(FakeData["Ltext"])
-
-                if signup_page.get_like_textarea()!=FakeData["Ltext"] :
-                    assert False
-
-            except Exception as e:
-                print(f"오류 발생: {e}")
-                assert False
-
-    
-    def test_signup_TC107(self, driver: WebDriver):
-            try:
-                login_page = LoginPage(driver)
-                signup_page= SignupPage(driver)
-
-                setup(login_page)
-                signup_page.set_like_textarea(FakeData["Ltext"])
-
-                driver.find_element(By.NAME, 'pros')
-                parent=driver.find_element(By.NAME, 'pros')
-                child=parent.find_element(By.XPATH, "parent::*")
-                num_text=child.find_element(By.CLASS_NAME, "text-subbody, text-dark-gray").text
-                if num_text == "19/100자" :
-                    print(num_text)
-                    assert True
-                    return
-                assert False
-                
-            except Exception as e:
-                print(f"오류 발생: {e}")
-                assert False
-
-    
-    def test_signup_TC108(self, driver: WebDriver):
-            try:
-                login_page = LoginPage(driver)
-                signup_page= SignupPage(driver)
-
-                setup(login_page)
-                signup_page.set_hate_textarea(FakeData["Htext"])
-
-                if signup_page.get_hate_textarea()!=FakeData["Htext"] :
-                    assert False
-
-            except Exception as e:
-                print(f"오류 발생: {e}")
-                assert False
-
-    
-    def test_signup_TC109(self, driver: WebDriver):
-            try:
-                login_page = LoginPage(driver)
-                signup_page= SignupPage(driver)
-
-                setup(login_page)
-                signup_page.set_hate_textarea(FakeData["Htext"])
-
-                driver.find_element(By.NAME, 'cons')
-                parent=driver.find_element(By.NAME, 'cons')
-                child=parent.find_element(By.XPATH, "parent::*")
-                num_text=child.find_element(By.CLASS_NAME, "text-subbody, text-dark-gray").text
-                if num_text == "19/100자" :
-                    print(num_text)
-                    assert True
-                    return
-                assert False
-                
-            except Exception as e:
-                print(f"오류 발생: {e}")
-                assert False
-
-    
-    def test_signup_TC0110(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            
-            signup_page.click_button("제출하기")
-            
-            for error in signup_page.error_messages_check():
-                 if error.text in "이름을 입력해주세요"  :
-                    assert True
-                    return
-            assert False
-
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-      
-    def test_signup_TC111(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            
-            signup_page.click_button("제출하기")
-            
-            for error in signup_page.error_messages_check():
-                 if error.text in "팀을 선택해주세요"  :
-                    assert True
-                    return
-            assert False
-
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-      
-    def test_signup_TC112(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            
-            signup_page.click_button("제출하기")
-            
-            flavor_section_xpath = f"//section[.//span[text()='단 맛']]"
-            flavor_section =driver.find_element(By.XPATH , flavor_section_xpath)
-            sweet_error=flavor_section.find_element(By.XPATH, '//*[@id="root"]//p[contains(text(),"맛에 대한 성향은 최소")]')
-            if sweet_error.text in "맛에 대한 성향은 최소 1 이상 설정해주세요":
-                assert True
-                return
-            assert False
-            
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC113(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            
-            signup_page.click_button("제출하기")
-            
-            flavor_section_xpath = f"//section[.//span[text()='짠 맛']]"
-            flavor_section =driver.find_element(By.XPATH , flavor_section_xpath)
-            sweet_error=flavor_section.find_element(By.XPATH, '//*[@id="root"]//p[contains(text(),"맛에 대한 성향은 최소")]')
-            if sweet_error.text in "맛에 대한 성향은 최소 1 이상 설정해주세요":
-                assert True
-                return
-            assert False
-            
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC114(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            
-            signup_page.click_button("제출하기")
-            
-            flavor_section_xpath = f"//section[.//span[text()='매운 맛']]"
-            flavor_section = driver.find_element(By.XPATH , flavor_section_xpath)
-            sweet_error=flavor_section.find_element(By.XPATH, '//*[@id="root"]//p[contains(text(),"맛에 대한 성향은 최소")]')
-            if sweet_error.text in "맛에 대한 성향은 최소 1 이상 설정해주세요":
-                assert True
-                return
-            assert False
-            
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC115(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            
-            signup_page.click_button("제출하기")
-            parent=driver.find_element(By.NAME, 'pros')
-            child=parent.find_element(By.XPATH, "parent::*")
-            error=child.find_element(By.XPATH,'.//p[contains(text(),"10자 이상 입력해주세요")]')
-            
-            if error.text in "10자 이상 입력해주세요"  :
-                assert True
-                return
-            assert False
-
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC116(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            
-            signup_page.click_button("제출하기")
-            parent=driver.find_element(By.NAME, 'cons')
-            child=parent.find_element(By.XPATH, "parent::*")
-            error=child.find_element(By.XPATH,'.//p[contains(text(),"10자 이상 입력해주세요")]')
-            
-            if error.text in "10자 이상 입력해주세요"  :
-                assert True
-                return
-            assert False
-
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC117(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            signup_page.set_like_textarea(LongData["Ltext"])
-            signup_page.click_button("제출하기")
-            parent=driver.find_element(By.NAME, 'pros')
-            child=parent.find_element(By.XPATH, "parent::*")
-            try :
-                error=child.find_element(By.XPATH,'.//p[contains(text(),"100자 이내로 입력해주세요")]')
-            except NoSuchElementException:
-                assert False
-                
-            if error.text in "100자 이내로 입력해주세요"  :
-                assert True
-                return
-            assert False
-
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC118(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-
-            setup(login_page)
-            signup_page.set_hate_textarea(LongData["Ltext"])
-            signup_page.click_button("제출하기")
-            parent=driver.find_element(By.NAME, 'cons')
-            child=parent.find_element(By.XPATH, "parent::*")
-            try :
-                error=child.find_element(By.XPATH,'.//p[contains(text(),"100자 이내로 입력해주세요")]')
-            except NoSuchElementException:
-                assert False
-                
-            if error.text in "100자 이내로 입력해주세요"  :
-                assert True
-                return
-            assert False
-
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
-
-    
-    def test_signup_TC119(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            signup_page= SignupPage(driver)
-            #페이지 로딩
-            setup(login_page)
-
-            #TC99
-            signup_page.set_name(FakeData["name"])
-            signup_page.get_name()
-
-            #TC100
-            signup_page.set_select_option(FakeData["team"])
-            signup_page.get_team_option()
-
-            
-            #TC101, TC102
-            signup_page.set_slider_value("단", FakeData["value"])
-           
-            #TC103, TC104
-            signup_page.set_slider_value("짠", FakeData["value"])
-            
-
-            #TC105, TC106
-            signup_page.set_slider_value("매운", FakeData["value"])
-            
-
-            #TC107, TC108
-            signup_page.set_like_textarea(FakeData["Ltext"])
-            signup_page.set_hate_textarea(FakeData["Htext"])
-
-            
-            #TC107 ~ TC117
-            signup_page.click_button("제출하기")
-            if signup_page.error_messages_check() == None :
-                assert True
-                return
-            
-            assert False
-            
+            driver.find_element(By.NAME, "password")
 
         except NoSuchElementException as e:
+            print("비밀번호 인풋을 찾지 못함")
             assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+        
+
+    @pytest.mark.skip
+    def test_signup_TC037(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+
+            driver.find_element(By.XPATH, '//button[@data-action="toggle"]')
+
+        except NoSuchElementException as e:
+            print("비밀번호 표시 버튼 못찾음")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+        
+    @pytest.mark.skip
+    def test_signup_TC038(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+
+            driver.find_element(By.XPATH, '//button[contains(text(),"계속하기")]').click()
+            
+        except NoSuchElementException as e:
+            print("계속하기 버튼 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+        
+    @pytest.mark.skip
+    def test_signup_TC039(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+            class_value="이미 계정이 있으신가요"
+            get_text = driver.find_element(By.XPATH, f"//p[contains(text(),'{class_value}')]").text
+            if class_value in get_text:
+                driver.find_element(By.XPATH, '//a[contains(text(),"로그인")]')
+                print(get_text)
+                assert True
+                return
+            assert False
+        except NoSuchElementException as e:
+            print("로그인 버튼 또는 텍스트 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+        
+    @pytest.mark.skip
+    def test_signup_TC040(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+
+            background_color = driver.execute_script(
+            "return window.getComputedStyle(document.body).getPropertyValue('--page-background-color');"
+        )
+            if background_color == "#fff7ed" :
+                print(background_color)
+                assert True
+                return
+            assert False
+            
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+    
+    @pytest.mark.skip
+    def test_signup_TC041(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+
+            name=driver.find_element(By.NAME, "email")
+            name.send_keys(FalseLogin["username1"])
+            
+        except NoSuchElementException as e:
+            print("이메일 인풋 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
+    @pytest.mark.skip
+    def test_signup_TC042(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+
+            name=driver.find_element(By.NAME, "password")
+            name.send_keys(FalseLogin["password1"])
+            
+        except NoSuchElementException as e:
+            print("비밀번호 인풋 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
+    @pytest.mark.skip
+    def test_signup_TC043(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+
+            name=driver.find_element(By.NAME, "password")
+            name.send_keys(FalseLogin["password1"])
+            driver.find_elements(By.CSS_SELECTOR, "span.cac336714")
+                
+        except NoSuchElementException as e:
+            print("비밀번호 규칙창 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
+    @pytest.mark.skip
+    def test_signup_TC044_TC045(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+
+            name=driver.find_element(By.NAME, "password")
+            name.send_keys(FalseLogin["password1"])
+            length_element = driver.find_elements(By.CSS_SELECTOR, "span.cac336714")
+
+            count=0
+            for i in range(1, 6):
+                if "At least 8 characters" in length_element[i].text :
+                    if length_element[0].value_of_css_property("color") != length_element[i].value_of_css_property("color"):
+                        count += 1
+                        print(length_element[i].text+length_element[i].value_of_css_property("color"))
+                if "Lower case letters (a-z)" in length_element[i].text :
+                    if length_element[0].value_of_css_property("color") != length_element[i].value_of_css_property("color"):
+                        count += 1
+                        print(length_element[i].text+length_element[i].value_of_css_property("color"))
+                if count >=2 :
+                    assert True
+                    return
+            assert False
+
+        except NoSuchElementException as e:
+            print("비밀번호 규칙창 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
+    @pytest.mark.skip
+    def test_signup_TC046_TC048(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+
+            name=driver.find_element(By.NAME, "password")
+            name.send_keys(LoginData["password1"])
+            length_element = driver.find_elements(By.CSS_SELECTOR, "span.cac336714")
+
+            count=0
+            for i in range(1, 6):
+                print(length_element[i].text)
+                if "At least 8 characters" in length_element[i].text :
+                    if length_element[0].value_of_css_property("color") != length_element[i].value_of_css_property("color"):
+                        count += 1
+                        print(length_element[i].text+length_element[i].value_of_css_property("color"))
+                if "Numbers (0-9)" in length_element[i].text :
+                    if length_element[0].value_of_css_property("color") != length_element[i].value_of_css_property("color"):
+                        count += 1
+                        print(length_element[i].text+length_element[i].value_of_css_property("color"))
+                if count >=2 :
+                    assert True
+                    return
+            assert False
+
+        except NoSuchElementException as e:
+            print("비밀번호 규칙창 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
+    @pytest.mark.skip
+    def test_signup_TC049_TC055(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+
+            name=driver.find_element(By.NAME, "password")
+            name.send_keys(LoginData["password1"])
+            length_element = driver.find_elements(By.CSS_SELECTOR, "span.cac336714")
+            
+            count=0
+            for i in range(1, 6):
+                if length_element[0].value_of_css_property("color") != length_element[i].value_of_css_property("color"):
+                    print(length_element[i].text)
+                    count += 1
+                if count>=5 :
+                    assert True
+                    return
+            assert False
+
+        except NoSuchElementException as e:
+            print("비밀번호 규칙창 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
+    @pytest.mark.skip
+    def test_signup_TC056(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+
+            name=driver.find_element(By.NAME, "password")
+            name.send_keys(FalseLogin["password1"])
+
+            driver.find_element(By.XPATH, '//button[@data-action="toggle"]').click()
+        except NoSuchElementException as e:
+            print("비밀번호 표시 버튼 못찾음")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
+    @pytest.mark.skip
+    def test_signup_TC057(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+            
+            driver.find_element(By.XPATH, '//button[contains(text(),"계속하기")]').click()
+            
+            username_field = driver.find_element(By.ID, "email")
+            error_massage=username_field.get_attribute("validationMessage")
+            active_element = driver.switch_to.active_element
+
+            # 확인 로직
+            expected_focus_id = "email"
+            if active_element.get_attribute("id") == expected_focus_id:
+                if error_massage == "이 입력란을 작성하세요." :
+                    print(error_massage)
+                    print("✅ 테스트 성공: 필수 인풋으로 포커싱 이동함")
+                    assert True
+                    return
+            else:
+                print("❌ 테스트 실패: 예상한 필드로 포커싱되지 않음")
+            assert False
+
+        except NoSuchElementException as e:
+            print("계속하기 버튼 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
+    @pytest.mark.skip
+    def test_signup_TC058(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+            
+            driver.find_element(By.ID, "email").send_keys(FalseLogin["username1"])
+
+            driver.find_element(By.XPATH, '//button[contains(text(),"계속하기")]').click()
+
+            usespassword_field = driver.find_element(By.ID, "password")
+            error_massage=usespassword_field.get_attribute("validationMessage")
+            
+            active_element = driver.switch_to.active_element
+            print("포커스된 요소 ID:", 
+            active_element.get_attribute("id"))
+            # 확인 로직
+            expected_focus_id = "password"
+            if active_element.get_attribute("id") == expected_focus_id:
+                if error_massage == "이 입력란을 작성하세요." :
+                    print(error_massage)
+                    print("✅ 테스트 성공: 필수 인풋으로 포커싱 이동함")
+                    assert True
+                    return
+            else:
+                print("❌ 테스트 실패: 예상한 필드로 포커싱되지 않음")
+            assert False
+            
+        except NoSuchElementException as e:
+            print("계속하기 버튼 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
+    @pytest.mark.skip
+    def test_signup_TC059(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+            
+            
+            driver.find_element(By.ID, "email").send_keys(LoginData["username"])
+            driver.find_element(By.ID,"password").send_keys(FalseLogin["password2"])
+            driver.find_element(By.XPATH, '//button[contains(text(),"계속하기")]').click()
+
+            usespassword_field=driver.find_element(By.XPATH, '//div[contains(text(),"비밀번호*")]')
+            default_color="rgba(208, 60, 56, 1)"
+            field_color=usespassword_field.value_of_css_property("color")
+            if default_color==field_color:
+                print(field_color)
+                assert True
+                return
+            
+            assert False
+            
+        except NoSuchElementException as e:
+            print("계속하기 버튼 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
+    @pytest.mark.skip
+    def test_signup_TC060(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+            
+            
+            driver.find_element(By.ID, "email").send_keys(FalseLogin["username1"])
+            driver.find_element(By.ID,"password").send_keys(LoginData["password1"])
+            driver.find_element(By.XPATH, '//button[contains(text(),"계속하기")]').click()
+            
+            try :
+                error=ws(driver, 2).until(
+                    EC.presence_of_element_located((By.ID, "error-element-email")) 
+                )
+                if "이메일이 유효하지 않습니다." in error.text:
+                    print("TC060"+error.text)
+                    assert True
+                    return
+                
+            except TimeoutException:
+                print("TC60 테스트 실패")
+                assert False            
+            
+        except NoSuchElementException as e:
+            print("계속하기 버튼 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+            
+    @pytest.mark.skip
+    def test_signup_TC061(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+            
+            
+            driver.find_element(By.ID, "email").send_keys("qwer@qwer.qwer")
+            driver.find_element(By.ID,"password").send_keys(LoginData["password1"])
+            driver.find_element(By.XPATH, '//button[contains(text(),"계속하기")]').click()
+            
+            try :
+                error=ws(driver, 2).until(
+                    EC.presence_of_element_located((By.ID, "prompt-alert")) 
+                )
+                if "문제가 발생했습니다. 나중에 다시 시도해 주세요" in error.text:
+                    print("TC061"+error.text)
+                    assert True
+                    return
+                assert False
+            except TimeoutException:
+                print("TC60 테스트 실패")
+                assert False            
+            
+        except NoSuchElementException as e:
+            print("계속하기 버튼 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
+    
+    def test_signup_TC062(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+            
+            driver.find_element(By.ID, "email").send_keys(NewLoginData["username"])
+            driver.find_element(By.ID,"password").send_keys(FalseLogin["password2"])
+            driver.find_element(By.XPATH, '//button[contains(text(),"계속하기")]').click()
+
+            usespassword_field=driver.find_element(By.XPATH, '//div[contains(text(),"비밀번호*")]')
+            default_color="rgba(208, 60, 56, 1)"
+            field_color=usespassword_field.value_of_css_property("color")
+            if default_color==field_color:
+                print(field_color)
+                assert True
+                return
+            
+            assert False
+            
+        except NoSuchElementException as e:
+            print("계속하기 버튼 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
+    def test_signup_TC063(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            
+            login_page.open()
+            login_page.check_url("signin")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
+            login_page.signup(NewLoginData["username"],NewLoginData["password"])
+            
+        except NoSuchElementException as e:
+            print("계속하기 버튼 찾지 못함")
+            assert False
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+
