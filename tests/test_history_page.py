@@ -360,7 +360,3 @@ class TestMyPage:
             assert warning_text == True, print("별점 입력 경고 메시지 미노출")            
         except Exception as e:
             assert False
-
-a = driver.find_element(By.XPATH, "//button[]").get_attribute("src")
-
-a.is_similar()
