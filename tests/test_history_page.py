@@ -30,7 +30,7 @@ menu_list의 출력 예시
 
 
 @pytest.mark.usefixtures("login_driver")
-#@pytest.mark.skip()
+@pytest.mark.skip()
 class TestMyPage:
 
     category_list = [
@@ -71,13 +71,7 @@ class TestMyPage:
             assert False
 
     @pytest.mark.skip()
-<<<<<<< HEAD
     def test_history_003(self, driver: WebDriver):
-=======
-
-    def test_history_003(self, driver: WebDriver):
-
->>>>>>> cb38479bd9d35beb6223a2fc0657add0ea30311c
         try:
             history_page = self.navigate_to_history(driver)
             GNB_name = history_page.text(HistoryPage.GNB_history)
@@ -106,10 +100,6 @@ class TestMyPage:
         except Exception as e:
             print(f"메뉴들을 찾아내지 못함")
             assert False
-<<<<<<< HEAD
-            
-    @pytest.mark.skip()
-=======
 
     @pytest.mark.skip()
     @pytest.mark.parametrize("index, expected_main, expected_sub", category_list)
@@ -134,7 +124,7 @@ class TestMyPage:
             print("추천 후기 등록하기 버튼 탐색 실패")
             assert False
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_023(self,driver:WebDriver):
         try:
             history_page = self.navigate_to_history(driver)
@@ -287,7 +277,7 @@ class TestMyPage:
             print("라디오 버튼 탐색 실패")
             assert False
     
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_history_043(self,driver:WebDriver):
         try:
             history_page = self.navigate_to_history(driver)
@@ -295,6 +285,82 @@ class TestMyPage:
 
             history_page.send_keys(HistoryPage.review_comment, "123")
             result = history_page.get_attribute(HistoryPage.review_comment, "value")
-            assert result == "123", print("val")
+            assert result == "123", print("동일한 값이 아님")
         except Exception as e:
             assert False
+
+    @pytest.mark.skip()
+    def test_history_044(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+
+            history_page.send_keys(HistoryPage.review_comment, "a" * 500)
+            result = history_page.get_attribute(HistoryPage.review_comment, "value")
+            assert result != "a" * 500, print("후기에 500자 전부 입력됨")
+        except Exception as e:
+            assert False
+
+    @pytest.mark.skip()
+    def test_history_044(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+            
+            history_page.click(HistoryPage.review_stars_3)
+            result = len(history_page.texts(HistoryPage.review_star_yellow))
+            assert result == 3,print("별점이 3개가 아님")
+        except Exception as e:
+            assert False
+
+
+    @pytest.mark.skip()
+    def test_history_046(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+            history_page.click(HistoryPage.review_submit_btn)
+            result = history_page.is_displayed(HistoryPage.review_tab)
+            assert result == True, "후기 등록 실패했으나 탭이 닫힘"
+        except Exception as e:
+            assert False
+
+    @pytest.mark.skip()
+    def test_history_047(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+            history_page.click(HistoryPage.review_submit_btn)
+
+            warning_text = history_page.is_displayed(HistoryPage.review_img_warning)
+            assert warning_text == True, print("이미지 경고 메시지 미노출")            
+        except Exception as e:
+            assert False
+
+    @pytest.mark.skip()
+    def test_history_048(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+            history_page.click(HistoryPage.review_submit_btn)
+
+            warning_text = history_page.is_displayed(HistoryPage.review_text_warning)
+            assert warning_text == True, print("후기 입력 경고 메시지 미노출")            
+        except Exception as e:
+            assert False
+
+    @pytest.mark.skip()
+    def test_history_049(self,driver:WebDriver):
+        try:
+            history_page = self.navigate_to_history(driver)
+            history_page.click(HistoryPage.review_register_btn)
+            history_page.click(HistoryPage.review_submit_btn)
+
+            warning_text = history_page.is_displayed(HistoryPage.review_star_warning)
+            assert warning_text == True, print("별점 입력 경고 메시지 미노출")            
+        except Exception as e:
+            assert False
+
+a = driver.find_element(By.XPATH, "//button[]").get_attribute("src")
+
+a.is_similar()

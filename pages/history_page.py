@@ -19,21 +19,28 @@ class HistoryPage:
     def click(self, by_locator):
         WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(by_locator)).click()
 
+    def clear(self, by_locator):
+        WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(by_locator)).clear()
+
     def send_keys(self, by_locator, text):
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(by_locator)).send_keys(text)
 
     def text(self, by_locator):
         return WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(by_locator)).text
 
-    def is_displayed(self, by_locator):
-        return WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(by_locator)).is_displayed()
-
     def texts(self, by_locator):
         elements = WebDriverWait(self.driver, 10).until(EC.presence_of_all_elements_located(by_locator))
         return [el.text for el in elements]
+
+    def is_displayed(self, by_locator):
+        return WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(by_locator)).is_displayed()
+
+
     
     def get_attribute(self, by_locator, attribute):
         return WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(by_locator)).get_attribute(attribute)
+
+
 
     def menu_list(self):
         result = []
@@ -89,8 +96,14 @@ class HistoryPage:
     #리뷰탭 - 별점
     review_star_gray = (By.XPATH,".//div[contains(@class, 'text-gray-300')]" )
     review_star_yellow = (By.XPATH,".//div[contains(@class, 'text-yellow-400')]" )
+    review_stars_3 = (By.XPATH, '//div[text()="★"][3]')
 
+    #리뷰탭 - 후기 작성 완료 버튼
+    review_submit_btn = (By.XPATH, "//button[contains(text(), '후기 작성 완료')]")
 
-
+    #리뷰탭 - 경고
+    review_img_warning = (By.XPATH, "//p[contains(text(), '리뷰 이미지는 필수입니다')]")
+    review_text_warning = (By.XPATH, "//p[contains(text(), '후기는 필수입니다')]")
+    review_star_warning = (By.XPATH, "//p[contains(text(), '별점은 최소 1점 이상이어야 합니다')]")
 
     
