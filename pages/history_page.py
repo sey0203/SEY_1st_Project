@@ -109,7 +109,6 @@ class HistoryPage:
     review_star_warning = (By.XPATH, "//p[contains(text(), '별점은 최소 1점 이상이어야 합니다')]")
 
     #홈 탭 - 혼자 먹기
-
     eat_alone_home_btn = (By.XPATH, "//button[.//p[text()='혼자 먹기']]")
     eat_alone_home_combobox = (By.XPATH, "//button[@role='combobox']")
     eat_alone_home_category_Korean = (By.XPATH, "//span[text()='한식']")

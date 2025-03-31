@@ -17,6 +17,47 @@ class MyPage:
     def __init__(self, driver: WebDriver):
         self.driver = driver
 
+    def set_slider_value(self, flavor : str, value : float):
+        try:
+            # 맛에 해당하는 슬라이더 섹션 찾기
+            flavor_section_xpath = f"//section[.//span[text()='{flavor} 맛']]"
+            flavor_section = WebDriverWait(self.driver, 3).until(
+                EC.presence_of_element_located((By.XPATH, flavor_section_xpath))
+            )
+
+            # # 슬라이더 thumb 요소 찾기
+            thumb_element = flavor_section.find_element(By.XPATH, ".//span[@role='slider']")
+
+            # # 슬라이더 트랙 요소 찾기
+            track_element = flavor_section.find_element(By.XPATH, ".//span[@class='relative h-2 w-full grow overflow-hidden rounded-full bg-light-gray']")
+
+                # 슬라이더 트랙의 시작점 x 좌표
+            track_start_x = track_element.location['x']
+
+            # 슬라이더 thumb 요소의 오프셋
+            thumb_offset = thumb_element.size['width'] / 2
+
+            # 이동할 x 좌표 계산
+            target_x = track_start_x + (float(value) / 5) * track_element.size['width'] - thumb_offset
+
+            # 드래그 앤 드롭 동작 수행
+            action = ActionChains(self.driver)
+            action.click_and_hold(thumb_element).move_by_offset(target_x -track_start_x, 0).release().perform()
+            
+            return True
+        except Exception as e:
+            print(f"슬리이더 조작 중 오류 발생: {e}")
+            return False
+        
+        except NoSuchElementException:
+            print("필드를 찾을 수 없습니다.")
+            return False  
+        
+        except TimeoutException:
+            print("슬라이드 로딩 시간 초과.")
+            return False
+
+
     def scroll_down(self):
         self.driver.execute_script("window.scrollBy(0, 500);")
 
@@ -66,6 +107,24 @@ class MyPage:
 
     #내 프로필 진입 버튼
     my_profile_btn = (By.CSS_SELECTOR, "div.flex.items-center.justify-between.text-subbody > svg.cursor-pointer")
+    my_profile_gnb = (By.XPATH, "//span[text()='프로필 정보 수정']")
+    my_profile_back_btn = (By.XPATH,'//button[contains(@class, "cursor-pointer")]')
+    my_profile_edit_title = (By.XPATH,'//span[text()="프로필 이미지 수정"]')
+    my_profile_img = (By.XPATH,"//img[@alt='프로필 이미지' and contains(@class, 'border-light-gray')]")
+    default_profile = os.path.abspath('utils/default_profile_image.png')
+    my_profile_img_input = (By.NAME, "profileImageUrl")
+    my_profile_prefer = (By.NAME,"pros")
+    my_profile_hate = (By.NAME,"cons")
+    my_profile_warn = (By.XPATH,"//p[contains(text(),'10자 이상 입력해주세요')]")
+    my_profile_submit_btn = (By.XPATH,"//button[@type='submit']")
+    my_profile_edit_complete = (By.XPATH,"//div[@role='status']")
+    my_profile_feed = (By.XPATH, "//p[@class='w-4/5']")
+    ## 슬라이더 요소 (role="slider"인 요소)
+    sweet_slider = (By.XPATH, '//span[text()="단 맛"]/following-sibling::div//span[@role="slider"]')
+    salty_sldier = (By.XPATH, '//span[text()="짠 맛"]/following-sibling::div//span[@role="slider"]')
+    spicy_slider = (By.XPATH, '//span[text()="매운 맛"]/following-sibling::div//span[@role="slider"]')
+
+
 
     #홈 탭 - 혼자 먹기
     eat_alone_home_btn = (By.XPATH, "//button[.//p[text()='혼자 먹기']]")
