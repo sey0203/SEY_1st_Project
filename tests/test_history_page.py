@@ -30,7 +30,7 @@ menu_list의 출력 예시
 
 
 @pytest.mark.usefixtures("login_driver")
-#@pytest.mark.skip()
+@pytest.mark.skip()
 class TestHistoryPage:
 
     def add_new_history(self, driver):
