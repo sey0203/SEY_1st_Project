@@ -11,7 +11,6 @@ import random
 import pytest
 from pages.my_page import MyPage
 from utils.image_is_similar import is_similar
-from test_history_page import TestHistoryPage, TestHistoryPage_Second
 
 
 
@@ -25,7 +24,24 @@ class TestMyPage:
         WebDriverWait(driver, 10).until(EC.url_contains("my"))
         return my_page
                             
-    @pytest.mark.skip()
+    def precondition_ai_recommend(self,driver:WebDriver):
+        my_page = MyPage(driver)
+        my_page.click(MyPage.add_AI_recommend)
+        my_page.click(MyPage.add_AI_category)
+        element_list = my_page.elements(MyPage.add_AI_categories_list)
+        element_list[7].click()
+        my_page.click(MyPage.add_AI_btn)
+        my_page.click(MyPage.add_AI_accept_btn)
+        my_page.click(MyPage.history_add_review)
+        my_page.send_keys(MyPage.add_review_img,MyPage.image_path)
+        my_page.send_keys(MyPage.comment,"123")
+        my_page.click(MyPage.star_3)
+        my_page.click(MyPage.review_submit_btn)
+        
+        my_page.click(MyPage.my_feed_btn)
+        return my_page
+
+    
     def test_my_001(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -40,7 +56,7 @@ class TestMyPage:
             print("test_my_001 예외 발생")
             assert False
 
-    @pytest.mark.skip()
+    
     def test_my_002(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -53,7 +69,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_002 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_003(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -68,7 +84,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_003 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_004(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -89,7 +105,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_004 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_005(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -102,26 +118,40 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_005 예외 발생"
 
-    @pytest.mark.skip()## 주말간 AI추천기능이 안됨
+    
+    @pytest.mark.flaky(reruns=3, reruns_delay=0.5)
     def test_my_006(self, driver:WebDriver):
         try:
-            TestHistoryPage_Second.add_new_history(self,driver) # 히스토리에 메뉴 하나 추가
-            time.sleep(5)
+            my_page = self.precondition_ai_recommend(driver)
+            title = my_page.text(MyPage.my_add_history_menu)
+            main = my_page.text(MyPage.my_add_history_eat_main_type)   
+            sub = my_page.text(MyPage.my_add_history_eat_sub_type)
+            sub2 = my_page.text(MyPage.my_add_history_eat_sub_2_type)
+            src = my_page.get_attribute(MyPage.my_add_history_pic,"src")
+            similar_result = is_similar(src, MyPage.my_add_image_path)
+            stars = my_page.texts(MyPage.my_add_history_star)
+            count_star = stars[:5].count('★')
+            btn_check = my_page.is_displayed(MyPage.my_add_history_btn)
         except TimeoutException:
             assert False , "test_my_006 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_006  존재하지 않음"
         except Exception as e:
+            time.sleep(30)
             assert False , "test_my_006 예외 발생"
+        assert "내가 먹은 메뉴" in title, "내가 먹은 메뉴 타이틀 미노출"
+        assert main == "회식", "내가 먹은 메뉴 - 메인 카테고리 잘못된 값 노출"
+        assert sub == "기타", "내가 먹은 메뉴 - 서브 카테고리 잘못된 값 노출"
+        assert sub2 == "AI 추천", "내가 먹은 메뉴 - 서브 2 카테고리 잘못된 값 노출"
+        assert similar_result == True, "내가 먹은 메뉴 - 동일하지 않은 이미지 노출"
+        assert count_star == 3, "내가 먹은 메뉴 - 별점 잘못된 값 노출"
+        assert btn_check == True, "내가 먹은 메뉴 - 같은 메뉴 먹기 버튼 미노출"
 
-    @pytest.mark.skip() ## 버튼을 못찾겠음.....help
+    
     def test_my_007(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
-            #사용해본 방법들
-            # 1. JAVA SCIRPT로 argument.click
-            # 2. actionchain
-            # 3. 그외 GPT가 하라는대로 다해봄..
+            my_page.click(MyPage.my_profile_btn)
         except TimeoutException:
             assert False , "test_my_007 작동 않음"
         except NoSuchElementException:
@@ -129,7 +159,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_007 예외 발생"
 
-    @pytest.mark.skip() #7번이 작동하지 않아 15번까지 진행하지 못함 ㅠ
+    
     def test_my_008(self, driver:WebDriver):
         try:
             None
@@ -140,7 +170,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_008 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_009(self, driver:WebDriver):
         try:
             None 
@@ -151,7 +181,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_009 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_010(self, driver:WebDriver):
         try:
             None 
@@ -162,7 +192,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_010 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_011(self, driver:WebDriver):
         try:
             None 
@@ -173,7 +203,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_011 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_012(self, driver:WebDriver):
         try:
             None 
@@ -184,7 +214,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_012 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_013(self, driver:WebDriver):
         try:
             None 
@@ -195,7 +225,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_013 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_014(self, driver:WebDriver):
         try:
             None 
@@ -206,7 +236,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_014 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_015(self, driver:WebDriver):
         try:
             None 
@@ -217,7 +247,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_015 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_016(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -231,7 +261,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_016 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_017(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -254,7 +284,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_017 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_018(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -272,7 +302,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_018 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_019(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -288,7 +318,7 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_019 예외 발생"
 
-    @pytest.mark.skip()
+    
     def test_my_020(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -311,7 +341,7 @@ class TestMyPage:
         assert "음식 카테고리를 설정" in category_name_text
         assert category_list == expected_list
 
-    @pytest.mark.skip()
+    
     def test_my_021(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -328,7 +358,7 @@ class TestMyPage:
         assert comment_title == "후기" , "후기 타이틀이 다르게 노출됨"
         assert "후기를 입력해주세요." in comment_name , "후기 입력란 placeholder 오류"
 
-    @pytest.mark.skip()
+    
     def test_my_022(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -344,7 +374,7 @@ class TestMyPage:
         assert star_title == "별점", "후기 별점이 다르게 노출됨"
         assert len(star_rate) == 5 , "별점 수가 5개보다 많거나 적음"
 
-    @pytest.mark.skip()
+    
     def test_my_023(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -362,7 +392,7 @@ class TestMyPage:
         assert is_group_clicked == "unchecked", "그룹에 체크가 되어있음"
         assert is_together_clicked == "unchecked", "회식에 체크가 되어있음"
 
-    @pytest.mark.skip()
+    
     def test_my_024(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -379,7 +409,7 @@ class TestMyPage:
         assert with_title == "같이 먹은 사람 등록", "같이 먹은 사람 등록 타이틀 미노출"
         assert with_name == "이름을 검색해주세요", "같이 먹은 사람 등록 placeholder 미노출"
 
-    @pytest.mark.skip()
+    
     def test_my_025(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -399,7 +429,7 @@ class TestMyPage:
         assert desc_list[3] == expected_list[3], "후기 필수 여부 노출되지 않음"
         assert desc_list[4] == expected_list[4], "별점 필수 여부 노출되지 않음"
 
-    @pytest.mark.skip()
+    
     def test_my_026(self, driver:WebDriver):
         try: 
             my_page = self.navigate_to_my_page(driver)
@@ -415,7 +445,7 @@ class TestMyPage:
             assert False , "test_my_026 예외 발생"
         assert similar_result == True, "업로드한 이미지가 다르게 노출됨"
 
-    @pytest.mark.skip()
+    
     def test_my_027(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -430,7 +460,7 @@ class TestMyPage:
             assert False , "test_my_027 예외 발생"
         assert len(value) < 500, "메뉴 명 입련란이 500자 이상 작성 가능"
 
-    @pytest.mark.skip()
+    
     def test_my_028(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -447,7 +477,7 @@ class TestMyPage:
             assert False , "test_my_028 예외 발생"
         assert category_text == "분식", "카테고리 변경 실패"
 
-    @pytest.mark.skip()
+    
     def test_my_029(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -463,7 +493,7 @@ class TestMyPage:
             assert False , "test_my_029 예외 발생"
         assert len(value) < 500, "후기 입련란이 500자 이상 작성 가능"
 
-    @pytest.mark.skip()
+    
     def test_my_030(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -480,7 +510,8 @@ class TestMyPage:
         assert len(gray_stars) == 2, "리뷰 별점 3점으로 설정되지 않음"
         assert len(yellow_stars) == 3 , "리뷰 별점이 3점으로 설정되지 않음"
 
-    #@pytest.mark.skip()
+    
+    @pytest.mark.flaky(reruns=3, reruns_delay=0.25)
     def test_my_031(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -492,8 +523,8 @@ class TestMyPage:
             my_page.click(MyPage.my_add_category_name)
             category_list = my_page.elements(MyPage.my_add_category_clickable_list)
             category_list[4].click()
-            driver.implicitly_wait(3)
             my_page.click(MyPage.my_add_submit_btn)
+
             status_shown = my_page.is_displayed(MyPage.my_add_review_status)
         except TimeoutException:
             assert False , "test_my_031 작동 않음" 
@@ -503,13 +534,165 @@ class TestMyPage:
             assert False , "test_my_031 예외 발생"
         assert status_shown == True, "리뷰 등록 완료 나오지 않음"
 
-    @pytest.mark.skip()
+    
+    @pytest.mark.flaky(reruns=3, reruns_delay=0.25)
     def test_my_032(self, driver:WebDriver):
         try:
-            None 
+            my_page = self.precondition_ai_recommend(driver)
+            driver.fullscreen_window()
+            my_page.click(MyPage.my_add_history_btn)
+            review_again_gnb = my_page.text(MyPage.my_add_review_again_GNB)
+            review_again_back_btn = my_page.is_displayed(MyPage.my_add_review_back_btn)
         except TimeoutException:
-            assert False , "test_my_032 작동 않음" 
+            assert False , "test_my_032 작동 않음"
         except NoSuchElementException:
             assert False , "test_my_032  존재하지 않음"
         except Exception as e:
             assert False , "test_my_032 예외 발생"
+        assert review_again_gnb == "또 먹은 후기 등록하기", "새로운 후기 등록하기 GNB가 나오지 않음"
+        assert review_again_back_btn == True, "뒤로가기 버튼이 나오지 않음"
+
+    
+    @pytest.mark.flaky(reruns=3, reruns_delay=0.25)
+    def test_my_033(self, driver:WebDriver):
+        errors = []
+        try:
+            my_page = self.precondition_ai_recommend(driver)
+            driver.fullscreen_window()
+            my_page.click(MyPage.my_add_history_btn)
+            eat_title = my_page.text(MyPage.my_add_eat_title)
+            alone_radio = my_page.get_attribute(MyPage.my_add_eat_alone_radio,"data-state")
+            group_radio = my_page.get_attribute(MyPage.my_add_eat_group_radio,"data-state")
+            together_radio = my_page.get_attribute(MyPage.my_add_eat_together_radio,"data-state")
+        except TimeoutException:
+            assert False , "test_my_033 작동 않음"
+        except NoSuchElementException:
+            assert False , "test_my_033  존재하지 않음"
+        except Exception as e:
+            assert False , "test_my_033 예외 발생"
+        if eat_title != "식사 유형":
+            errors.append("또 먹은 후기 - 타이틀 잘못 노출됨")
+        if alone_radio != "unchecked":
+            errors.append("또 먹은 후기 - 혼밥에 체크됨")
+        if group_radio != "unchecked":
+            errors.append("또 먹은 후기 - 그룹에 체크됨")
+        if together_radio != "checked":
+           errors.append("또 먹은 후기 - 회식에 체크 안됨")
+        assert not errors, " / ".join(errors)
+
+    
+    @pytest.mark.flaky(reruns=3, reruns_delay=0.25)
+    def test_my_034(self, driver:WebDriver):
+        try:
+            my_page = self.precondition_ai_recommend(driver)
+            driver.fullscreen_window()
+            my_page.click(MyPage.my_add_history_btn)
+            review_img_title = my_page.text(MyPage.my_add_review_title)
+            review_img_btn = my_page.is_displayed(MyPage.my_add_review_img_btn)
+            review_img = my_page.get_attribute(MyPage.my_add_review_img,"src")
+            similar = is_similar(review_img,MyPage.image_path)
+        except TimeoutException:
+            assert False , "test_my_034 작동 않음"
+        except NoSuchElementException:
+            assert False , "test_my_034  존재하지 않음"
+        except Exception as e:
+            assert False , "test_my_034 예외 발생"
+        assert similar == True, "또 먹은 후기 - 이미지가 유사하지 않음"
+        assert review_img_btn == True, "또 먹은 후기 - 이미지가 유사하지 않음"
+        assert review_img_title == "후기 사진", "또 먹은 후기 사진 타이틀이 잘못 노출됨"
+
+    
+    @pytest.mark.flaky(reruns=3, reruns_delay=0.25)
+    def test_my_035(self, driver:WebDriver):
+        errors = []
+        try:
+            my_page = self.precondition_ai_recommend(driver)
+            driver.fullscreen_window()
+            my_page.click(MyPage.my_add_history_btn)
+            category_title = my_page.text(MyPage.my_add_category_title)
+            category_text = my_page.text(MyPage.my_add_category_text)
+        except TimeoutException:
+            assert False , "test_my_035 작동 않음"
+        except NoSuchElementException:
+            assert False , "test_my_035  존재하지 않음"
+        except Exception as e:
+            assert False , "test_my_035 예외 발생"
+        assert category_title == "카테고리", "또 먹은 후기 - 카테고리 타이틀이 잘못 노출됨"
+        assert category_text == "기타", "또 먹은 후기 - 카테고리 내 텍스트 잘못 노출됨"
+
+    
+    @pytest.mark.flaky(reruns=3, reruns_delay=0.25)
+    def test_my_036(self, driver:WebDriver):
+        errors = []
+        try:
+            my_page = self.precondition_ai_recommend(driver)
+            driver.fullscreen_window()
+            my_page.click(MyPage.my_add_history_btn)
+            comment_title = my_page.text(MyPage.my_add_comment_title)
+            comment_text = my_page.get_attribute(MyPage.my_add_comment_name,"value")
+        except TimeoutException:
+            assert False , "test_my_036 작동 않음"
+        except NoSuchElementException:
+            assert False , "test_my_036  존재하지 않음"
+        except Exception as e:
+            assert False , "test_my_036 예외 발생"
+        assert comment_title == "후기", "또 먹은 후기 - 후기 작성란 타이틀 잘못 노출됨"
+        assert comment_text == "123", "또 먹은 후기 - 후기 작성란 내용 잘못 노출됨"
+
+
+    @pytest.mark.flaky(reruns=3, reruns_delay=0.25)
+    def test_my_037(self, driver:WebDriver):
+        errors = []
+        try:
+            my_page = self.precondition_ai_recommend(driver)
+            driver.fullscreen_window()
+            my_page.click(MyPage.my_add_history_btn)
+            star_title = my_page.text(MyPage.my_add_star_title)
+            star_rate = my_page.texts(MyPage.my_add_star_rate)
+        except TimeoutException:
+            assert False , "test_my_037 작동 않음"
+        except NoSuchElementException:
+            assert False , "test_my_037  존재하지 않음"
+        except Exception as e:
+            assert False , "test_my_037 예외 발생"
+        assert star_title == "별점", "또 먹은 후기 - 별점 타이틀 잘못 노출됨"
+        assert len(star_rate) == 5, "또 먹은 후기 - 별점이 잘못 노출됨"
+
+
+    @pytest.mark.flaky(reruns=3, reruns_delay=0.25)
+    def test_my_038(self, driver:WebDriver):
+        errors = []
+        try:
+            my_page = self.precondition_ai_recommend(driver)
+            driver.fullscreen_window()
+            my_page.click(MyPage.my_add_history_btn)
+            submit_btn = my_page.is_displayed(MyPage.my_add_submit_btn)
+            
+        except TimeoutException:
+            assert False , "test_my_038 작동 않음"
+        except NoSuchElementException:
+            assert False , "test_my_038  존재하지 않음"
+        except Exception as e:
+            assert False , "test_my_038 예외 발생"
+        assert submit_btn == True, "또 먹은 후기 - 후기 작성 완료 버튼 미노출"
+
+
+    @pytest.mark.flaky(reruns=3, reruns_delay=0.25)
+    def test_my_039(self, driver:WebDriver):
+        errors = []
+        try:
+            my_page = self.precondition_ai_recommend(driver)
+            driver.fullscreen_window()
+            my_page.click(MyPage.my_add_history_btn)
+            my_page.click(MyPage.my_add_stars_5)
+            my_page.click(MyPage.my_add_submit_btn)
+            stars = my_page.texts(MyPage.my_add_history_star)
+            count_star = stars[:5].count('★')
+            print(count_star)
+        except TimeoutException:
+            assert False , "test_my_039 작동 않음"
+        except NoSuchElementException:
+            assert False , "test_my_039  존재하지 않음"
+        except Exception as e:
+            assert False , "test_my_039 예외 발생"
+        assert count_star == 5, "별점이 다르게 노출됨"
