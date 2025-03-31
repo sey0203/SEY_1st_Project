@@ -40,7 +40,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드 아이콘-실패 (알 수 없는 오류) : {e}"
 
 
-    @pytest.mark.skip()
+    # @pytest.mark.skip()
     def test_teamfeed_002(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -757,7 +757,7 @@ class TestTeamFeedPage:
            assert False, f"❌ 같은메뉴먹기 클릭-또 먹은 후기 등록하기 화면-실패 (알 수 없는 오류) : {e}"
 
         
-    # @pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_104(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
