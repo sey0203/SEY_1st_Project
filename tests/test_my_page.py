@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.webdriver import ActionChains
 import time
 import random
 import pytest
@@ -37,25 +38,19 @@ class TestMyPage:
         my_page.send_keys(MyPage.comment,"123")
         my_page.click(MyPage.star_3)
         my_page.click(MyPage.review_submit_btn)
-        
         my_page.click(MyPage.my_feed_btn)
         return my_page
-
     
     def test_my_001(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
             my_page.text(MyPage.my_feed_btn)
         except TimeoutException:
-            print("URL에 'my'가 포함되지 않았습니다. ")
-            assert False
+            assert False, "URL에 'my'가 포함되지 않았습니다. "
         except NoSuchElementException:
-            print("개인 피드 탭이 존재하지 않습니다.")
-            assert False
+            assert False, "개인 피드 탭이 존재하지 않습니다."
         except Exception as e:
-            print("test_my_001 예외 발생")
-            assert False
-
+            assert False, "test_my_001 예외 발생"
     
     def test_my_002(self, driver:WebDriver):
         try:
@@ -68,7 +63,6 @@ class TestMyPage:
             assert False , "test_my_002 뒤로가기 버튼이 존재하지 않음"
         except Exception as e:
             assert False , "test_my_002 예외 발생"
-
     
     def test_my_003(self, driver:WebDriver):
         try:
@@ -83,7 +77,6 @@ class TestMyPage:
             assert False , "test_my_003 텍스트 불일치"
         except Exception as e:
             assert False , "test_my_003 예외 발생"
-
     
     def test_my_004(self, driver:WebDriver):
         try:
@@ -104,7 +97,6 @@ class TestMyPage:
             assert False , "test_my_004  존재하지 않음"
         except Exception as e:
             assert False , "test_my_004 예외 발생"
-
     
     def test_my_005(self, driver:WebDriver):
         try:
@@ -117,7 +109,6 @@ class TestMyPage:
             assert False , "test_my_005  존재하지 않음"
         except Exception as e:
             assert False , "test_my_005 예외 발생"
-
     
     @pytest.mark.flaky(reruns=3, reruns_delay=0.5)
     def test_my_006(self, driver:WebDriver):
@@ -137,7 +128,6 @@ class TestMyPage:
         except NoSuchElementException:
             assert False , "test_my_006  존재하지 않음"
         except Exception as e:
-            time.sleep(30)
             assert False , "test_my_006 예외 발생"
         assert "내가 먹은 메뉴" in title, "내가 먹은 메뉴 타이틀 미노출"
         assert main == "회식", "내가 먹은 메뉴 - 메인 카테고리 잘못된 값 노출"
@@ -146,7 +136,6 @@ class TestMyPage:
         assert similar_result == True, "내가 먹은 메뉴 - 동일하지 않은 이미지 노출"
         assert count_star == 3, "내가 먹은 메뉴 - 별점 잘못된 값 노출"
         assert btn_check == True, "내가 먹은 메뉴 - 같은 메뉴 먹기 버튼 미노출"
-
     
     def test_my_007(self, driver:WebDriver):
         try:
@@ -158,95 +147,133 @@ class TestMyPage:
             assert False , "test_my_007  존재하지 않음"
         except Exception as e:
             assert False , "test_my_007 예외 발생"
-
+        assert my_page.is_displayed(MyPage.my_add_review_tab) == True, "탭이 노출되지 않음"
     
     def test_my_008(self, driver:WebDriver):
         try:
-            None
+            my_page = self.navigate_to_my_page(driver)
+            my_page.click(MyPage.my_profile_btn)
+            profile_gnb = my_page.text(MyPage.my_profile_gnb)
+            profile_back_btn = my_page.is_displayed(MyPage.my_profile_back_btn)
         except TimeoutException:
             assert False , "test_my_008 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_008  존재하지 않음"
         except Exception as e:
             assert False , "test_my_008 예외 발생"
-
+        assert profile_gnb == "프로필 정보 수정", "프로필 정보 수정 GNB 미노출"
+        assert profile_back_btn == True, "프로필 정보 수정 뒤로가기 버튼 미노출"
     
     def test_my_009(self, driver:WebDriver):
         try:
-            None 
+            my_page = self.navigate_to_my_page(driver)
+            my_page.click(MyPage.my_profile_btn)
+            profile_edit_title = my_page.text(MyPage.my_profile_edit_title)
+            profile_img = my_page.get_attribute(MyPage.my_profile_img,"src")
+            similar = is_similar(profile_img,MyPage.default_profile)
         except TimeoutException:
             assert False , "test_my_009 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_009  존재하지 않음"
         except Exception as e:
             assert False , "test_my_009 예외 발생"
-
+        assert profile_edit_title == "프로필 이미지 수정" , "프로필 정보 수정 - 프로필 이미지 수정 타이틀 잘못 노출됨"
+        assert similar == True, "프로필이 기본 프로필이 아님"
     
     def test_my_010(self, driver:WebDriver):
         try:
-            None 
+            my_page = self.navigate_to_my_page(driver)
+            my_page.click(MyPage.my_profile_btn)
+            my_page.send_keys(MyPage.my_profile_img_input,MyPage.image_path)
+            profile_img = my_page.get_attribute(MyPage.my_profile_img,"src")
+            similar = is_similar(profile_img,MyPage.image_path)
         except TimeoutException:
             assert False , "test_my_010 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_010  존재하지 않음"
         except Exception as e:
             assert False , "test_my_010 예외 발생"
-
+        assert similar == True, "프로필 정보 수정 - 이미지 변경이 안됨"
     
-    def test_my_011(self, driver:WebDriver):
+    @pytest.mark.skip(reason="슬라이더 미구현")
+    def test_my_011(self, driver: WebDriver):
         try:
-            None 
-        except TimeoutException:
-            assert False , "test_my_011 작동 않음" 
-        except NoSuchElementException:
-            assert False , "test_my_011  존재하지 않음"
+            my_page = self.navigate_to_my_page(driver)
+            my_page.click(MyPage.my_profile_btn)
         except Exception as e:
-            assert False , "test_my_011 예외 발생"
+            assert False, f"test_my_011 예외 발생: {e}"
 
-    
+    @pytest.mark.skip(reason="슬라이더 미구현")   
     def test_my_012(self, driver:WebDriver):
         try:
-            None 
+            my_page = self.navigate_to_my_page(driver)
+            my_page.click(MyPage.my_profile_btn)
         except TimeoutException:
             assert False , "test_my_012 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_012  존재하지 않음"
         except Exception as e:
             assert False , "test_my_012 예외 발생"
-
     
     def test_my_013(self, driver:WebDriver):
         try:
-            None 
+            my_page = self.navigate_to_my_page(driver)
+            my_page.click(MyPage.my_profile_btn)
+            my_page.clear(MyPage.my_profile_prefer)
+            my_page.clear(MyPage.my_profile_hate)
+            prefer_placeholder = my_page.get_attribute(MyPage.my_profile_prefer,"placeholder")
+            hate_placeholder = my_page.get_attribute(MyPage.my_profile_hate,"placeholder")
         except TimeoutException:
             assert False , "test_my_013 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_013  존재하지 않음"
         except Exception as e:
             assert False , "test_my_013 예외 발생"
-
+        assert "좋아하는 음식 성향을 이야기해주세요!" in prefer_placeholder, "placeholder이 다르게 노출됨"
+        assert "싫어하는 음식 성향을 이야기해주세요!" in hate_placeholder, "placeholder이 다르게 노출됨"
     
     def test_my_014(self, driver:WebDriver):
         try:
-            None 
+            my_page = self.navigate_to_my_page(driver)
+            my_page.click(MyPage.my_profile_btn)
+            my_page.clear(MyPage.my_profile_prefer)
+            my_page.clear(MyPage.my_profile_hate)
+            my_page.send_keys(MyPage.my_profile_prefer,"123")
+            my_page.send_keys(MyPage.my_profile_hate,"456")
+            my_page.click(MyPage.my_profile_submit_btn)
+            prefer_value = my_page.get_attribute(MyPage.my_profile_prefer,"value")
+            hate_value = my_page.get_attribute(MyPage.my_profile_hate,"value")
+            warn_count = len(my_page.elements(MyPage.my_profile_warn))
         except TimeoutException:
             assert False , "test_my_014 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_014  존재하지 않음"
         except Exception as e:
             assert False , "test_my_014 예외 발생"
-
+        assert "123" == prefer_value, "프로필 수정 좋아하는 음식 성향에 값이 잘못 들어가짐"
+        assert "456" == hate_value, "프로필 수정 싫어하는 음식 성향에 값이 잘못 들어가짐"
+        assert warn_count == 2 , "프로필 수정 경고가 덜 노출됨"
     
     def test_my_015(self, driver:WebDriver):
         try:
-            None 
+            my_page = self.navigate_to_my_page(driver)
+            my_page.click(MyPage.my_profile_btn)
+            my_page.clear(MyPage.my_profile_prefer)
+            my_page.clear(MyPage.my_profile_hate)
+            my_page.send_keys(MyPage.my_profile_prefer,"한식에서 매콤한 음식을 좋아합니다.")
+            my_page.send_keys(MyPage.my_profile_hate,"중식에서 느끼한 음식을 싫어합니다.")
+            my_page.click(MyPage.my_profile_submit_btn)
+            complete_status = my_page.is_displayed(MyPage.my_profile_edit_complete)
+            list = my_page.texts(MyPage.my_profile_feed)
         except TimeoutException:
             assert False , "test_my_015 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_015  존재하지 않음"
         except Exception as e:
             assert False , "test_my_015 예외 발생"
-
+        assert complete_status == True, "프로필 수정 완료 미노출"
+        assert list[0] == "한식에서 매콤한 음식을 좋아합니다.", "좋아하는 성향 변경 미반영"
+        assert list[1] == "중식에서 느끼한 음식을 싫어합니다.", "싫어하는 성향 변경 미반영"
     
     def test_my_016(self, driver:WebDriver):
         try:
@@ -688,7 +715,6 @@ class TestMyPage:
             my_page.click(MyPage.my_add_submit_btn)
             stars = my_page.texts(MyPage.my_add_history_star)
             count_star = stars[:5].count('★')
-            print(count_star)
         except TimeoutException:
             assert False , "test_my_039 작동 않음"
         except NoSuchElementException:
