@@ -17,9 +17,8 @@ class MyPage:
     def __init__(self, driver: WebDriver):
         self.driver = driver
 
-
-
-
+    def scroll_down(self):
+        self.driver.execute_script("window.scrollBy(0, 500);")
 
     def element(self,by_locator):
         return WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(by_locator))
@@ -66,8 +65,7 @@ class MyPage:
     my_status = (By.XPATH, '//*[@id="root"]/div[1]/main/section/section/div[1]/span')
 
     #내 프로필 진입 버튼
-    my_profile_btn = (By.XPATH, '//*[@id="root"]/div[1]/main/section/section/section/div[1]/div[2]/div/svg')
-
+    my_profile_btn = (By.CSS_SELECTOR, "div.flex.items-center.justify-between.text-subbody > svg.cursor-pointer")
 
     #홈 탭 - 혼자 먹기
     eat_alone_home_btn = (By.XPATH, "//button[.//p[text()='혼자 먹기']]")
@@ -78,13 +76,16 @@ class MyPage:
 
     # 내가 먹은 메뉴 추가
     my_add_menu = (By.XPATH,'//*[@id="root"]/div[1]/main/section/section/div[2]/div[1]/button') 
-
+    my_add_history_menu = (By.XPATH, "//*[contains(text(), '내가 먹은 메뉴')]")
+    my_add_same_menu_btn = (By.XPATH, "//button[text()='같은 메뉴 먹기']")
 
     # 새로운 후기 등록하기
     my_add_review_tab = (By.XPATH,'//*[@id="modal-root"]/div')
     my_add_review_GNB = (By.XPATH,'//span[text()="새로운 후기 등록하기"]')
+    my_add_review_again_GNB = (By.XPATH,'//span[text()="또 먹은 후기 등록하기"]')
     my_add_review_back_btn = (By.XPATH,'//button[contains(@class, "cursor-pointer")]')
     ## 식사 유형
+    my_add_eat_title = (By.XPATH,'//h1[text()="식사 유형"]')    
     my_add_eat_alone = (By.XPATH, "//label[@for='혼밥']")
     my_add_eat_group = (By.XPATH, "//label[@for='그룹']")
     my_add_eat_together = (By.XPATH, "//label[@for='회식']")
@@ -118,6 +119,7 @@ class MyPage:
     my_add_star_rate = (By.XPATH,".//div[contains(@class, 'text-gray-300')]" )
     my_add_star_yellow = (By.XPATH,".//div[contains(@class, 'text-yellow-400')]" )
     my_add_stars_3 = (By.XPATH, '//div[text()="★"][3]')
+    my_add_stars_5 = (By.XPATH, '//div[text()="★"][5]')
     ## 같이 먹은 사람 등록
     my_add_eat_with_title = (By.XPATH,'//h1[text()="같이 먹은 사람 등록"]')
     my_add_eat_with_name = (By.XPATH,'//input[contains(@placeholder, "이름을 검색해주세요")]')
@@ -127,3 +129,26 @@ class MyPage:
     my_add_submit_btn = (By.XPATH, '//button[@type="submit"]')
     ## 리뷰 등록 완료 버튼 확인
     my_add_review_status = (By.XPATH,'//div[text()="리뷰 등록 완료"]')
+
+    #내가 먹은 메뉴
+    my_add_history_menu_recent = (By.XPATH, '//div[contains(@class, "flex w-full gap-6 p-4 shadow-md rounded-2xl")]')
+    my_add_history_eat_main_type = (By.XPATH,"//div[@class='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-main text-white']")
+    my_add_history_eat_sub_type = (By.XPATH,"//div[@class='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-sub text-white']")    
+    my_add_history_eat_sub_2_type = (By.XPATH,"//div[@class='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-sub-2 text-white']")
+    my_add_history_pic = (By.XPATH,'//img[not(@alt="프로필 이미지")]')
+    my_add_history_star = (By.XPATH,'//span[@class="text-[#FFCD29]"]')
+    my_add_history_btn = (By.XPATH,'//button[text()="같은 메뉴 먹기"]')
+
+    #AI추천 사전조건
+    add_AI_recommend = (By.XPATH,"//button[.//p[text()='회식 하기']]")
+    add_AI_category = (By.XPATH,"//button[@role='combobox']")
+    add_AI_categories_list = (By.XPATH, '//div[@role="option"]')
+    add_AI_btn = (By.XPATH, "//button[text()='선택 완료']")
+    add_AI_accept_btn = (By.XPATH,"//button[text()='추천 수락하기']")
+    history_add_review = (By.XPATH,"//button[text()='추천 후기 등록하기']")
+    add_review_img = (By.NAME, 'reviewImg')
+    menu_name = (By.NAME,"menu")
+    image_path = os.path.abspath('utils/망글곰.png')
+    comment = (By.NAME,"comment")
+    star_3 = (By.XPATH, '//div[text()="★"][3]')
+    review_submit_btn = (By.XPATH, '//button[@type="submit"]')
