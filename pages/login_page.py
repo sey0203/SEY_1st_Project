@@ -102,9 +102,9 @@ class LoginPage:
             
             password_field.send_keys(Keys.ENTER)
             try :
-                print(WebDriverWait(self.driver, 2).until(
+                WebDriverWait(self.driver, 2).until(
                     EC.presence_of_element_located((By.ID, "prompt-alert")) 
-                ).text)
+                )
                 return False
             except TimeoutException:
                 print("회원가입 성공")

@@ -1,30 +1,30 @@
 import pytest
-
+import random
 from selenium.webdriver.support.ui import WebDriverWait as ws
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException,TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
 
 from pages.login_page import LoginPage
 
+NewLoginData = {"username" : "qwer11@qwer.qwer", "password" : "qwerQWER1!"}
 LoginData = {"username" : "qwer3@qwer.qwer", "password" : "qwerQWER1!","password1" : "!Q2w3e4r"}
 FalseLogin = {"username1" : "hi@com", "password1" : "qwerqwer", "password2" : "12341234" }
-NewLoginData = {"username" : "qwer11@qwer.qwer", "password" : "qwerQWER1!"}
 
-@pytest.mark.skip
-@pytest.mark.usefixtures("driver")
-class TestSignPage:
-    @pytest.mark.skip
-    def test_signup_TC032(self, driver: WebDriver):
-        
-        try:
-            login_page = LoginPage(driver)
+
+def setup(login_page) :
             login_page.open()
             login_page.check_url("signin")
             login_page.click_button("회원가입")
             login_page.check_url("u/signup")
+
+@pytest.mark.usefixtures("driver")
+class TestSignPage:
+    def test_signup_TC032(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            setup(login_page)
 
             background_color = driver.execute_script(
             "return window.getComputedStyle(document.documentElement).getPropertyValue('--widget-background-color');"
@@ -38,15 +38,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC033(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             class_value="환영합니다"
             get_text = driver.find_element(By.XPATH, f"//h1[contains(text(),'{class_value}')]").text
@@ -61,15 +57,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC034(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             class_value="오늘 뭐 먹지? 를 사용하시려면 회원가입을 진행해주세요."
             get_text = driver.find_element(By.XPATH, f"//p[contains(text(),'{class_value}')]").text
@@ -84,15 +76,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
     
-    @pytest.mark.skip
+    
     def test_signup_TC035(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             driver.find_element(By.NAME, "email")
         except NoSuchElementException as e:
@@ -104,15 +92,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
         
-    @pytest.mark.skip
+    
     def test_signup_TC036(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             driver.find_element(By.NAME, "password")
 
@@ -124,15 +108,11 @@ class TestSignPage:
             assert False
         
 
-    @pytest.mark.skip
+    
     def test_signup_TC037(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             driver.find_element(By.XPATH, '//button[@data-action="toggle"]')
 
@@ -143,15 +123,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
         
-    @pytest.mark.skip
+    
     def test_signup_TC038(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             driver.find_element(By.XPATH, '//button[contains(text(),"계속하기")]').click()
             
@@ -162,15 +138,12 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
         
-    @pytest.mark.skip
+    
     def test_signup_TC039(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
+
             class_value="이미 계정이 있으신가요"
             get_text = driver.find_element(By.XPATH, f"//p[contains(text(),'{class_value}')]").text
             if class_value in get_text:
@@ -186,14 +159,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
         
-    @pytest.mark.skip
+    
     def test_signup_TC040(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             background_color = driver.execute_script(
             "return window.getComputedStyle(document.body).getPropertyValue('--page-background-color');"
@@ -208,14 +178,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
     
-    @pytest.mark.skip
+    
     def test_signup_TC041(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             name=driver.find_element(By.NAME, "email")
             name.send_keys(FalseLogin["username1"])
@@ -227,14 +194,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC042(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             name=driver.find_element(By.NAME, "password")
             name.send_keys(FalseLogin["password1"])
@@ -246,14 +210,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC043(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             name=driver.find_element(By.NAME, "password")
             name.send_keys(FalseLogin["password1"])
@@ -266,14 +227,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC044_TC045(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             name=driver.find_element(By.NAME, "password")
             name.send_keys(FalseLogin["password1"])
@@ -301,14 +259,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC046_TC048(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             name=driver.find_element(By.NAME, "password")
             name.send_keys(LoginData["password1"])
@@ -337,14 +292,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC049_TC055(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             name=driver.find_element(By.NAME, "password")
             name.send_keys(LoginData["password1"])
@@ -367,15 +319,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC056(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
 
             name=driver.find_element(By.NAME, "password")
             name.send_keys(FalseLogin["password1"])
@@ -388,15 +336,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC057(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
             
             driver.find_element(By.XPATH, '//button[contains(text(),"계속하기")]').click()
             
@@ -423,15 +367,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC058(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
             
             driver.find_element(By.ID, "email").send_keys(FalseLogin["username1"])
 
@@ -462,15 +402,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC059(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
             
             
             driver.find_element(By.ID, "email").send_keys(LoginData["username"])
@@ -494,15 +430,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC060(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
             
             
             driver.find_element(By.ID, "email").send_keys(FalseLogin["username1"])
@@ -529,15 +461,11 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
             
-    @pytest.mark.skip
+    
     def test_signup_TC061(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
             
             
             driver.find_element(By.ID, "email").send_keys("qwer@qwer.qwer")
@@ -568,11 +496,7 @@ class TestSignPage:
     def test_signup_TC062(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
+            setup(login_page)
             
             driver.find_element(By.ID, "email").send_keys(NewLoginData["username"])
             driver.find_element(By.ID,"password").send_keys(FalseLogin["password2"])
@@ -595,20 +519,4 @@ class TestSignPage:
             print(f"오류 발생: {e}")
             assert False
 
-    def test_signup_TC063(self, driver: WebDriver):
-        try:
-            login_page = LoginPage(driver)
-            
-            login_page.open()
-            login_page.check_url("signin")
-            login_page.click_button("회원가입")
-            login_page.check_url("u/signup")
-            login_page.signup(NewLoginData["username"],NewLoginData["password"])
-            
-        except NoSuchElementException as e:
-            print("계속하기 버튼 찾지 못함")
-            assert False
-        except Exception as e:
-            print(f"오류 발생: {e}")
-            assert False
 
