@@ -1,5 +1,5 @@
 import pytest
-
+import random
 from selenium.webdriver.support.ui import WebDriverWait as ws
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -9,14 +9,12 @@ from selenium.webdriver.support.ui import Select
 
 from pages.login_page import LoginPage
 from pages.signup_page import SignupPage
-
 FakeData = {"name" : "육조임", "team" : "개발 1팀","value" : 0.99, "Ltext" : "한식에서 매콤한 음식을 좋아합니다." ,"Htext" : "중식에서 느끼한 음식을 싫어합니다."}
 InvalidData = {"name" : "", "team" : "","value" : "", "Ltext" : "" ,"Htext" : ""}
 LongData = {"name" : "@"*100,
                 "team" : "#"*100,
                 "value" : 10, "Ltext" : "백자가넘는텍스트"*20 ,"Htext" : "백자가넘는텍스트"*20}
-LoginData = {"username" : "qwer3@qwer.qwer", "password" : "qwerQWER1!","password1" : "!Q2w3e4r"}
-
+NewLoginData = {"username" : "qwer"+str(random.randint(1000,9999))+"@qwer.qwer", "password" : "qwerQWER1!","password1" : "!Q2w3e4r"}
 
 def setup(login_page) :
             login_page.open()
@@ -26,29 +24,42 @@ def setup(login_page) :
             login_page.check_url("login")
             
             #TC98
-            login_page.login(LoginData["username"], LoginData["password"])
+            login_page.login(NewLoginData["username"], NewLoginData["password"])
             login_page.check_url("welcome")
 
-@pytest.mark.skip
+
 @pytest.mark.usefixtures("driver")
 class TestconsentPage:
-    @pytest.mark.skip
-    def test_signup_TC064(self, driver: WebDriver):
+
+    def test_signup_TC063(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
             login_page.open()
             login_page.check_url("signin")
-            #로그인 버튼 클릭
-            login_page.click_button("로그인")
-            login_page.check_url("login")
+            login_page.click_button("회원가입")
+            login_page.check_url("u/signup")
 
-            login_page.login(LoginData["username"], LoginData["password"])
+            if login_page.signup(NewLoginData["username"],NewLoginData["password"]):
+                return
+            print("TC063 실패")
+            assert False
+            
+        except Exception as e:
+            print(f"오류 발생: {e}")
+            assert False
+    
+    def test_signup_TC064(self, driver: WebDriver):
+        try:
+            login_page = LoginPage(driver)
+            setup(login_page)
+
+            login_page.login(NewLoginData["username"], NewLoginData["password"])
             login_page.check_url("u/consent")
 
             class_value="c53c6f72a,cd0e583bc,cf991a62f"   
             
             get_text=driver.find_element(By.CLASS_NAME, class_value).text
-            if LoginData["username"] in get_text :
+            if NewLoginData["username"] in get_text :
                 print(get_text)
                 assert True
                 return
@@ -61,18 +72,14 @@ class TestconsentPage:
             print("슬라이드 로딩 시간 초과.")
             return False
     
-    @pytest.mark.skip
+    
     def test_signup_TC065(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
 
-            login_page.open()
-            login_page.check_url("signin")
-            #로그인 버튼 클릭
-            login_page.click_button("로그인")
-            login_page.check_url("login")
+            setup(login_page)
 
-            login_page.login(LoginData["username"], LoginData["password"])
+            login_page.login(NewLoginData["username"], NewLoginData["password"])
             login_page.check_url("u/consent")
             text="Decline"
             driver.find_element(By.XPATH, f'//button[contains(text(),"{text}")]').click()
@@ -82,18 +89,13 @@ class TestconsentPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC066(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
 
-            login_page.open()
-            login_page.check_url("signin")
-            #로그인 버튼 클릭
-            login_page.click_button("로그인")
-            login_page.check_url("login")
-
-            login_page.login(LoginData["username"], LoginData["password"])
+            setup(login_page)
+            login_page.login(NewLoginData["username"], NewLoginData["password"])
             login_page.check_url("u/consent")
             text="Accept"
             driver.find_element(By.XPATH, f'//button[contains(text(),"{text}")]').click()
@@ -102,7 +104,7 @@ class TestconsentPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC067(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
