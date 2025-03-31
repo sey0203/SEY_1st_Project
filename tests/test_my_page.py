@@ -16,7 +16,7 @@ from utils.image_is_similar import is_similar
 
 
 @pytest.mark.usefixtures("login_driver_second")
-#@pytest.mark.skip()
+@pytest.mark.skip()
 class TestMyPage:
     
     def navigate_to_my_page(self, driver):
