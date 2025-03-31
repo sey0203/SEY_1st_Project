@@ -2253,7 +2253,7 @@ class TestTeamFeedPage:
             print("✅ '회식' 라디오 버튼 선택 완료")
 
             # 이미지 파일 경로 설정 (utils 폴더 내 '깜자.png')
-            image_path = os.path.abspath(r"C:\\Users\\LENOVO\\OneDrive\\바탕 화면\\qa-track-ch6-reference-main\\tests\\utils\\깜자.png")  # 절대 경로 변환
+            image_path = TeamFeedPageLocators.IMAGE_PATH  # 절대 경로 변환
 
             # 파일 업로드 input 요소 찾기
             file_input = driver.find_element(By.NAME, "reviewImg")
