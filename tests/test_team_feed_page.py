@@ -9,8 +9,6 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from pages.team_feed_page import TeamFeedPage
-from pages.login_page import LoginPage
-from pages.signup_page import SignupPage
 from selenium.webdriver.common.action_chains import ActionChains
 from pages.team_feed_page_locators import TeamFeedPageLocators
 from selenium.webdriver.support.ui import Select
