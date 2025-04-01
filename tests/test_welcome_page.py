@@ -9,12 +9,12 @@ from selenium.webdriver.support.ui import Select
 
 from pages.login_page import LoginPage
 from pages.signup_page import SignupPage
-FakeData = {"name" : "육조임", "team" : "개발 1팀","value" : 0.99, "Ltext" : "한식에서 매콤한 음식을 좋아합니다." ,"Htext" : "중식에서 느끼한 음식을 싫어합니다."}
+FakeData = {"name" : "육조임", "team" : "개발 1팀","value" : 1, "Ltext" : "한식에서 매콤한 음식을 좋아합니다." ,"Htext" : "중식에서 느끼한 음식을 싫어합니다."}
 InvalidData = {"name" : "", "team" : "","value" : "", "Ltext" : "" ,"Htext" : ""}
 LongData = {"name" : "@"*100,
                 "team" : "#"*100,
                 "value" : 10, "Ltext" : "백자가넘는텍스트"*20 ,"Htext" : "백자가넘는텍스트"*20}
-NewLoginData = {"username" : "qwer"+str(random.randint(1000,9999))+"@qwer.qwer", "password" : "qwerQWER1!","password1" : "!Q2w3e4r"}
+NewLoginData = {"username" : "qwer"+str(random.randint(10000,99999))+"@qwer.qwer", "password" : "qwerQWER1!","password1" : "!Q2w3e4r"}
 
 def setup(login_page) :
             login_page.open()
@@ -40,6 +40,7 @@ class TestconsentPage:
             login_page.check_url("u/signup")
 
             if login_page.signup(NewLoginData["username"],NewLoginData["password"]):
+                assert True
                 return
             print("TC063 실패")
             assert False
@@ -51,7 +52,11 @@ class TestconsentPage:
     def test_signup_TC064(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
-            setup(login_page)
+            login_page.open()
+            login_page.check_url("signin")
+            #로그인 버튼 클릭
+            login_page.click_button("로그인")
+            login_page.check_url("login")
 
             login_page.login(NewLoginData["username"], NewLoginData["password"])
             login_page.check_url("u/consent")
@@ -77,7 +82,11 @@ class TestconsentPage:
         try:
             login_page = LoginPage(driver)
 
-            setup(login_page)
+            login_page.open()
+            login_page.check_url("signin")
+            #로그인 버튼 클릭
+            login_page.click_button("로그인")
+            login_page.check_url("login")
 
             login_page.login(NewLoginData["username"], NewLoginData["password"])
             login_page.check_url("u/consent")
@@ -94,7 +103,12 @@ class TestconsentPage:
         try:
             login_page = LoginPage(driver)
 
-            setup(login_page)
+            login_page.open()
+            login_page.check_url("signin")
+            #로그인 버튼 클릭
+            login_page.click_button("로그인")
+            login_page.check_url("login")
+
             login_page.login(NewLoginData["username"], NewLoginData["password"])
             login_page.check_url("u/consent")
             text="Accept"
@@ -121,7 +135,6 @@ class TestconsentPage:
         except Exception as e:
             print(f"오류 발생: {e}")
             assert False
-
 
 
 

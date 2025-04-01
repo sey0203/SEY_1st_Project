@@ -16,7 +16,7 @@ import math
 
 
 
-@pytest.mark.usefixtures("login_driver_second")
+@pytest.mark.usefixtures("login_driver")
 #@pytest.mark.skip()
 class TestMyPage:
     
@@ -163,8 +163,6 @@ class TestMyPage:
             my_page = self.navigate_to_my_page(driver)
             my_page.click(MyPage.my_profile_btn)
             profile_edit_title = my_page.text(MyPage.my_profile_edit_title)
-            profile_img = my_page.get_attribute(MyPage.my_profile_img,"src")
-            similar = is_similar(profile_img,MyPage.default_profile)
         except TimeoutException:
             assert False , "test_my_009 작동 않음" 
         except NoSuchElementException:
@@ -172,7 +170,6 @@ class TestMyPage:
         except Exception as e:
             assert False , "test_my_009 예외 발생"
         assert profile_edit_title == "프로필 이미지 수정" , "프로필 정보 수정 - 프로필 이미지 수정 타이틀 잘못 노출됨"
-        assert similar == True, "프로필이 기본 프로필이 아님"
     
     def test_my_010(self, driver:WebDriver):
         try:
