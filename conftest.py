@@ -10,7 +10,7 @@ import time
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from user_info import LOGIN_INFO, LOGIN_INFO_SECOND
+from user_info import LOGIN_INFO
 
 @pytest.fixture(scope="function")
 def driver():
