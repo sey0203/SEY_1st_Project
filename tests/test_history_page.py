@@ -52,7 +52,6 @@ class TestHistoryPage:
         try:
             history_page = self.navigate_to_history(driver)
         except Exception as e:
-            
             assert False, "히스토리 페이지 진입 테스트 실패"
 
     def test_history_002(self, driver: WebDriver):
@@ -85,18 +84,17 @@ class TestHistoryPage:
     
     def test_history_005(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             btn = history_page.text(HistoryPage.review_register_btn)
         except Exception as e:
             assert False, "추천 후기 등록하기 버튼 탐색 실패"
-        assert "추천 후기 등록" in btn, "추천 후기 등록 버튼 미노출"
+        assert "추천 후기 등록하기" in btn, "추천 후기 등록 버튼 미노출"
 
     def test_history_006(self,driver:WebDriver):
         try:
             history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             result = history_page.is_displayed(HistoryPage.review_tab)
-            time.sleep(5)
         except Exception as e:
             assert False, "후기 등록 탭 탐색 실패"
         assert result == True, "후기 등록 탭 미노출"
@@ -104,7 +102,7 @@ class TestHistoryPage:
     
     def test_history_007(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             review_title = history_page.text(HistoryPage.GNB_review)
         except Exception as e:
@@ -114,7 +112,7 @@ class TestHistoryPage:
     
     def test_history_008(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             radio_alone = history_page.text(HistoryPage.eat_alone)
             radio_group = history_page.text(HistoryPage.eat_group)
@@ -128,7 +126,7 @@ class TestHistoryPage:
     
     def test_history_009(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             result = history_page.is_displayed(HistoryPage.review_img_is_null)
         except Exception as e:
@@ -137,7 +135,7 @@ class TestHistoryPage:
 
     def test_history_010(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             history_page.send_keys(HistoryPage.review_img_input, HistoryPage.image_path)
             src = history_page.get_attribute(HistoryPage.review_img, "src")
@@ -149,7 +147,7 @@ class TestHistoryPage:
     
     def test_history_011(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             menu_list = history_page.menu_list()
             history_menu_name = menu_list[0][2]
             history_page.click(HistoryPage.review_register_btn)
@@ -187,7 +185,7 @@ class TestHistoryPage:
 
     def test_history_015(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             lenth = len(history_page.texts(HistoryPage.review_star_gray))            
         except Exception as e:            
@@ -196,7 +194,7 @@ class TestHistoryPage:
 
     def test_history_016(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             class_attr = history_page.get_attribute(HistoryPage.eat_alone_radio, "class")
             if "disabled:cursor-not-allowed" in class_attr:
@@ -209,7 +207,7 @@ class TestHistoryPage:
 
     def test_history_017(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             history_page.send_keys(HistoryPage.review_comment, "123")
             result = history_page.get_attribute(HistoryPage.review_comment, "value")
@@ -219,7 +217,7 @@ class TestHistoryPage:
     
     def test_history_018(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
 
             history_page.send_keys(HistoryPage.review_comment, "a" * 500)
@@ -231,7 +229,7 @@ class TestHistoryPage:
     
     def test_history_019(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             
             history_page.click(HistoryPage.review_stars_3)
@@ -242,18 +240,18 @@ class TestHistoryPage:
     
     def test_history_020(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             history_page.click(HistoryPage.review_submit_btn)
             result = history_page.is_displayed(HistoryPage.review_tab)
-            assert result == True, "후기 등록 실패했으나 탭이 닫힘"
         except Exception as e:
             assert False
+        assert result == True, "후기 등록 실패했으나 탭이 닫힘"
 
     
     def test_history_021(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             history_page.click(HistoryPage.review_submit_btn)
             warning_text = history_page.is_displayed(HistoryPage.review_img_warning)                      
@@ -263,7 +261,7 @@ class TestHistoryPage:
     
     def test_history_022(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             history_page.click(HistoryPage.review_submit_btn)
             warning_text = history_page.is_displayed(HistoryPage.review_text_warning)
@@ -273,7 +271,7 @@ class TestHistoryPage:
     
     def test_history_023(self,driver:WebDriver):
         try:
-            history_page = self.navigate_to_history(driver)
+            history_page = self.add_new_history(driver)
             history_page.click(HistoryPage.review_register_btn)
             history_page.click(HistoryPage.review_submit_btn)
             warning_text = history_page.is_displayed(HistoryPage.review_star_warning)          
@@ -292,11 +290,9 @@ class TestHistoryPage:
             try:
                 history_page.click(HistoryPage.GNB_history)
             except ElementClickInterceptedException:
-                print("리뷰 작성 후 히스토리탭 이동 안함")
-                assert False
+                assert False, "리뷰 작성 후 히스토리탭 이동 안함"
         except Exception as e:
-            print("리뷰 작성 후 히스토리탭 이동 실패")
-            assert False
+            assert False , "리뷰 작성 후 히스토리탭 이동 실패"
 
         
     def test_history_025(self,driver:WebDriver):
