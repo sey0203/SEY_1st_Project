@@ -124,7 +124,7 @@ class TestconsentPage:
 
 
 
-@pytest.mark.skip
+
 @pytest.mark.usefixtures("driver")
 class TestWelcomePage:
     def test_signup_TC069(self, driver: WebDriver):
