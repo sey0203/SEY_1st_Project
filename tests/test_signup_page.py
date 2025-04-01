@@ -482,7 +482,7 @@ class TestSignPage:
                     return
                 assert False
             except TimeoutException:
-                print("TC60 테스트 실패")
+                print("TC61 테스트 실패")
                 assert False            
             
         except NoSuchElementException as e:
