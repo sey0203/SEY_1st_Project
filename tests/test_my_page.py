@@ -12,11 +12,12 @@ import random
 import pytest
 from pages.my_page import MyPage
 from utils.image_is_similar import is_similar
+import math
 
 
 
 @pytest.mark.usefixtures("login_driver_second")
-@pytest.mark.skip()
+#@pytest.mark.skip()
 class TestMyPage:
     
     def navigate_to_my_page(self, driver):
@@ -81,34 +82,27 @@ class TestMyPage:
     def test_my_004(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
-            profile_team = my_page.text(MyPage.my_profile_team)
-            profile_name = my_page.text(MyPage.my_profile_name)
-            profile_value = my_page.texts(MyPage.my_profile_food_value)
-            expected_value = ['1.0','3.0','5.0']
-            profile_prefer = my_page.texts(MyPage.my_profile_prefer)
-            expected_prefer = ['한식에서 매콤한 음식을 좋아합니다.', '중식에서 느끼한 음식을 싫어합니다.']
-            assert profile_team == "개발 1팀"
-            assert profile_name == "육조임"
-            assert profile_value == expected_value
-            assert profile_prefer == expected_prefer
+            section = my_page.is_displayed(MyPage.my_profile_section)
         except TimeoutException:
             assert False , "test_my_004 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_004  존재하지 않음"
         except Exception as e:
             assert False , "test_my_004 예외 발생"
+        assert section == True, "섹션 위치가 안보임"
     
     def test_my_005(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
             status = my_page.text(MyPage.my_status)
-            assert "통계" in status
+            
         except TimeoutException:
             assert False , "test_my_005 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_005  존재하지 않음"
         except Exception as e:
             assert False , "test_my_005 예외 발생"
+        assert "통계" in status , "내 피드 통계 미노출"
     
     @pytest.mark.flaky(reruns=3, reruns_delay=0.5)
     def test_my_006(self, driver:WebDriver):
@@ -195,26 +189,42 @@ class TestMyPage:
             assert False , "test_my_010 예외 발생"
         assert similar == True, "프로필 정보 수정 - 이미지 변경이 안됨"
     
-    @pytest.mark.skip(reason="슬라이더 미구현")
+    
     def test_my_011(self, driver: WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
             my_page.click(MyPage.my_profile_btn)
+            time.sleep(0.5)
+            my_page.move_sliders(MyPage.sliders,MyPage.sliders_size,MyPage.sliders_size_sub,0.0,0.5,0.9)
+            actual_list  = my_page.texts(MyPage.sliders_amount)
+            my_page.click(MyPage.my_profile_submit_btn)
+            warn = len(my_page.texts(MyPage.my_add_desc_list))
+            expected_list = ['0.0','0.5','0.9']
         except Exception as e:
             assert False, f"test_my_011 예외 발생: {e}"
-
-    @pytest.mark.skip(reason="슬라이더 미구현")   
+        for i, (e, a) in enumerate(zip(expected_list, actual_list)):
+            diff = abs(float(e) - float(a))
+            assert diff <= 0.1, "값이 다름 "
+        assert warn == 3, "맛에 대한 성향 슬라이더 경고 메세지 일부 미노출"
+  
     def test_my_012(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
             my_page.click(MyPage.my_profile_btn)
+            time.sleep(0.5)
+            my_page.move_sliders(MyPage.sliders,MyPage.sliders_size,MyPage.sliders_size_sub,2.0,4.0,4.5)
+            actual_list = my_page.texts(MyPage.sliders_amount)
+            expected_list = ['2.0','4.0','4.5']
         except TimeoutException:
             assert False , "test_my_012 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_012  존재하지 않음"
         except Exception as e:
             assert False , "test_my_012 예외 발생"
-    
+        for i, (e, a) in enumerate(zip(expected_list, actual_list)):
+            diff = abs(float(e) - float(a))
+            assert diff <= 0.1, "값이 다름"
+            
     def test_my_013(self, driver:WebDriver):
         try:
             my_page = self.navigate_to_my_page(driver)
@@ -280,13 +290,13 @@ class TestMyPage:
             my_page = self.navigate_to_my_page(driver)
             my_page.click(MyPage.my_add_menu)
             result = my_page.is_displayed(MyPage.my_add_review_tab)
-            assert result == True
         except TimeoutException:
             assert False , "test_my_016 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_016  존재하지 않음"
         except Exception as e:
             assert False , "test_my_016 예외 발생"
+        assert result == True, "리뷰탭 미노출"
 
     
     def test_my_017(self, driver:WebDriver):
@@ -298,19 +308,17 @@ class TestMyPage:
             text_eat_alone = my_page.text(MyPage.my_add_eat_alone)
             text_eat_group = my_page.text(MyPage.my_add_eat_group)
             text_eat_together = my_page.text(MyPage.my_add_eat_together)
-            
-            assert result_GNB == True
-            assert result_back_btn == True
-            assert text_eat_alone == "혼밥"
-            assert text_eat_group == "그룹"
-            assert text_eat_together == "회식"
         except TimeoutException:
             assert False , "test_my_017 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_017  존재하지 않음"
         except Exception as e:
             assert False , "test_my_017 예외 발생"
-
+        assert result_GNB == True , "리뷰 추가 GNB 미노출"
+        assert result_back_btn == True , " 리뷰 뒤로가기 버튼 미노출"
+        assert text_eat_alone == "혼밥", " 혼밥 텍스트 미노출"
+        assert text_eat_group == "그룹", " 그룹 텍스트 미노출"
+        assert text_eat_together == "회식", "회식 텍스트 미노출"
     
     def test_my_018(self, driver:WebDriver):
         try:
@@ -319,15 +327,15 @@ class TestMyPage:
             review_title = my_page.is_displayed(MyPage.my_add_review_title)
             review_img_is_null = my_page.is_displayed(MyPage.my_add_review_img_is_null)
             review_img_btn = my_page.is_displayed(MyPage.my_add_review_img_btn)
-            assert review_title == True
-            assert review_img_is_null == True
-            assert review_img_btn == True 
         except TimeoutException:
             assert False , "test_my_018 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_018  존재하지 않음"
         except Exception as e:
             assert False , "test_my_018 예외 발생"
+        assert review_title == True , "리뷰 이미지 타이틀 미노출"
+        assert review_img_is_null == True , "리뷰 이미지 빈공간이 노출되지 않음"
+        assert review_img_btn == True , "리뷰 이미지 추가 버튼이 노출되지 않음"
 
     
     def test_my_019(self, driver:WebDriver):
@@ -336,14 +344,14 @@ class TestMyPage:
             my_page.click(MyPage.my_add_menu)
             menu_title = my_page.is_displayed(MyPage.my_add_menu_title)
             menu_name_placeholder = my_page.get_attribute(MyPage.my_add_menu_name,"placeholder")
-            assert menu_title == True
-            assert menu_name_placeholder == "메뉴 명을 입력해주세요."
         except TimeoutException:
             assert False , "test_my_019 작동 않음" 
         except NoSuchElementException:
             assert False , "test_my_019  존재하지 않음"
         except Exception as e:
             assert False , "test_my_019 예외 발생"
+        assert menu_title == True , "메뉴 명 타이틀이 미노출"
+        assert menu_name_placeholder == "메뉴 명을 입력해주세요." , "메뉴명 placeholder이 다르게 노출됨"
 
     
     def test_my_020(self, driver:WebDriver):

@@ -17,47 +17,6 @@ class MyPage:
     def __init__(self, driver: WebDriver):
         self.driver = driver
 
-    def set_slider_value(self, flavor : str, value : float):
-        try:
-            # 맛에 해당하는 슬라이더 섹션 찾기
-            flavor_section_xpath = f"//section[.//span[text()='{flavor} 맛']]"
-            flavor_section = WebDriverWait(self.driver, 3).until(
-                EC.presence_of_element_located((By.XPATH, flavor_section_xpath))
-            )
-
-            # # 슬라이더 thumb 요소 찾기
-            thumb_element = flavor_section.find_element(By.XPATH, ".//span[@role='slider']")
-
-            # # 슬라이더 트랙 요소 찾기
-            track_element = flavor_section.find_element(By.XPATH, ".//span[@class='relative h-2 w-full grow overflow-hidden rounded-full bg-light-gray']")
-
-                # 슬라이더 트랙의 시작점 x 좌표
-            track_start_x = track_element.location['x']
-
-            # 슬라이더 thumb 요소의 오프셋
-            thumb_offset = thumb_element.size['width'] / 2
-
-            # 이동할 x 좌표 계산
-            target_x = track_start_x + (float(value) / 5) * track_element.size['width'] - thumb_offset
-
-            # 드래그 앤 드롭 동작 수행
-            action = ActionChains(self.driver)
-            action.click_and_hold(thumb_element).move_by_offset(target_x -track_start_x, 0).release().perform()
-            
-            return True
-        except Exception as e:
-            print(f"슬리이더 조작 중 오류 발생: {e}")
-            return False
-        
-        except NoSuchElementException:
-            print("필드를 찾을 수 없습니다.")
-            return False  
-        
-        except TimeoutException:
-            print("슬라이드 로딩 시간 초과.")
-            return False
-
-
     def scroll_down(self):
         self.driver.execute_script("window.scrollBy(0, 500);")
 
@@ -88,10 +47,35 @@ class MyPage:
     
     def get_attribute(self, by_locator, attribute):
         return WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(by_locator)).get_attribute(attribute)
-    
+
+    def get_attributes(self, by_locator, attribute):
+        elements = WebDriverWait(self.driver, 10).until(EC.presence_of_all_elements_located(by_locator))
+        return [element.get_attribute(attribute) for element in elements]
+
+    def move_sliders(self, by_sliders_locator, by_sliders_size_locator, by_sliders_size_sub_locator, sweet_value, salty_value, spicy_value):
+        self.driver.implicitly_wait(5)
+        sliders = self.elements(by_sliders_locator)
+        sliders_size = self.elements(by_sliders_size_locator)
+        slider_size = sliders_size[0].size['width']
+        right_values = self.get_attributes(by_sliders_size_sub_locator,"style")
+        current_values = []
+        for value in right_values:
+            value = value.split("right:")[1].split("%")[0].strip()
+            current_values.append(100.0-float(value))
+        sweet = round((slider_size * ((-(current_values[0] - float(sweet_value) * 20)) * 0.01)),2)
+        salty = round((slider_size * ((-(current_values[1] - float(salty_value) * 20)) * 0.01)),2)
+        spicy = round((slider_size * ((-(current_values[2] - float(spicy_value) * 20)) * 0.01)),2)
+        offset_value = [sweet,salty,spicy]
+        action = ActionChains(self.driver)
+        for slider, offset in zip(sliders,offset_value):
+            action.move_to_element(slider).perform()
+            action.click_and_hold(slider).move_by_offset(offset+(slider_size*0.017),0).release().perform()
+            
+            
+
     #개인 피드 탭 진입 버튼
     my_feed_btn = (By.XPATH,'//*[@href="/my"]')
-
+    
     #GNB 영역
     back_btn = (By.CLASS_NAME,'cursor-pointer')
     GNB_my_page = (By.XPATH, '//span[contains(@class, "text-title")]')
@@ -106,6 +90,7 @@ class MyPage:
     my_status = (By.XPATH, '//*[@id="root"]/div[1]/main/section/section/div[1]/span')
 
     #내 프로필 진입 버튼
+    my_profile_section = (By.XPATH,'//section[contains(@class,"w-full flex")]')
     my_profile_btn = (By.CSS_SELECTOR, "div.flex.items-center.justify-between.text-subbody > svg.cursor-pointer")
     my_profile_gnb = (By.XPATH, "//span[text()='프로필 정보 수정']")
     my_profile_back_btn = (By.XPATH,'//button[contains(@class, "cursor-pointer")]')
@@ -120,11 +105,10 @@ class MyPage:
     my_profile_edit_complete = (By.XPATH,"//div[@role='status']")
     my_profile_feed = (By.XPATH, "//p[@class='w-4/5']")
     ## 슬라이더 요소 (role="slider"인 요소)
-    sweet_slider = (By.XPATH, '//span[text()="단 맛"]/following-sibling::div//span[@role="slider"]')
-    salty_sldier = (By.XPATH, '//span[text()="짠 맛"]/following-sibling::div//span[@role="slider"]')
-    spicy_slider = (By.XPATH, '//span[text()="매운 맛"]/following-sibling::div//span[@role="slider"]')
-
-
+    sliders = (By.XPATH, '//*[@id="modal-root"]//span[@role="slider"]')
+    sliders_amount = (By.XPATH,'//*[@id="modal-root"]//span[@class="w-8 text-right text-gray-500 text-subbody"]')
+    sliders_size = (By.XPATH, '//*[@id="modal-root"]//span[@class="relative h-2 w-full grow overflow-hidden rounded-full bg-light-gray"]')
+    sliders_size_sub = (By.XPATH,'//*[@id="modal-root"]//span[@class="absolute h-full bg-sub"]')
 
     #홈 탭 - 혼자 먹기
     eat_alone_home_btn = (By.XPATH, "//button[.//p[text()='혼자 먹기']]")
