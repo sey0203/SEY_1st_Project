@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
 import time
 import random
 from selenium.webdriver import ActionChains
@@ -27,8 +27,16 @@ class MyPage:
         return WebDriverWait(self.driver, 10).until(EC.presence_of_all_elements_located(by_locator))
 
     def click(self, by_locator):
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(by_locator)).click()
-
+        # 요소가 클릭 가능할 때까지 기다림
+        element = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(by_locator))
+        # 요소가 화면 중앙에 오도록 스크롤
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+        try:
+            element.click()
+        except ElementClickInterceptedException:
+            # 클릭 인터셉트 발생 시 짧은 대기 후 재시도
+            time.sleep(0.5)
+            element.click()
     def clear(self, by_locator):
         WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(by_locator)).clear()
 
@@ -53,7 +61,7 @@ class MyPage:
         return [element.get_attribute(attribute) for element in elements]
 
     def move_sliders(self, by_sliders_locator, by_sliders_size_locator, by_sliders_size_sub_locator, sweet_value, salty_value, spicy_value):
-        self.driver.implicitly_wait(5)
+        # 불필요한 암시적 대기는 제거하고 명시적 대기만 사용
         sliders = self.elements(by_sliders_locator)
         sliders_size = self.elements(by_sliders_size_locator)
         slider_size = sliders_size[0].size['width']
@@ -61,15 +69,17 @@ class MyPage:
         current_values = []
         for value in right_values:
             value = value.split("right:")[1].split("%")[0].strip()
-            current_values.append(100.0-float(value))
+            current_values.append(100.0 - float(value))
         sweet = round((slider_size * ((-(current_values[0] - float(sweet_value) * 20)) * 0.01)),2)
         salty = round((slider_size * ((-(current_values[1] - float(salty_value) * 20)) * 0.01)),2)
         spicy = round((slider_size * ((-(current_values[2] - float(spicy_value) * 20)) * 0.01)),2)
-        offset_value = [sweet,salty,spicy]
+        offset_value = [sweet, salty, spicy]
         action = ActionChains(self.driver)
-        for slider, offset in zip(sliders,offset_value):
+        for slider, offset in zip(sliders, offset_value):
+            # 스크롤로 요소 노출
+            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", slider)
             action.move_to_element(slider).perform()
-            action.click_and_hold(slider).move_by_offset(offset+(slider_size*0.017),0).release().perform()
+            action.click_and_hold(slider).move_by_offset(offset + (slider_size * 0.005), 0).release().perform()
             
             
 
