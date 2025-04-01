@@ -11,10 +11,10 @@ LoginData = {"username" : "qwer3@qwer.qwer", "password" : "qwerQWER1!","password
 FalseLogin = {"username1" : "hi@com", "password1" : "qwerqwer", "password2" : "12341234" }
 NewLoginData = {"username" : "qwer11@qwer.qwer", "password" : "qwerQWER1!"}
 
-@pytest.mark.skip
+
 @pytest.mark.usefixtures("driver")
 class TestLoginPage:
-    @pytest.mark.skip
+    
     def test_login_TC001(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -34,7 +34,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC002(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -54,7 +54,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC004(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -74,7 +74,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC005(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -94,7 +94,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC006_TC011(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -108,7 +108,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC007(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -127,7 +127,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC008_TC012(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -141,7 +141,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC009(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -162,7 +162,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
             
-    @pytest.mark.skip
+    
     def test_login_TC010(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -182,7 +182,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC013(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -205,7 +205,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC014(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -227,7 +227,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC015(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -249,7 +249,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC016(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -264,7 +264,7 @@ class TestLoginPage:
                     print("username 인풋을 찾지 못함")
                     assert False
 
-    @pytest.mark.skip                
+                    
     def test_login_TC017(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -279,7 +279,7 @@ class TestLoginPage:
                     print("password 인풋을 찾지 못함")
                     assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC018(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -295,7 +295,7 @@ class TestLoginPage:
             print("비밀번호 표시 버튼 못찾음")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC019(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -317,7 +317,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC020(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -332,7 +332,7 @@ class TestLoginPage:
             print("계속하기 버튼 찾지 못함")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC021(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -354,7 +354,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC022(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -377,7 +377,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
             
-    @pytest.mark.skip
+    
     def test_login_TC023_TC24(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -393,7 +393,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC025(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -409,7 +409,7 @@ class TestLoginPage:
             assert False
 
 
-    @pytest.mark.skip
+    
     def test_login_TC026(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -439,7 +439,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC027(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -470,7 +470,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC028(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -497,7 +497,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC029(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -522,7 +522,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC030(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -539,7 +539,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC031(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -556,7 +556,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC120(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -583,7 +583,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC121(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -609,7 +609,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_login_TC122(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -635,7 +635,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC123_128(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -656,7 +656,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC124(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -677,7 +677,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC125(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -698,7 +698,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
     
-    @pytest.mark.skip
+    
     def test_signup_TC126(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -728,7 +728,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC127(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -761,7 +761,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
     
-    @pytest.mark.skip
+    
     def test_signup_TC129(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -788,7 +788,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC130(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -811,7 +811,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC131(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
@@ -847,7 +847,7 @@ class TestLoginPage:
             print(f"오류 발생: {e}")
             assert False
 
-    @pytest.mark.skip
+    
     def test_signup_TC132(self, driver: WebDriver):
         try:
             login_page = LoginPage(driver)
