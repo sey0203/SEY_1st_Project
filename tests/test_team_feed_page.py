@@ -1378,7 +1378,7 @@ class TestTeamFeedPage:
             team_feed_page.profile_edit_finish_btn_click()
 
             # 오류 메시지 기다리기
-            error_message = wait.until(EC.presence_of_element_located((By.XPATH, TeamFeedPageLocators.TEAM_FLAVOR_REQUIRED_MESSAGE_XPATH)))
+            error_message = wait.until(EC.visibility_of_element_located((By.XPATH, TeamFeedPageLocators.TEAM_FLAVOR_REQUIRED_MESSAGE_XPATH)))
 
             # 오류 메시지가 표시되는지 확인
             assert error_message.is_displayed(), f"❌ 단맛-'맛에 대한 성향은 최소 1 이상 설정해주세요' 오류 메시지가 표시되지 않음"
@@ -1541,7 +1541,7 @@ class TestTeamFeedPage:
             team_feed_page.profile_edit_finish_btn_click()
 
             # 오류 메시지 기다리기
-            error_message = wait.until(EC.presence_of_element_located((By.XPATH, TeamFeedPageLocators.TEAM_FLAVOR_REQUIRED_MESSAGE_XPATH)))
+            error_message = wait.until(EC.visibility_of_element_located((By.XPATH, TeamFeedPageLocators.TEAM_FLAVOR_REQUIRED_MESSAGE_XPATH)))
 
             # 오류 메시지가 표시되는지 확인
             assert error_message.is_displayed(), f"❌ 짠맛-'맛에 대한 성향은 최소 1 이상 설정해주세요' 오류 메시지가 표시되지 않음"
@@ -1704,7 +1704,7 @@ class TestTeamFeedPage:
             team_feed_page.profile_edit_finish_btn_click()
 
             # 오류 메시지 기다리기
-            error_message = wait.until(EC.presence_of_element_located((By.XPATH, TeamFeedPageLocators.TEAM_FLAVOR_REQUIRED_MESSAGE_XPATH)))
+            error_message = wait.until(EC.visibility_of_element_located((By.XPATH, TeamFeedPageLocators.TEAM_FLAVOR_REQUIRED_MESSAGE_XPATH)))
 
             # 오류 메시지가 표시되는지 확인
             assert error_message.is_displayed(), f"❌ 매운맛-'맛에 대한 성향은 최소 1 이상 설정해주세요' 오류 메시지가 표시되지 않음"
@@ -1778,7 +1778,7 @@ class TestTeamFeedPage:
             favorite_food_input.send_keys("123456789")
             team_feed_page.profile_edit_finish_btn_click()
 
-            review_10more_required_message = wait.until(EC.presence_of_element_located((By.XPATH, TeamFeedPageLocators.REVIEW_10MORE_REQUIRED_MESSAGE_XPATH)))
+            review_10more_required_message = wait.until(EC.visibility_of_element_located((By.XPATH, TeamFeedPageLocators.REVIEW_10MORE_REQUIRED_MESSAGE_XPATH)))
 
             assert review_10more_required_message.is_displayed(), f"❌ 좋아하는 음식-'10자 이상 입력해주세요' 빨간색 오류 메시지 노출안됨"
             print("✅ 좋아하는 음식-'10자 이상 입력해주세요' 빨간색 오류 메시지 노출")
@@ -1807,7 +1807,7 @@ class TestTeamFeedPage:
             favorite_food_input.send_keys(favorite_food_input_message)
             team_feed_page.profile_edit_finish_btn_click()
 
-            confirm_favorite_food_input_message = wait.until(EC.presence_of_element_located((By.XPATH, f"//p[contains(text(), '{favorite_food_input_message}')]")))
+            confirm_favorite_food_input_message = wait.until(EC.visibility_of_element_located((By.XPATH, f"//p[contains(text(), '{favorite_food_input_message}')]")))
 
             assert confirm_favorite_food_input_message.is_displayed(), "❌ 이런 음식은 좋아요! 텍스트 박스에 입력한 내용이 그대로 노출안됨"
             print("✅ 이런 음식은 좋아요! 텍스트 박스에 입력한 내용이 그대로 노출")
@@ -1835,7 +1835,7 @@ class TestTeamFeedPage:
             hate_food_input.send_keys("123456789")
             team_feed_page.profile_edit_finish_btn_click()
 
-            review_10more_required_message = wait.until(EC.presence_of_element_located((By.XPATH, TeamFeedPageLocators.REVIEW_10MORE_REQUIRED_MESSAGE_XPATH)))
+            review_10more_required_message = wait.until(EC.visibility_of_element_located((By.XPATH, TeamFeedPageLocators.REVIEW_10MORE_REQUIRED_MESSAGE_XPATH)))
 
             assert review_10more_required_message.is_displayed(), f"❌ 싫어하는 음식-'10자 이상 입력해주세요' 빨간색 오류 메시지 노출안됨"
             print("✅ 싫어하는 음식-'10자 이상 입력해주세요' 빨간색 오류 메시지 노출")
