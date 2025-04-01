@@ -27,6 +27,8 @@ python -m venv .venv
 
 pip install selenium
 pip install pytest
+pip install pytest-rerunfailures
+
 ```
 
 이후 추가
