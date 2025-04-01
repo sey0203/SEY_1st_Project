@@ -281,9 +281,9 @@ class TestWelcomePage:
             login_page = LoginPage(driver)
             setup(login_page)
             signup_page= SignupPage(driver)
-            signup_page.set_slider_value(TASTE, 0)
             get_text=signup_page.get_slider_value(TASTE)
             print(get_text)
+            signup_page.set_slider_value(TASTE, 0)
 
         except Exception as e:
             print(f"오류 발생: {e}")

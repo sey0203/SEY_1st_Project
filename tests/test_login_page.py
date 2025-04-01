@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from pages.login_page import LoginPage
 
 LoginData = {"username" : "qwer3@qwer.qwer", "password" : "qwerQWER1!","password1" : "!Q2w3e4r"}
-FalseLogin = {"username1" : "hi@com", "password1" : "qwerqwer", "password2" : "12341234" }
+FalseLogin = {"username1" : "hie@com", "password1" : "qwerqwer", "password2" : "12341234" }
 NewLoginData = {"username" : "qwer11@qwer.qwer", "password" : "qwerQWER1!"}
 
 

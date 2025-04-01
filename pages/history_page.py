@@ -19,8 +19,17 @@ class HistoryPage:
 
 
     def click(self, by_locator):
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(by_locator)).click()
-
+        # 요소가 클릭 가능할 때까지 기다림
+        element = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(by_locator))
+        # 요소가 화면 중앙에 오도록 스크롤
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+        try:
+            element.click()
+        except ElementClickInterceptedException:
+            # 클릭 인터셉트 발생 시 짧은 대기 후 재시도
+            time.sleep(0.5)
+            element.click()
+            
     def clear(self, by_locator):
         WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(by_locator)).clear()
 
