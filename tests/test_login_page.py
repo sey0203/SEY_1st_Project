@@ -488,7 +488,8 @@ class TestLoginPage:
                     EC.presence_of_element_located((By.ID, "error-element-password"))  
                 )
                 print(error_element.text)
-                return True
+                assert True
+                return
             except TimeoutException:
                 assert False
 
@@ -780,7 +781,8 @@ class TestLoginPage:
                     EC.presence_of_element_located((By.ID, "error-element-email"))  
                 )
                 print(error_element.text)
-                return True
+                assert True
+                return
             except TimeoutException:
                 assert False
             
