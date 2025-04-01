@@ -1776,6 +1776,7 @@ class TestTeamFeedPage:
             favorite_food_input = wait.until(EC.presence_of_element_located((By.XPATH, TeamFeedPageLocators.FAVORITE_FOOD_INPUT_XPATH)))
             favorite_food_input.clear()
             favorite_food_input.send_keys("123456789")
+            time.sleep(1)
             team_feed_page.profile_edit_finish_btn_click()
 
             review_10more_required_message = wait.until(EC.visibility_of_element_located((By.XPATH, TeamFeedPageLocators.REVIEW_10MORE_REQUIRED_MESSAGE_XPATH)))
