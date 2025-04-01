@@ -14,7 +14,7 @@ InvalidData = {"name" : "", "team" : "","value" : "", "Ltext" : "" ,"Htext" : ""
 LongData = {"name" : "@"*100,
                 "team" : "#"*100,
                 "value" : 10, "Ltext" : "백자가넘는텍스트"*20 ,"Htext" : "백자가넘는텍스트"*20}
-NewLoginData = {"username" : "qwer"+str(random.randint(1000,9999))+"@qwer.qwer", "password" : "qwerQWER1!","password1" : "!Q2w3e4r"}
+NewLoginData = {"username" : "qwer"+str(random.randint(10000,99999))+"@qwer.qwer", "password" : "qwerQWER1!","password1" : "!Q2w3e4r"}
 
 def setup(login_page) :
             login_page.open()
@@ -82,7 +82,11 @@ class TestconsentPage:
         try:
             login_page = LoginPage(driver)
 
-            setup(login_page)
+            login_page.open()
+            login_page.check_url("signin")
+            #로그인 버튼 클릭
+            login_page.click_button("로그인")
+            login_page.check_url("login")
 
             login_page.login(NewLoginData["username"], NewLoginData["password"])
             login_page.check_url("u/consent")
@@ -99,7 +103,12 @@ class TestconsentPage:
         try:
             login_page = LoginPage(driver)
 
-            setup(login_page)
+            login_page.open()
+            login_page.check_url("signin")
+            #로그인 버튼 클릭
+            login_page.click_button("로그인")
+            login_page.check_url("login")
+
             login_page.login(NewLoginData["username"], NewLoginData["password"])
             login_page.check_url("u/consent")
             text="Accept"
