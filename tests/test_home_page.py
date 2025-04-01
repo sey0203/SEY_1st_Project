@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 
-@pytest.mark.skip(reason="git 업로드를 위해 일시적으로 skip 처리")
+
 @pytest.fixture(scope="class")
 def login_driver(request):
     """로그인 설정"""

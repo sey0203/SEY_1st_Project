@@ -4,7 +4,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
-import time
 from pages.team_feed_page_locators import TeamFeedPageLocators
 
 
@@ -26,41 +25,6 @@ class BasePage:
 class TeamFeedPage(BasePage):
     URL = "https://kdt-pt-1-pj-2-team03.elicecoding.com/teams/1"
 
-
-    def team_feed_click(self):
-        #팀 피드 페이지 클릭 후 URL 변경까지 자동 대기
-        self.wait_for_element(By.CSS_SELECTOR, TeamFeedPageLocators.GNB_SELECTOR)
-        self.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, TeamFeedPageLocators.TEAM_FEED_SELECTOR)))
-        self.driver.find_element(By.CSS_SELECTOR, TeamFeedPageLocators.TEAM_FEED_SELECTOR).click()
-        self.wait_for_url("teams")
-
-    def combobox_team1_select(self):
-        #개발1팀 선택 후 URL 변경까지 자동 대기
-        wait = ws(self.driver, 10)
-        team1_option = wait.until(EC.element_to_be_clickable((By.XPATH, TeamFeedPageLocators.COMBOBOX_TEAM1_XPATH)))
-        ActionChains(self.driver).move_to_element(team1_option).click().perform()
-        self.wait_for_url("teams/1")
-
-    def combobox_team2_select(self):
-        #개발2팀 선택 후 URL 변경까지 자동 대기
-        wait = ws(self.driver, 10)
-        team2_option = wait.until(EC.element_to_be_clickable((By.XPATH, TeamFeedPageLocators.COMBOBOX_TEAM2_XPATH)))
-        ActionChains(self.driver).move_to_element(team2_option).click().perform()
-        self.wait_for_url("teams/2")
-
-    def combobox_team3_select(self):
-        #디자인1팀 선택 후 URL 변경까지 자동 대기
-        wait = ws(self.driver, 10)
-        team3_option = wait.until(EC.element_to_be_clickable((By.XPATH, TeamFeedPageLocators.COMBOBOX_TEAM3_XPATH)))
-        ActionChains(self.driver).move_to_element(team3_option).click().perform()
-        self.wait_for_url("teams/3")
-
-    def combobox_team4_select(self):
-        #디자인2팀 선택 후 URL 변경까지 자동 대기
-        wait = ws(self.driver, 10)
-        team4_option = wait.until(EC.element_to_be_clickable((By.XPATH, TeamFeedPageLocators.COMBOBOX_TEAM4_XPATH)))
-        ActionChains(self.driver).move_to_element(team4_option).click().perform()
-        self.wait_for_url("teams/4")
 
     # 클릭 함수
     def element_click(self, locator_type, locator):
@@ -117,6 +81,43 @@ class TeamFeedPage(BasePage):
     # 팀이 먹은 메뉴 목록까지 스크롤 함수
     def team_eaten_menu_scroll(self):
         self.element_scroll(By.XPATH, TeamFeedPageLocators.TEAM_EATEN_MENU_XPATH)
+
+
+    def team_feed_click(self):
+        #팀 피드 페이지 클릭 후 URL 변경까지 자동 대기
+        self.wait_for_element(By.CSS_SELECTOR, TeamFeedPageLocators.GNB_SELECTOR)
+        self.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, TeamFeedPageLocators.TEAM_FEED_SELECTOR)))
+        self.driver.find_element(By.CSS_SELECTOR, TeamFeedPageLocators.TEAM_FEED_SELECTOR).click()
+        self.wait_for_url("teams")
+
+    def combobox_team1_select(self):
+        #개발1팀 선택 후 URL 변경까지 자동 대기
+        wait = ws(self.driver, 10)
+        team1_option = wait.until(EC.element_to_be_clickable((By.XPATH, TeamFeedPageLocators.COMBOBOX_TEAM1_XPATH)))
+        ActionChains(self.driver).move_to_element(team1_option).click().perform()
+        self.wait_for_url("teams/1")
+
+    def combobox_team2_select(self):
+        #개발2팀 선택 후 URL 변경까지 자동 대기
+        wait = ws(self.driver, 10)
+        team2_option = wait.until(EC.element_to_be_clickable((By.XPATH, TeamFeedPageLocators.COMBOBOX_TEAM2_XPATH)))
+        ActionChains(self.driver).move_to_element(team2_option).click().perform()
+        self.wait_for_url("teams/2")
+
+    def combobox_team3_select(self):
+        #디자인1팀 선택 후 URL 변경까지 자동 대기
+        wait = ws(self.driver, 10)
+        team3_option = wait.until(EC.element_to_be_clickable((By.XPATH, TeamFeedPageLocators.COMBOBOX_TEAM3_XPATH)))
+        ActionChains(self.driver).move_to_element(team3_option).click().perform()
+        self.wait_for_url("teams/3")
+
+    def combobox_team4_select(self):
+        #디자인2팀 선택 후 URL 변경까지 자동 대기
+        wait = ws(self.driver, 10)
+        team4_option = wait.until(EC.element_to_be_clickable((By.XPATH, TeamFeedPageLocators.COMBOBOX_TEAM4_XPATH)))
+        ActionChains(self.driver).move_to_element(team4_option).click().perform()
+        self.wait_for_url("teams/4")
+    
 
     def navigate_to_profile_edit(self, driver):
         #팀 피드에서 프로필 편집 화면으로 이동하는 공통 함수, 대기까지
