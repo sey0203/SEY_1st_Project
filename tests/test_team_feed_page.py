@@ -2361,9 +2361,9 @@ class TestTeamFeedPage:
             wait = ws(driver, 10)
             wait.until(EC.presence_of_element_located((By.XPATH, TeamFeedPageLocators.TEST_REVIEW_XPATH)))
 
-            team_feed_page.send_keys(TeamFeedPageLocators.review_img_input, TeamFeedPageLocators.image_path)
+            team_feed_page.send_keys(TeamFeedPageLocators.review_img_input, TeamFeedPageLocators.IMAGE_PATH)
             src = team_feed_page.get_attribute(TeamFeedPageLocators.review_img, "src")
-            result = is_similar(src, TeamFeedPageLocators.image_path)
+            result = is_similar(src, TeamFeedPageLocators.IMAGE_PATH)
             assert result > 0.9, "이미지가 다름"
 
         # 예상대로 팀 피드에 후기가 표시되지 않아 Exception 발생
