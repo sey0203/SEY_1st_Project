@@ -51,7 +51,7 @@ class TeamFeedPageLocators:
      review_img_is_null = (By.XPATH, ".//div[contains(@class, 'object-cover w-24 h-24 rounded-md border-[1px] border-light-gray')]")
      review_img_btn = (By.XPATH, '//*[@id="modal-root"]/div/div[2]/section/form/div[2]/div/button')
      review_img_input = (By.NAME, 'reviewImg')
-     image_path = os.path.abspath(r"\\utils\\깜자.png")
+     IMAGE_PATH = os.path.abspath(r"\\utils\\깜자.png")
      review_img = (By.XPATH,"//img[@alt='후기 사진']")
      review_register_btn = (By.XPATH, "//button[contains(text(), '후기 등록')]") 
      #리뷰탭 - 메뉴 명

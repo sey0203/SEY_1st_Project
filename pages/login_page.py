@@ -14,17 +14,35 @@ class LoginPage:
     def __init__(self, driver: WebDriver):
         self.driver = driver
 
+    def check_url(self, url : str) :
+        try:
+            wait = WebDriverWait(self.driver, 3) 
+            wait.until(EC.url_contains(url))
+            assert url in self.driver.current_url
+        except TimeoutException:
+            print(f"{url} 페이지가 일치하지 않음")
+            assert False
+
     def open(self):
-        self.driver.get(self.URL)
+            self.driver.get(self.URL)
+            
 
     def open_page(self, url : str):
         self.driver.get(url)
+    
+    def click_button(self, text):
+        try :
+            button=self.driver.find_element(By.XPATH, f'//*[@id="root"]//button[contains(text(),"{text}")]')
+            button.click()
+        except NoSuchElementException :
+            print("버튼을 찾을 수 없음")
+            assert False
     
     def login(self, username, password):
         try:
             url = self.driver.current_url
             
-            username_field = WebDriverWait(self.driver, 3).until(
+            username_field = WebDriverWait(self.driver, 2).until(
                 EC.presence_of_element_located((By.ID, "username")) 
             )
             username_field.send_keys(username)
@@ -63,23 +81,28 @@ class LoginPage:
     
     def signup(self, username, password) :
         try:
-            username_field = WebDriverWait(self.driver, 3).until(
+            username_field = WebDriverWait(self.driver, 2).until(
                 EC.presence_of_element_located((By.ID, "email")) 
             )
+            username_field.clear()
             username_field.send_keys(username)
             password_field = self.driver.find_element(By.ID, "password")
+            password_field.clear()
             password_field.send_keys(password)
 
             length_element = self.driver.find_elements(By.CSS_SELECTOR, "span.cac336714")
             #비밀번호 규칙 지키는지 확인
-            for i in range(1, 5):
+            count = 0
+            for i in range(1, 6):
                 if length_element[0].value_of_css_property("color") == length_element[i].value_of_css_property("color"):
-                    print("비밀번호 규칙 실패")
-                    return False
+                    count += 1
+                    if count >= 2:
+                        print("비밀번호 규칙 실패")
+                        return False
             
             password_field.send_keys(Keys.ENTER)
             try :
-                WebDriverWait(self.driver, 1).until(
+                WebDriverWait(self.driver, 2).until(
                     EC.presence_of_element_located((By.ID, "prompt-alert")) 
                 )
                 return False
@@ -88,15 +111,15 @@ class LoginPage:
                 return True
         
         except Exception as e:
-            print(f"로그인 중 오류 발생: {e}")
+            print(f"회원가입 실패: {e}")
             return False
         
         except NoSuchElementException:
-            print("입력 필드를 찾을 수 없습니다.")
+            print("회원가입 입력 필드를 찾을 수 없습니다.")
             return False  
         
         except TimeoutException:
-            print("입력 필드 로딩 시간 초과.")
+            print("회원가입 입력 필드 로딩 시간 초과.")
             return False
         
         #로그인 텍스트 인풋의 ID는 username 회원가입 텍스트 인풋의 아이디는 emaill이라 이방법을 사용 By.ID "username" By.ID "email"
