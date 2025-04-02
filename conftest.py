@@ -11,19 +11,23 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from user_info import LOGIN_INFO
+import tempfile
 
 @pytest.fixture(scope="function")
 def driver():
     # 크롬 옵션 설정
+    user_data_dir = tempfile.mkdtemp()
     chrome_options = Options()
+    chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
     chrome_options.add_experimental_option("excludeSwitches", ['enable-logging'])
     driver = webdriver.Chrome(service=Service(), options=chrome_options)
     driver.delete_all_cookies()
     #  대기시간 설정
-    driver.implicitly_wait(1)
+    driver.implicitly_wait(3)
     yield driver
-    # 테스트가 끝나면 드라이버 종료
+    import shutil
     driver.quit()
+    shutil.rmtree(user_data_dir)
 
 @pytest.fixture
 def login_driver(driver):
