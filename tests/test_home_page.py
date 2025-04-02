@@ -1,5 +1,6 @@
 import os 
 import time
+import random
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -11,39 +12,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 
 
-@pytest.mark.usefixtures("driver")
-def login_driver(driver):
-    """로그인 설정"""
-
-
-    # 로그인 정보
-    email = "qa1234@1234.com"
-    password = "QA1234@1234.com"
-    url = "https://kdt-pt-1-pj-2-team03.elicecoding.com/"
-    
-    # 로그인 절차
-    driver.get(url)
-    driver.find_element(By.XPATH, "//button[text()='로그인하기']").click()
-    driver.find_element(By.ID, "username").send_keys(email)
-    driver.find_element(By.ID, "password").send_keys(password + Keys.ENTER)
-    
-    # 로그인 성공 확인 (URL 변경 감지)
-    try:
-        WebDriverWait(driver, 10).until(
-            EC.url_matches("https://kdt-pt-1-pj-2-team03.elicecoding.com/")
-        )
-        print("로그인 성공")
-    except:
-        print("로그인 실패 또는 로그인 페이지에서 벗어나지 못함")
-    
-    # request를 통해 driver를 클래스에 전달
-    
-    yield driver
-    driver.quit()
-
-# TestHomePage 클래스 정의
-
-@pytest.mark.usefixtures("login_driver")
+@pytest.mark.usefixtures("Rlogin_driver")
 class TestHomePage:
     def setup_method(self) :
         """테스트 실행 전에 setup"""
@@ -62,6 +31,7 @@ class TestHomePage:
     def test_alone_korean_food_001(self,driver: WebDriver):
         """혼자 먹기 버튼 클릭"""
         try:
+            
             alone_button = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.XPATH, self.alone_button_xpath))
             )
