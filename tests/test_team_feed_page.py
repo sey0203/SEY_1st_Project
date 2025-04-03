@@ -1277,7 +1277,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 프로필 정보 수정화면-'X' 버튼 클릭-실패 (알 수 없는 오류) : {e}"
 
     
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_047(self, driver):
         #실제로 슬라이더를 옮기는건 못해서 자동화 실패...
         try:
@@ -1314,7 +1314,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-단맛 슬라이더 감소-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_048(self, driver):
         #실제로 슬라이더를 옮기는건 못해서 자동화 실패...
         try:
@@ -1351,7 +1351,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-단맛 슬라이더 증가-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_049(self, driver: WebDriver):
     #슬라이더를 실제로 1.0 미만으로 조절하지 못해서 자동화는 실패...
         try:
@@ -1396,7 +1396,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-단맛 슬라이더-1.0 미만 오류메시지-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_050(self, driver: WebDriver):
         #슬라이더를 실제로 1.0 이상으로 조절하지 못해서 자동화는 실패...
         try:
@@ -1440,7 +1440,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-단맛 슬라이더-1.0 미만 오류메시지-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_051(self, driver):
         #실제로 슬라이더를 옮기는건 못해서 자동화 실패...
         try:
@@ -1477,7 +1477,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-짠맛 슬라이더 감소-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_052(self, driver):
         #실제로 슬라이더를 옮기는건 못해서 자동화 실패...
         try:
@@ -1514,7 +1514,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-짠맛 슬라이더 증가-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_053(self, driver: WebDriver):
     #슬라이더를 실제로 1.0 미만으로 조절하지 못해서 자동화는 실패...
         try:
@@ -1559,7 +1559,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-짠맛 슬라이더-1.0 미만 오류메시지-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_054(self, driver: WebDriver):
         #슬라이더를 실제로 1.0 이상으로 조절하지 못해서 자동화는 실패...
         try:
@@ -1603,7 +1603,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-짠맛 슬라이더-1.0 미만 오류메시지-실패 (알 수 없는 오류) : {e}"
 
 
-        ##@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_055(self, driver):
         #실제로 슬라이더를 옮기는건 못해서 자동화 실패...
         try:
@@ -1640,7 +1640,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-매운맛 슬라이더 감소-실패 (알 수 없는 오류) : {e}"
 
 
-    ##@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_056(self, driver):
         #실제로 슬라이더를 옮기는건 못해서 자동화 실패...
         try:
@@ -1677,7 +1677,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-매운맛 슬라이더 증가-실패 (알 수 없는 오류) : {e}"
 
 
-    ##@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_057(self, driver: WebDriver):
     #슬라이더를 실제로 1.0 미만으로 조절하지 못해서 자동화는 실패...
         try:
@@ -1722,7 +1722,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-매운맛 슬라이더-1.0 미만 오류메시지-실패 (알 수 없는 오류) : {e}"
 
 
-    ##@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_058(self, driver: WebDriver):
         #슬라이더를 실제로 1.0 이상으로 조절하지 못해서 자동화는 실패...
         try:
