@@ -58,7 +58,7 @@ def login_driver(driver):
     yield driver
 
 def generate_random_user_id():
-    """랜덤한 사용자 ID를 생성합니다."""
+    """qwer 1,2,3 랜덤"""
     
     return "qwer"+str(random.randint(1,3))+"@qwer.qwer"
 
