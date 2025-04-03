@@ -71,7 +71,6 @@ pip install selenium
 pip install pytest
 pip install pytest-rerunfailures
 pip install opencv-python
-echo LOGIN_INFO = {"user_id" : "1xdist@test.com", "user_password" : "!Q2w3e4r"} > user_info.py
+echo LOGIN_INFO = {"user_id" : "1xdist@test.com", "user_password" : "!Q2w3e4r"} > QA_1st_project\user_info.py
 pytest
 ```
-
