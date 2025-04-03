@@ -65,19 +65,13 @@ AI 메뉴 추천 (상)
 
 ```
 python -m venv venv
-또는 
-python -m venv .venv
-(파이썬 가상환경 폴더 생성)
-
 .\venv\Scripts\activate
-(파이썬 가상환경 실행)
-
+git clone https://github.com/Jaypark711/QA_1st_project.git
 pip install selenium
 pip install pytest
 pip install pytest-rerunfailures
 pip install opencv-python
 echo LOGIN_INFO = {"user_id" : "1xdist@test.com", "user_password" : "!Q2w3e4r"} > user_info.py
-
-
+pytest
 ```
 
