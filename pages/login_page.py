@@ -18,7 +18,7 @@ class LoginPage:
         try:
             wait = WebDriverWait(self.driver, 3) 
             wait.until(EC.url_contains(url))
-            assert url in self.driver.current_url
+            
         except TimeoutException:
             print(f"{url} 페이지가 일치하지 않음")
             assert False
