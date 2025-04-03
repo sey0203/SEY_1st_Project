@@ -61,19 +61,6 @@ AI 메뉴 추천 (상)
 - 웹 주요 기능을 100% 자동화하여 오류를 조기 발견하고, 반복되는 빌드 과정에서 서비스 안정성과 테스트 효율 높이기
 <br>
 
-
-## utils 폴더
-
-utils = 일단 테스트데이터인 망글곰.png, 치즈버거.jpg, webp이미지.webp 와 같은 파일과 이름, 소속, 이메일주소같은 데이터를 다 집어넣을 폴더.
-<br>
-```
-from ..utils.test_data import test_files
-from ..utils.test_data import test_datas 
-```
-와 같은 형식으로 불러오기
-<br>
-
-
 ## 환경 설정
 
 ```
@@ -88,6 +75,9 @@ python -m venv .venv
 pip install selenium
 pip install pytest
 pip install pytest-rerunfailures
+pip install opencv-python
+echo LOGIN_INFO = {"user_id" : "1xdist@test.com", "user_password" : "!Q2w3e4r"} > user_info.py
+
 
 ```
 
