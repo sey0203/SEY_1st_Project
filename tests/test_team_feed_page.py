@@ -17,7 +17,7 @@ from selenium.webdriver.support.ui import Select
 @pytest.mark.usefixtures("login_driver")
 class TestTeamFeedPage:
     
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_001(self, driver: WebDriver):
         try:
             wait = ws(driver, 10)
@@ -42,7 +42,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드 아이콘-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_002(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -62,7 +62,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드 페이지-오픈-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_003(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -85,7 +85,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드 title 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_004(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -111,7 +111,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-콤보박스-개발1팀 선택-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_005(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -138,7 +138,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-개발1팀-음식 성향 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_006(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -166,7 +166,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-개발1팀-팀 통계 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_007(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -193,7 +193,7 @@ class TestTeamFeedPage:
         except Exception as e:
             assert False, f"❌ 팀 피드-개발1팀-팀이 먹은 메뉴-실패 (알 수 없는 오류) : {e}"
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_008(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -219,7 +219,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-콤보박스-개발2팀 선택-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_009(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -246,7 +246,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-개발2팀-음식 성향 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_010(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -274,7 +274,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-개발2팀-팀 통계 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_011(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -302,7 +302,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-개발2팀-팀이 먹은 메뉴-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_012(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -328,7 +328,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-콤보박스-디자인1팀 선택-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_013(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -355,7 +355,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-디자인1팀-음식 성향 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_014(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -383,7 +383,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-디자인1팀-팀 통계 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_015(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -411,7 +411,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-디자인1팀-팀이 먹은 메뉴-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_016(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -437,7 +437,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-콤보박스-디자인2팀 선택-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_017(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -464,7 +464,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-디자인2팀-음식 성향 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_018(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -492,7 +492,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-디자인2팀-팀 통계 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_019(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -520,7 +520,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-디자인2팀-팀이 먹은 메뉴-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_020(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -549,7 +549,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 음식성향-'개발 1팀' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_021(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -577,7 +577,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-'단 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_022(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -605,7 +605,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 음식성향-'짠 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_023(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -633,7 +633,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-'매운 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_024(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -661,7 +661,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-좋아하는 음식 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_025(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -689,7 +689,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-싫어하는 음식 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_026(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -717,7 +717,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 음식성향-'개발2팀' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_027(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -745,7 +745,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발2팀-음식성향-'단 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_028(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -773,7 +773,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 음식성향-'짠 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_029(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -801,7 +801,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발2팀-음식성향-'매운 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_030(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -829,7 +829,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발2팀-음식성향-좋아하는 음식 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_031(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -857,7 +857,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발2팀-음식성향-싫어하는 음식 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_032(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -886,7 +886,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 음식성향-'디자인1팀' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_033(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -914,7 +914,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 디자인1팀-음식성향-'단 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_034(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -942,7 +942,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 음식성향-'짠 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_035(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -970,7 +970,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 디자인1팀-음식성향-'매운 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_036(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -998,7 +998,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 디자인1팀-음식성향-좋아하는 음식 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_037(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1026,7 +1026,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 디자인1팀-음식성향-싫어하는 음식 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_038(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1055,7 +1055,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 음식성향-'디자인2팀' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_039(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1083,7 +1083,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 디자인2팀-음식성향-'단 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_040(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1111,7 +1111,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 음식성향-'짠 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_041(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1139,7 +1139,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 디자인2팀-음식성향-'매운 맛' 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_042(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1167,7 +1167,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 디자인2팀-음식성향-좋아하는 음식 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_043(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1195,7 +1195,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 디자인2팀-음식성향-싫어하는 음식 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_044(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1226,7 +1226,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-프로필 정보 수정화면-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_045(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1251,7 +1251,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 프로필 정보 수정화면-프로필 수정 완료 클릭-실패 (알 수 없는 오류) : {e}"
         
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_046(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1766,7 +1766,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-매운맛 슬라이더-1.0 미만 오류메시지-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_059(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1795,7 +1795,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-좋아하는 음식 10자 미만 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_060(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1824,7 +1824,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-좋아하는 음식에 입력한 내용 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    # @pytest.mark.skip()
     def test_teamfeed_061(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1852,7 +1852,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-싫어하는 음식 10자 미만 텍스트-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_062(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1881,7 +1881,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-음식성향-싫어하는 음식에 입력한 내용 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()   
+    @pytest.mark.skip()   
     def test_teamfeed_063(self, driver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1922,7 +1922,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 개발1팀-파이차트 노출-실패: {e}"
 
 
-    #@pytest.mark.skip()   
+    @pytest.mark.skip()   
     def test_teamfeed_064(self, driver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1954,7 +1954,7 @@ class TestTeamFeedPage:
 
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_065(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -1980,7 +1980,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-팀이 먹은 메뉴목록-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_066(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2002,7 +2002,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-팀이 먹은 메뉴-혼밥태그-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_067(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2023,7 +2023,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-팀이 먹은 메뉴-그룹태그-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_068(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2044,7 +2044,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-팀이 먹은 메뉴-회식태그-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_069(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2070,7 +2070,7 @@ class TestTeamFeedPage:
            assert False, f"❌ 팀 피드-새로운 후기 등록하기 화면-실패 (알 수 없는 오류) : {e}"
             
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_070(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2096,7 +2096,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-새로운 후기 등록하기-혼밥라디오버튼-실패 (알 수 없는 오류): {e}"
 
    
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_071(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2122,7 +2122,7 @@ class TestTeamFeedPage:
            assert False, f"❌ 필수항목누락-후기작성완료-새로운 후기 등록하기 화면-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_072(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2145,7 +2145,7 @@ class TestTeamFeedPage:
         except Exception as e:
            assert False, f"❌ 리뷰이미지누락-후기작성완료 클릭-오류메시지 노출-실패 (알 수 없는 오류) : {e}"
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_073(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2169,7 +2169,7 @@ class TestTeamFeedPage:
            assert False, f"❌ 메뉴명누락-후기작성완료 클릭-오류메시지 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_074(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2193,7 +2193,7 @@ class TestTeamFeedPage:
            assert False, f"❌ 카테고리누락-후기작성완료 클릭-오류메시지 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_075(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2217,7 +2217,7 @@ class TestTeamFeedPage:
            assert False, f"❌ 후기누락-후기작성완료 클릭-오류메시지 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_076(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2241,7 +2241,7 @@ class TestTeamFeedPage:
            assert False, f"❌ 별점누락-후기작성완료 클릭-오류메시지 노출-실패 (알 수 없는 오류) : {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_077(self,driver:WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)            
@@ -2307,7 +2307,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 필수항목 모두 작성-새로 등록한 후기 작성완료 클릭-실패 (알 수 없는 오류): {e}"
 
 
-    # #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_078(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2330,7 +2330,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-새로 등록한 후기 확인-실패 (알 수 없는 오류): {e}"
 
 
-# #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_079(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2354,7 +2354,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-새로 등록한 후기 식사유형확인-실패 (알 수 없는 오류): {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_080(self,driver:WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2373,7 +2373,7 @@ class TestTeamFeedPage:
             assert False
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_081(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2397,7 +2397,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-새로 등록한 후기 메뉴명확인-실패 (알 수 없는 오류): {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_082(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2423,7 +2423,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-새로 등록한 후기 카테고리확인-실패 (알 수 없는 오류): {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_083(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2449,7 +2449,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-새로 등록한 후기 내용확인-실패 (알 수 없는 오류): {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_084(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2474,7 +2474,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 팀 피드-새로 등록한 후기 별점확인-실패 (알 수 없는 오류): {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_085(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2501,7 +2501,7 @@ class TestTeamFeedPage:
            assert False, f"❌ 같은메뉴먹기 클릭-또 먹은 후기 등록하기 화면-실패 (알 수 없는 오류) : {e}"
 
         
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_086(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2530,7 +2530,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 또 먹은 후기 등록하기-식사유형 자동 적용-실패 (알 수 없는 오류): {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_087(self,driver:WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2559,7 +2559,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 또 먹은 후기 등록하기-이미지 자동 적용-실패 (알 수 없는 오류): {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_088(self,driver:WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2587,7 +2587,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 또 먹은 후기 등록하기-메뉴 명 자동 적용-실패 (알 수 없는 오류): {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_089(self,driver:WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2612,7 +2612,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 또 먹은 후기 등록하기-카테고리 자동 적용-실패 (알 수 없는 오류): {e}"
 
 
-    #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_090(self,driver:WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
@@ -2639,7 +2639,7 @@ class TestTeamFeedPage:
             assert False, f"❌ 또 먹은 후기 등록하기-후기내용 자동 적용-실패 (알 수 없는 오류): {e}"
 
 
-    # #@pytest.mark.skip()
+    @pytest.mark.skip()
     def test_teamfeed_091(self, driver: WebDriver):
         try:
             team_feed_page = TeamFeedPage(driver)
