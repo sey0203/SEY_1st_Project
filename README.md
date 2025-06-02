@@ -20,8 +20,9 @@ http://kdt-pt-1-pj-2-team03.elicecoding.com
 <br>
 
 ## 🔍 담당 페이지와 기능 (우선순위)
-<br>
+
 신은영 - 팀 피드
+<br>
 <br>
 팀 선택 드롭다운 (상)
 <br>
